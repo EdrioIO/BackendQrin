@@ -14,7 +14,7 @@ app.get('/multiple', function (req, res) {
     res.json({
         number: 1,
         name: 'John',
-        gender: 'male'
+        gender: 'female'
     });
 });
 
