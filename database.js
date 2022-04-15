@@ -35,9 +35,8 @@ const client = new Client({
 
 client.connect();
 
-const query = 'Select * ' + 'ST001'
  
-client.query<JSON>('SELECT * FROM "MsStudent" ', 'where "StudendId" = $ST001', (err, res) => {
+client.query<JSON>('SELECT * FROM "MsStudent" ', (err, res) => {
   if (err) throw err;
   for (let row of res.rows) {
     console.log(JSON.stringify(row));
