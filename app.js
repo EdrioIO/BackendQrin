@@ -19,6 +19,7 @@ app.get('/', function (req, res){
 
 app.post('/api/submit', function(req,res){
     const channelSend = req.body;
+    channelSend.id = 1;
     channel.push(channelSend);
     res.status(201).json(channelSend);
 });
