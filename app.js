@@ -24,6 +24,10 @@ app.post('/api/submit', function(req,res){
     res.status(201).json(channelSend);
 });
 
+app.get('/api/submit', function(req,res){
+    res.status(200).json(channel);
+})
+
 // Defining get request at '/multiple' route
 app.get('/multiple', function (req, res) {
     res.json({
