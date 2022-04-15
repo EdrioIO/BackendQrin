@@ -7,15 +7,14 @@ const client = new Client({
   password: process.env.PASSWORD_KEY,
   port: process.env.PORT_KEY,
 
-  ssl: {
+ssl: {
     rejectUnauthorized: false
   }
 
 })
 
 client.connect(function(err) {
-  console.log("here");
-  if (!err)
+  if (err) throw err;
   console.log("Connected!");
 });
 
