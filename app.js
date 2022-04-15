@@ -3,6 +3,9 @@ const app = express();
 
 const staticPort = 3000;
 
+const channel = [];
+const lesson = [];
+
 app.use(express.json()); // biar bisa parsing json
 
 //client request to server to get respond
@@ -14,8 +17,10 @@ app.get('/', function (req, res){
     })
 });
 
-app.get('/login', function(req,res){
-
+app.post('api/submit', function(req,res){
+    const channelSend = req.body;
+    channel.push(channelSend);
+    res.status(201).json(channelSend);
 });
 
 // Defining get request at '/multiple' route

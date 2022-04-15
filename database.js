@@ -1,14 +1,40 @@
 const { Client } = require('pg')
 
 const client = new Client({
-  user: 'axgmnmooasvcsg',
-  host: 'ec2-52-86-56-90.compute-1.amazonaws.com',
-  database: 'dadbpgie5t1j5t',
-  password: '1254a4ae582a6dd1e5458e3ae19f8561789a45b25ce6bbaf969d765264cbef46',
-  port: 5432,
+  user: process.env.USER_KEY,
+  host: process.env.HOST_KEY,
+  database: process.env.DATABASE_KEY,
+  password: process.env.PASSWORD_KEY,
+  port: process.env.PORT_KEY,
+
+  ssl: {
+    rejectUnauthorized: false
+  }
+
 })
 
 client.connect(function(err) {
-  if (err) throw err;
+  console.log("here");
+  if (!err)
   console.log("Connected!");
 });
+
+// const { Client } = require('pg');
+
+// const client = new Client({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false
+//   }
+// });
+
+// client.connect();
+
+// client.query('SELECT * FROM "MsStudent"', (err, res) => {
+//   if (err) throw err;
+//   for (let row of res.rows) {
+//     console.log(JSON.stringify(row));
+//   }
+//   client.end();
+  
+// });
