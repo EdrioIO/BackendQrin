@@ -7,6 +7,7 @@ let channel = [];
 
 
 app.use(express.json()); // biar bisa parsing json
+app.use(router);
 
 //client request to server to get respond
 //req for request , res for respond
