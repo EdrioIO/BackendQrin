@@ -2,7 +2,7 @@ const dotenv = require('dotenv').config();
 const express = require('express');
 const app = express();
 // const router = require('./routes/route')
-// const database = require('./database');
+const database = require('./database/database');
 const staticPort = 3000;
 
 let channel = [];
@@ -18,6 +18,13 @@ app.get('/', (req, res) => {
         number: 13,
         Name: 'edrio'
     })
+});
+
+app.post('/api/submit', (req,res)=>{
+    const channelSend = req.body;
+    channelSend.id = 1;
+    channel.push(channelSend);
+    res.status(201).json(channelSend);
 });
 
 app.post('/api/submit', (req,res)=>{
