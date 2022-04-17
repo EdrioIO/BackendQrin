@@ -1,5 +1,3 @@
-const envi = require('dotenv').config()
-
 // const knex = require('knex');
 // const knexfile = require('./knexfile')
 // const db = knex(knexfile.development);
@@ -16,13 +14,13 @@ const client = new Client({
 });
 
 client.connect();
-
  
-client.query<JSON>('SELECT * FROM "ms_student" ', (err, res) => {
+client.query('SELECT * FROM "ms_student";', (err, res) => {
+  
   if (err) throw err;
   for (let row of res.rows) {
     console.log(JSON.stringify(row));
   }
   client.end();
-  
+
 });

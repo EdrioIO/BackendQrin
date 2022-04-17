@@ -1,13 +1,16 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const app = express();
-const router = require('/routes');
+const router = require('./routes/route')
+const database = require('./db/database');
 const staticPort = 3000;
 
 let channel = [];
 
 
 app.use(express.json()); // biar bisa parsing json
-app.use(router);
+// app.use(router);
 
 //client request to server to get respond
 //req for request , res for respond

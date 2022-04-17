@@ -23,3 +23,6 @@ exports.up = function(knex) {
 exports.down = function(knex) {
   return knex.schema.dropTable('ms_staff');
 };
+
+
+// npx knex migrate:latest --knexfile db/knexfile.js
