@@ -5,8 +5,8 @@
  */
 module.exports = {
 
-  development: {
-    client: 'pg',
+  production: {
+    client: "pg",
     connection: process.env.DATABASE_URL,
     pool: { //connection
       min: 2,
