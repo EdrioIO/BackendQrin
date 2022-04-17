@@ -3,12 +3,11 @@
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-require('dotenv').config();
+const dotenv = require('dotenv').config();
 module.exports = {
 
   production: {
-    client: process.env.DB_CLIENT,
-    connection: process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE_URL,
     ssl: {
       rejectUnauthorized: false
     },
