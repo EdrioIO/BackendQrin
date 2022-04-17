@@ -1,29 +1,12 @@
-require('dotenv').config()
+const knex = require('knex');
+const envi = process.env.DB_ENV || 'development';
+const config = require('./knexfile');
 
-// manual 1 by 1
+const db = knex(config[envi]);
 
-// const { Client } = require('pg')
-
-// const client = new Client({
-//   user: process.env.USER_KEY,
-//   host: process.env.HOST_KEY,
-//   database: process.env.DATABASE_KEY,
-//   password: process.env.PASSWORD_KEY,
-//   port: process.env.PORT_KEY,
-
-// ssl: {
-//     rejectUnauthorized: false
-//   }
-
-// })
-
-// client.connect(function(err) {
-//   if (err) throw err;
-//   console.log("Connected!");
-// });
+module.exports = db;
 
 
-// one single url
 const { Client } = require('pg');
 
 const client = new Client({
@@ -34,14 +17,13 @@ const client = new Client({
 });
 
 client.connect();
-
-const query = 'Select * ' + 'ST001'
  
-client.query('SELECT * FROM "MsStudent"', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-  client.end();
+client.query('SELECT * FROM "ms_student";', (err, res) => {
   
+  // if (err) throw err;
+  // for (let row of res.rows) {
+  //   console.log(JSON.stringify(row));
+  // }
+  // client.end();
+
 });
