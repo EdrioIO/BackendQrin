@@ -1,10 +1,10 @@
-const knex = require('knex');
-const envi = process.env.DB_ENV || 'development';
-const config = require('./knexfile');
+// const knex = require('knex');
+// const envi = process.env.DB_ENV || 'development';
+// const config = require('./knexfile');
 
-const db = knex(config[envi]);
+// const db = knex(config[envi]);
 
-module.exports = db;
+// module.exports = db;
 
 
 const { Client } = require('pg');
