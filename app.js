@@ -2,8 +2,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const app = express();
-const router = require('./routes/route')
-const database = require('./db/database');
+// const router = require('./routes/route')
+// const database = require('./db/database');
 const staticPort = 3000;
 
 let channel = [];
