@@ -114,4 +114,4 @@ app.listen(process.env.PORT || staticPort, () => {
     console.log('listening on port 3000');
 }) // jalanin di port yang auto / 3000
 
-
+module.exports = app

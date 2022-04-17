@@ -6,18 +6,14 @@
 module.exports = {
 
   development: {
-    client: 'postgresql',
-    connection: {
-      database: process.env.DATABASE_KEY,
-      user:     process.env.USER_KEY,
-      password: process.env.PASSWORD_KEY
-    },
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
     pool: { //connection
       min: 2,
       max: 10
     },
     migrations: {
-      tableName: 'knex_migrations'
+      directory : './migrations',
     }
-  },
+  }
 };

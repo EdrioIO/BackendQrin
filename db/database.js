@@ -1,8 +1,11 @@
-// const knex = require('knex');
-// const knexfile = require('./knexfile')
-// const db = knex(knexfile.development);
+const knex = require('knex');
+const envi = process.env.DB_ENV || 'development';
+const config = require('./knexfile');
 
-// module.exports = db;
+const db = knex(config[envi]);
+
+module.exports = db;
+
 
 const { Client } = require('pg');
 
@@ -17,10 +20,10 @@ client.connect();
  
 client.query('SELECT * FROM "ms_student";', (err, res) => {
   
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-  client.end();
+  // if (err) throw err;
+  // for (let row of res.rows) {
+  //   console.log(JSON.stringify(row));
+  // }
+  // client.end();
 
 });
