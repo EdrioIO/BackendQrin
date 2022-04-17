@@ -6,7 +6,6 @@
 
 // module.exports = db;
 
-
 const { Client } = require('pg');
 
 const client = new Client({
@@ -20,10 +19,10 @@ client.connect();
  
 client.query('SELECT * FROM "ms_student";', (err, res) => {
   
-  // if (err) throw err;
-  // for (let row of res.rows) {
-  //   console.log(JSON.stringify(row));
-  // }
-  // client.end();
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
 
 });

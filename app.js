@@ -8,7 +8,7 @@ const staticPort = 3000;
 let channel = [];
 
 
-app.use(express.json()); // biar bisa parsing json
+app.use(express.json()); 
 // app.use(router);
 
 //client request to server to get respond
@@ -100,17 +100,8 @@ app.get('/multiple', (req, res) => {
     });
 });
 
-app.get('/verifyAbsence',function(req, res){
-
-    
-
-    res.json({
-
-    })
-})
-
 app.listen(process.env.PORT || staticPort, () => {
     console.log('listening on port 3000');
 }) // jalanin di port yang auto / 3000
 
-// module.exports = app;
+
