@@ -1,15 +1,16 @@
+const dotenv = require('dotenv').config();
 // Update with your config settings.
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-const dotenv = require('dotenv').config();
 
 module.exports = {
 
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
     pool: { //connection
       min: 2,
       max: 10
