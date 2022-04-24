@@ -5,6 +5,9 @@ const dotenv = require('dotenv').config();
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
+
+const __dirname = './database'
+
 module.exports = {
 
   production: {
