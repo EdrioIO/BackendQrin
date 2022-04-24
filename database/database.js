@@ -1,5 +1,7 @@
+const dotenv = require('dotenv').config();
+
 const knex = require('knex');
-const envi = process.env.DB_ENV || 'development';
+const envi = process.env.DB_CLIENT || 'development';
 const config = require('./knexfile');
 
 const db = knex(config[envi]);
