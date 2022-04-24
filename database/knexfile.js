@@ -3,7 +3,7 @@
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-
+const dotenv = require('dotenv').config();
 
 module.exports = {
 
