@@ -6,7 +6,6 @@ const dotenv = require('dotenv').config();
  */
 
 
-const __dirname = './database'
 
 module.exports = {
 
@@ -21,10 +20,10 @@ module.exports = {
       max: 10
     },
     migrations: {
-      directory: __dirname + '/migrations',
+      directory: './database/migrations',
     },
     seeds: {
-      directory: __dirname + '/seeds',
+      directory: './database/seeds',
     },
   }
 };
