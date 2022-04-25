@@ -12,7 +12,21 @@ module.exports = {
     deleteById,
     updateById,
     findAttendanceInquiry,
-    deleteInquiry
+    deleteInquiry,
+    //start project export
+    findUserByNIM,
+    showAllUser,
+}
+
+function findUserByNIM(student_nim, student_password){
+    return db("ms_student")
+    .where({student_nim : student_nim, 
+            student_password : student_password})
+    .first()
+}
+
+function showAllUser(){
+    return db("ms_student")
 }
 
 // insert new record

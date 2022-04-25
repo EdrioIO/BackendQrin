@@ -8,6 +8,10 @@ const router = express.Router()
 //client request to server to get respond
 //req for request , res for respond
 
+router.get('/', (req,res)=>{
+    res.json({message : "this is homepage root for testing staff router"})
+})
+
 
 router.post('/api/staff', (req,res)=>{
     staff.add(req.body).then(staff =>{
