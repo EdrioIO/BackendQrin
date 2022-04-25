@@ -3,7 +3,7 @@ const temp = require('../models/dbHelpers');
 
 const router = express.Router()
 
-router.get('/showuser', (req,res) =>{
+router.post('/showuser', (req,res) =>{
     temp.showAllUser().then(temp =>{
         if(temp){
             res.status(200).json(temp);
@@ -14,7 +14,7 @@ router.get('/showuser', (req,res) =>{
     })
 })
 
-router.get('/login', (req,res)=>{
+router.post('/login', (req,res)=>{
     const {student_nim, student_password} = req.body
     temp.findUserByNIM(student_nim,student_password)
     .then(temp =>{

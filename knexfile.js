@@ -5,15 +5,11 @@ const dotenv = require('dotenv').config();
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
-
-
 module.exports = {
   development:{
     client: 'pg',
     connection:{
-      database: 'QRin',
-      user: 'postgres',
-      password: 'admin123'
+      connectionString: 'postgressql://postgres:admin123@localhost:5432/QRin',
     },
     pool:{
       min: 2,
