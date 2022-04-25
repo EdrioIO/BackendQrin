@@ -6,10 +6,10 @@ const router = express.Router()
 router.post('/showuser', (req,res) =>{
     temp.showAllUser().then(temp =>{
         if(temp){
-            res.status(200).json(temp);
+            res.status(200).json({error: false, temp});
         }
         else{
-            res.status(404).json({message : 'No Student Data existed'})
+            res.status(404).json({error : true, message : 'No Student Data existed'})
         }
     })
 })
@@ -19,10 +19,10 @@ router.post('/login', (req,res)=>{
     temp.findUserByNIM(student_nim,student_password)
     .then(temp =>{
         if(temp){
-            res.status(200).json({message: 'Login parameter matched alert', temp})
+            res.status(200).json({error: false,message: 'Login parameter matched alert', temp})
         }
         else{
-            res.status(404).json({message : 'Login Error alert'})
+            res.status(404).json({error: true, message : 'Login Error alert'})
         }
     }).catch(err =>{
         res.status(500).json({message : 'Unable to perform operation'})
