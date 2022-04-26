@@ -92,7 +92,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
-
+//TODO : MIGRATE THIS TO BE THE MAIN LOGIN ROUTES
 router.post('/login/bcrypt', async (req, res) => {
     const { student_nim, student_password } = req.body;
 
