@@ -16,10 +16,10 @@ module.exports = {
       max: 10
     },
     migrations: {
-      tableName: 'migration',
+      tableName: './database/migration',
     },
     seeds: {
-      tableName: 'seed',
+      tableName: './database/seed',
     },
   },
   

@@ -14,11 +14,44 @@ module.exports = {
     findAttendanceInquiry,
     deleteInquiry,
     //start project export
-    findUserByNIM,
+    findUserForLogin,
+    findStudentById,
+    findStudentByNIM,
+    verifyRegister,
     showAllUser,
+    addStudent,
+
 }
 
-function findUserByNIM(student_nim, student_password){
+function addStudent(student){
+    return db('ms_student').insert(student, ['student_id', 'student_nim'])
+}
+
+// user & student func
+function findStudentById(student_id){
+    return db("ms_student")
+    .where({student_id : student_id})
+    .first()
+}
+
+
+
+function findStudentByNIM(student_nim){
+    return db("ms_student")
+    .select('*')
+    .where({student_nim : student_nim})
+    .first()
+}
+
+function verifyRegister(student_nim,student_email,student_phone){
+    return db("ms_student")
+    .where({student_nim : student_nim})
+    .orWhere({student_email : student_email})
+    .orWhere({student_phone : student_phone})
+    .first()
+}
+
+function findUserForLogin(student_nim, student_password){
     return db("ms_student")
     .where({student_nim : student_nim, 
             student_password : student_password})
@@ -80,3 +113,5 @@ function deleteInquiry(id){
 }
 
 // update record
+
+

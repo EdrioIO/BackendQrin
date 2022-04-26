@@ -5,10 +5,10 @@
 
 // changes yang mau dilakukan
 exports.up = function(knex) {
-    return knex.schema.createTable('ms_staff', table =>{
-        table.increments(); // id field
-        table.string('email').notNullable().unique
-        table.string('first_name').notNullable();
+    return knex.schema.createTable('ms_student', table =>{
+        table.increments('student_id'); // id field
+        table.string('student_nim').notNullable().unique();
+        table.string('student_name').notNullable();
         table.string('last_name').notNullable();
         table.timestamp(true,true);
     })
