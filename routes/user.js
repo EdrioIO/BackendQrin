@@ -1,7 +1,7 @@
 const express = require('express');
 const student = require('../models/dbHelpers');
 const bcrypt = require('bcrypt');
-
+const loc = require('geopoint');
 
 const router = express.Router();
 
@@ -119,6 +119,39 @@ router.post('/login/bcrypt', async (req, res) => {
         res.status(500).json({ error: true, message: 'Unable to perform the operation' })
     }
 })
+
+
+router.get('/dev', (req,res)=>{
+    const {student_id} = req.body;
+
+    student.findStudentById(student_id)
+    .then(student =>{
+        console.log(student.student_id)
+    })
+})
+
+
+// app.post('/takencourse', (req,res)=>{
+
+// })
+
+router.post('/attend',async (req,res)=>{
+    const {student_nim,qr_code,location_x,location_y,attend_type} = req.body
+
+    student.grabAttendData(student_nim)
+    .then(student =>{
+        if(student){
+            
+        }
+        else{
+            res.status(400).json({error : true, message : 'Attend attempt failed'})
+        }
+    })
+
+    
+})
+    
+
 
 
 module.exports = router;

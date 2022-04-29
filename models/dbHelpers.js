@@ -20,12 +20,33 @@ module.exports = {
     verifyRegister,
     showAllUser,
     addStudent,
+    // courseTakenById,
+    // checkQRCode,
+    // checkStudentLocation,
+    // checkPresenceIn,
+    // checkPresenceOut,
+    grabAttendData,
+}
 
+// function courseTakenById(student_id){
+//     return db()
+// }
+
+
+function grabAttendData(student_nim,qr_code){
+    return db.select('stu.student_nim', 'ses.qr_code', 'cla.class_coor_x', 'cla.class_coor_y', 'att.presence_in_time', 'att.presence_out_time').from({stu : 'ms_student'})
+    .join({att : 'ms_attendance'}, stu.student_id = att.student_id)
+    .join({seh : 'ms_session_header'}, seh.session_header_id = att.session_header_id)
+    .join({ses : 'ms_session'}, seh.session_id = ses.session_id)
+    .join({cla : 'ms_class'}, cla.class_id = seh.class_id)
+    .where({'stu.student_nim' : student_nim, 'ses.qr_code' : qr_code})
 }
 
 function addStudent(student){
     return db('ms_student').insert(student, ['student_id', 'student_nim'])
 }
+
+
 
 // user & student func
 function findStudentById(student_id){
@@ -33,7 +54,6 @@ function findStudentById(student_id){
     .where({student_id : student_id})
     .first()
 }
-
 
 
 function findStudentByNIM(student_nim){
