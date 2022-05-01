@@ -42,11 +42,13 @@ function IntTwoChars(i) {
   }
 
 function timeSlicer(timeToSlice){
-    slicedhour = timeToSlice.slice(0,2)
-    slicedminute = timeToSlice.slice(3,5)
-    slicedsec = timeToSlice.slice(6,8)
-    return slicedhour, slicedminute, slicedsec
+    const slicedhour = timeToSlice.slice(0,1)
+    const slicedminute = timeToSlice.slice(3,5)
+    const slicedsec = timeToSlice.slice(6,8)
+    return {slicedhour, slicedminute, slicedsec}
 }
+
+
 
 // const curdate = getCurrentTime();
 //     let hourx = IntTwoChars(curdate.getHours());
@@ -63,9 +65,8 @@ function compareBaseTime(time1, time2){
     const time1ToSec = (hours) * 60 * 60 + minutes * 60 + seconds
     console.log(time1ToSec)
     
-    let hours2, minutes2, seconds2 = timeSlicer(time2);
-    console.log(hours2,minutes2,seconds2);
-    const time2ToSec = hours2 * 60 * 60 + minutes2 * 60 + seconds2
+    let times = timeSlicer(time2);
+    const time2ToSec = times.slicedhour * 60 * 60 + times.slicedminute * 60 + times.slicedsec
     console.log(time2ToSec)
     const compare = Math.abs(time1ToSec - time2ToSec)
     console.log(compare)
