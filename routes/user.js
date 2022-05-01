@@ -135,7 +135,6 @@ router.patch('/attend', async (req, res) => {
 
     try {
         const studentRes = await student.grabAttendData(student_nim, qr_code);
-        res.status(302).json(studentRes)
         if (studentRes) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             console.log(studentRes.latitude,studentRes.longitude)
