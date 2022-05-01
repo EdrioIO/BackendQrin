@@ -42,7 +42,7 @@ function IntTwoChars(i) {
   }
 
 function timeSlicer(timeToSlice){
-    const slicedhour = timeToSlice.slice(0,1)
+    const slicedhour = timeToSlice.slice(0,2)
     const slicedminute = timeToSlice.slice(3,5)
     const slicedsec = timeToSlice.slice(6,8)
     return {slicedhour, slicedminute, slicedsec}
