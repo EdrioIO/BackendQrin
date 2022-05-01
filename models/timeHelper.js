@@ -24,7 +24,7 @@ async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    var timeNow = new Date().toLocaleTimeString();
+    var timeNow = new Date().toLocaleTimeString().toString();
     return timeNow;
 }
 
@@ -63,7 +63,7 @@ function compareBaseTime(time1, time2){
     let times = timeSlicer(time1)
 
     console.log(times.slicedhour,times.slicedminute,times.slicedsec);
-    const time1ToSec = ((times.slicedhour - offset) % 25) * 60 * 60 + times.slicedminute * 60 + times.slicedsec
+    const time1ToSec = times.slicedhour * 60 * 60 + times.slicedminute * 60 + times.slicedsec
     console.log(time1ToSec)
     
     let times2 = timeSlicer(time2);
