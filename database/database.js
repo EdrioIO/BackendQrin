@@ -1,12 +1,12 @@
 const dotenv = require('dotenv').config();
 
-// const knex = require('knex');
-// const envi = process.env.DB_CLIENT || 'development';
-// const config = require('./knexfile')[envi];
+const knex = require('knex');
+const envi = process.env.DB_CLIENT || 'development';
+const config = require('./knexfile')[envi];
 
-// const db = knex(config);
+const db = knex(config);
 
-// module.exports = db;
+module.exports = db;
 
 const { Client } = require('pg');
 
@@ -24,4 +24,7 @@ client.query('SELECT * FROM "ms_student";', (err, res) => {
   // }
   // client.end();
 
+  client.end()
+
 });
+
