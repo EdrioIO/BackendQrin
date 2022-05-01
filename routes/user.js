@@ -99,6 +99,7 @@ router.post('/login/bcrypt', async (req, res) => {
 
     try {
         const studentRes = await student.findStudentByNIM(student_nim)
+
         if (!studentRes) {
             res.status(400).json({ error: true, message: 'Login Error alert' })
         }
@@ -134,10 +135,11 @@ router.patch('/attend', async (req, res) => {
 
     try {
         const studentRes = await student.grabAttendData(student_nim, qr_code);
-
+        res.status(200).json(studentRes)
         if (studentRes) {
-            const userCoor = new GeoPoint(location_x, location_y);
-            const sessionClassCoor = new GeoPoint(studentRes.class_coor_x, studentRes.class_coor_y);
+            const userCoor = new GeoPoint(Number(location_x), Number(location_y));
+            console.log(studentRes.class_coor_x, studentRes.class_coor_y)
+            const sessionClassCoor = new GeoPoint(Number(studentRes.class_coor_x), Number(studentRes.class_coor_y));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
             const heightDiff = Math.abs(location_z - studentRes.class_coor_z);
 
@@ -167,21 +169,26 @@ router.patch('/attend', async (req, res) => {
         else {
             res.status(400).json({ error: true, message: 'Attend attempt failed' })
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error : true, message : 'Attend operation failed'})
+        res.status(500).json({ error: true, message: 'Attend operation failed' })
     }
 })
 
 
-router.get('/dev', (req, res) => {
+router.get('/dev', async (req, res) => {
     const { student_nim, qr_code, location_x, location_y, location_z, attend_type } = req.body
 
-    console.log(student_nim,qr_code,location_x,location_y,location_z,attend_type);
+    console.log(student_nim, qr_code, location_x, location_y, location_z, attend_type);
 
-    const dbHolder = student.grabAttendData(student_nim,qr_code)
-
-    console.log(dbHolder)
+    try {
+        const dbHolder = await student.grabAttendData(student_nim, qr_code)
+        if (dbHolder) res.status(200).json({ message: 'apakah ada data', dbHolder })
+        else res.status(404).json({ error: true, dbHolder })
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: true })
+    }
 })
 
 

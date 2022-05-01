@@ -33,33 +33,33 @@ module.exports = {
 
 function grabAttendData(student_nim, qr_code) {
     return db('ms_student')
-        .join(('ms_attendance'), 'ms_student'.student_id = 'ms_attendance'.student_id)
-        .join(('ms_session_header'), 'ms_session_header'.session_header_id = 'ms_attendance'.session_header_id)
-        .join(('ms_session'), 'ms_session_header'.session_id = 'ms_session'.session_id)
-        .join(('ms_class'), 'ms_class'.class_id = 'ms_session_header'.class_id)
-        .select('ms_student.student_nim', 'ms_session.qr_code', 'cla.class_coor_x', 'cla.class_coor_y', 'cla.class_coor_z', 'att.presence_in_time', 'att.presence_out_time')
-        .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
+        .join('ms_attendance', 'ms_student.student_id', 'ms_attendance.student_id')
+        .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
+        .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
+        .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
+        .select('student_nim', 'qr_code', 'class_coor_x', 'class_coor_y', 'class_coor_z', 'presence_in_time', 'presence_out_time')
+        // .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
 }
 
 function alterPresenceData(student_nim, attend_type, currentTime) {
     if (attend_type == 'in') {
         db('ms_student')
-            .join(('ms_attendance'), 'ms_student'.student_id = 'ms_attendance'.student_id)
-            .join(('ms_session_header'), 'ms_session_header'.session_header_id = 'ms_attendance'.session_header_id)
-            .join(('ms_session'), 'ms_session_header'.session_id = 'ms_session'.session_id)
-            .join(('ms_class'), 'ms_class'.class_id = 'ms_session_header'.class_id)
+            .join('ms_attendance', 'ms_student.student_id', 'ms_attendance.student_id')
+            .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
+            .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
+            .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
             .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
-            .update({ presence_in_time: currentTime })
+            .update({ 'ms_attendance.presence_in_time': currentTime })
 
     }
     else {
         db('ms_student')
-            .join(('ms_attendance'), 'ms_student'.student_id = 'ms_attendance'.student_id)
-            .join(('ms_session_header'), 'ms_session_header'.session_header_id = 'ms_attendance'.session_header_id)
-            .join(('ms_session'), 'ms_session_header'.session_id = 'ms_session'.session_id)
-            .join(('ms_class'), 'ms_class'.class_id = 'ms_session_header'.class_id)
+            .join('ms_attendance', 'ms_student.student_id', 'ms_attendance.student_id')
+            .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
+            .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
+            .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
             .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
-            .update({ presence_out_time: currentTime })
+            .update({ 'ms_attendance.presence_out_time': currentTime })
     }
 }
 
