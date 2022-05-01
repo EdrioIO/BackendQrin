@@ -139,7 +139,7 @@ router.patch('/attend', async (req, res) => {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor =await new GeoPoint(await Number(studentRes[0].latitude),await Number(studentRes[0].longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
-            const heightDiff = Math.abs(location_z - studentRes.altitude);
+            const heightDiff = Math.abs(location_z - studentRes[0].altitude);
 
 
             if (distance > 30 || heightDiff > 5) {
@@ -148,7 +148,7 @@ router.patch('/attend', async (req, res) => {
             else {
                 if (attend_type == 'in' || 'out') {
                     const currentTime = await time.getCurrentTime();
-                    const secDiff = time.compareBaseTime(currentTime, studentRes.presence_in_time);
+                    const secDiff = time.compareBaseTime(currentTime, studentRes[0].presence_in_time);
                     if (secDiff < 1800) {
                         // alter presence in time nya
                         await student.alterPresenceData(student_nim, attend_type, currentTime);
