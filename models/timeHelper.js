@@ -17,12 +17,11 @@ module.exports={
 
 
 
-
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    const timeNow = new Date();
+    const timeNow = new Date().toTimeString(0,8);
     return timeNow;
 }
 
