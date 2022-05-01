@@ -136,10 +136,10 @@ router.patch('/attend', async (req, res) => {
     try {
         const studentRes = await student.grabAttendData(student_nim, qr_code);
         if (studentRes) {
-            const userCoor = new GeoPoint(Number(location_x), Number(location_y));
-            const sessionClassCoor = new GeoPoint(Number(studentRes.latitude), Number(studentRes.longitude));
+            const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
+            const sessionClassCoor =await  new GeoPoint(await Number(studentRes.latitude),await Number(studentRes.longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
-            const heightDiff = Math.abs(location_z - studentRes.class_coor_z);
+            const heightDiff = Math.abs(location_z - studentRes.altitude);
 
 
             if (distance > 30 || heightDiff > 5) {
