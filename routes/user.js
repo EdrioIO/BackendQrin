@@ -147,7 +147,7 @@ router.patch('/attend', async (req, res) => {
             }
             else {
                 if (attend_type == 'in') {
-                    const currentTime = await time.getCurrentTime();
+                    const currentTime = new Date();
                     const secDiff = time.compareBaseTime(currentTime, studentRes[0].base_in_time);
                     console.log(secDiff);
                     if (secDiff < 1800) {
@@ -160,7 +160,7 @@ router.patch('/attend', async (req, res) => {
                     }
                 }
                 else if (attend_type == 'out') {
-                    const currentTime = await time.getCurrentTime();
+                    const currentTime = new Date();
                     const secDiff = time.compareBaseTime(currentTime, studentRes[0].base_out_time);
                     if (secDiff < 1800) {
                         // alter presence in time nya
