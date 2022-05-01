@@ -137,7 +137,7 @@ router.patch('/attend', async (req, res) => {
         const studentRes = await student.grabAttendData(student_nim, qr_code);
         if (studentRes) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
-            const sessionClassCoor =await new GeoPoint(await Number(studentRes[0].latitude),await Number(studentRes[0].longitude));
+            const sessionClassCoor = await new GeoPoint(await Number(studentRes[0].latitude), await Number(studentRes[0].longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
             const heightDiff = Math.abs(location_z - studentRes[0].altitude);
 
@@ -146,13 +146,22 @@ router.patch('/attend', async (req, res) => {
                 res.status(400).json({ error: true, message: 'Distance too far from class' });
             }
             else {
-                if (attend_type == 'in' || 'out') {
+                if (attend_type == 'in') {
                     const currentTime = await time.getCurrentTime();
-                    const secDiff = time.compareBaseTime(currentTime, studentRes[0].presence_in_time);
+                    const secDiff = time.compareBaseTime(currentTime, studentRes[0].base_in_time);
                     if (secDiff < 1800) {
                         // alter presence in time nya
                         await student.alterPresenceData(student_nim, attend_type, currentTime);
-                        res.status(200).json({ error: false, message: 'Attend in Succeeded' })
+                        res.status(200).json({ error: false, message: 'Attend IN Succeeded' })
+                    }
+                }
+                else if (attend_type == 'out') {
+                    const currentTime = await time.getCurrentTime();
+                    const secDiff = time.compareBaseTime(currentTime, studentRes[0].base_out_time);
+                    if (secDiff < 1800) {
+                        // alter presence in time nya
+                        await student.alterPresenceData(student_nim, attend_type, currentTime);
+                        res.status(200).json({ error: false, message: 'Attend OUT Succeeded' })
                     }
                     else {
                         res.status(400).json({ error: true, message: 'Attend time is outside the allocated range' })
