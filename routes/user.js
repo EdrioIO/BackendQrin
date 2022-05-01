@@ -122,14 +122,7 @@ router.post('/login/bcrypt', async (req, res) => {
 })
 
 
-router.get('/dev', (req, res) => {
-    const { student_id } = req.body;
 
-    student.findStudentById(student_id)
-        .then(student => {
-            console.log(student.student_id)
-        })
-})
 
 
 // app.post('/takencourse', (req,res)=>{
@@ -180,6 +173,16 @@ router.patch('/attend', async (req, res) => {
     }
 })
 
+
+router.get('/dev', (req, res) => {
+    const { student_nim, qr_code, location_x, location_y, location_z, attend_type } = req.body
+
+    console.log(student_nim,qr_code,location_x,location_y,location_z,attend_type);
+
+    const dbHolder = student.grabAttendData(student_nim,qr_code)
+
+    console.log(dbHolder)
+})
 
 
 module.exports = router;
