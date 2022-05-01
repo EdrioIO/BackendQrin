@@ -37,7 +37,7 @@ function grabAttendData(student_nim, qr_code) {
         .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
         .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
         .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
-        .select('student_nim', 'qr_code', 'class_coor_x', 'class_coor_y', 'class_coor_z', 'presence_in_time', 'presence_out_time')
+        .select('student_nim', 'qr_code', 'latitude', 'longitude', 'altitude', 'presence_in_time', 'presence_out_time')
         // .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
 }
 
