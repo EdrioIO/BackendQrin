@@ -59,6 +59,7 @@ function timeSlicer(timeToSlice){
 //     console.log(hourx,minutesx,secondsx)
 
 function compareBaseTime(time1, time2){
+    console.log(time1)
     let times = timeSlicer(time1)
 
     console.log(times.slicedhour,times.slicedminute,times.slicedsec);
