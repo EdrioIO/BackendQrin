@@ -63,7 +63,7 @@ function compareBaseTime(time1, time2){
     console.log(time1ToSec)
     
     let times2 = timeSlicer(time2);
-    console.log(times.slicedhour,times.slicedminute,times.slicedsec)
+    console.log(times2.slicedhour,times2.slicedminute,times2.slicedsec)
     const time2ToSec = times.slicedhour * 60 * 60 + times.slicedminute * 60 + times.slicedsec
     console.log(time2ToSec)
     const compare = Math.abs(time1ToSec - time2ToSec)
