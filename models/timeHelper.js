@@ -49,7 +49,8 @@ function timeSlicer(timeToSlice){
     const slicedsec = timeToSlice.slice(6,8)
     return {slicedhour, slicedminute, slicedsec}
 }
-
+const tes = 1 -(-4)
+console.log()
 
 
 // const curdate = getCurrentTime();
@@ -62,8 +63,8 @@ function compareBaseTime(time1, time2){
     console.log(time1)
     let times = timeSlicer(time1)
 
-    console.log(times.slicedhour,times.slicedminute,times.slicedsec);
-    const time1ToSec = times.slicedhour * 60 * 60 + times.slicedminute * 60 + times.slicedsec
+    console.log((times.slicedhour - (getTimezoneOffset())),times.slicedminute,times.slicedsec);
+    const time1ToSec = ((times.slicedhour - (getTimezoneOffset())) %25) * 60 * 60 + times.slicedminute * 60 + times.slicedsec
     console.log(time1ToSec)
     
     let times2 = timeSlicer(time2);
