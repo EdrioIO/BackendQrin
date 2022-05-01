@@ -4,22 +4,27 @@ const db = require('./dbHelpers')
 module.exports={
     getCurrentTime,
     compareBaseTime,
-
+    getTimezoneOffset
 }
 
 // current timestamp in milliseconds
 // function IntTwoChars(i) {
 //   return (`0${i}`).slice(-2);
 // }
+var offset = new Date().getTimezoneOffset();
+console.log(offset / 60);
 
-
+function getTimezoneOffset(){
+    var offset = new Date().getTimezoneOffset();
+    return (offset / 60)
+}
 
 
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    const timeNow = new Date().toLocaleTimeString()
+    var timeNow = (new Date(str)).toLocaleTimeString(defaultlang, options);
     return timeNow;
 }
 
@@ -57,7 +62,7 @@ function compareBaseTime(time1, time2){
     let times = timeSlicer(time1)
 
     console.log(times.slicedhour,times.slicedminute,times.slicedsec);
-    const time1ToSec = (times.slicedhour) * 60 * 60 + times.slicedminute * 60 + times.slicedsec
+    const time1ToSec = ((times.slicedhour - offset) % 25) * 60 * 60 + times.slicedminute * 60 + times.slicedsec
     console.log(time1ToSec)
     
     let times2 = timeSlicer(time2);
