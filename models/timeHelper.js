@@ -1,12 +1,41 @@
+const db = require('./dbHelpers')
+
 
 module.exports={
+    getCurrentTime,
     compareBaseTime,
+
 }
 
 // current timestamp in milliseconds
 // function IntTwoChars(i) {
 //   return (`0${i}`).slice(-2);
 // }
+
+
+
+
+
+
+
+async function getCurrentTime(){
+    // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
+    // const ex = await getColTimeFromDate(new Date());
+    // return ex;
+    const timeNow = new Date();
+    return timeNow;
+}
+
+// const date_ob = db.getTimeDev();
+// let date = IntTwoChars(date_ob.getDate());
+// let month = IntTwoChars(date_ob.getMonth() + 1);
+// let year =  IntTwoChars(date_ob.getFullYear());
+// let hours = IntTwoChars(date_ob.getHours());
+// let minutes = IntTwoChars(date_ob.getMinutes());
+// let seconds = IntTwoChars(date_ob.getSeconds());
+// let dateDisplay = `${hours}:${minutes}:${seconds} ${month}/${date}/${year}`;
+// console.log(hours,minutes,seconds)
+
 
 function IntTwoChars(i) {
     return (`0${i}`).slice(-2);

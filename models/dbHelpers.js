@@ -27,9 +27,14 @@ module.exports = {
     // checkPresenceOut,
     grabAttendData,
     alterPresenceData,
-
+    getTimeDev,
 }
 
+
+function getTimeDev(){
+    const timeNow = new Date()
+    return timeNow
+}
 
 function grabAttendData(student_nim, qr_code) {
     return db('ms_student')
