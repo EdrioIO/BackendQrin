@@ -139,39 +139,44 @@ router.get('/dev', (req, res) => {
 router.patch('/attend', async (req, res) => {
     const { student_nim, qr_code, location_x, location_y, location_z, attend_type } = req.body
 
-    const studentRes = await student.grabAttendData(student_nim, qr_code);
+    try {
+        const studentRes = await student.grabAttendData(student_nim, qr_code);
 
-    if (studentRes) {
-        const userCoor = new GeoPoint(location_x, location_y);
-        const sessionClassCoor = new GeoPoint(studentRes.class_coor_x, studentRes.class_coor_y);
-        const distance = userCoor.distanceTo(sessionClassCoor, true);
-        const heightDiff = Math.abs(location_z - studentRes.class_coor_z);
+        if (studentRes) {
+            const userCoor = new GeoPoint(location_x, location_y);
+            const sessionClassCoor = new GeoPoint(studentRes.class_coor_x, studentRes.class_coor_y);
+            const distance = userCoor.distanceTo(sessionClassCoor, true);
+            const heightDiff = Math.abs(location_z - studentRes.class_coor_z);
 
 
-        if (distance > 30 || heightDiff > 5) {
-            res.status(400).json({ error: true, message: 'Distance too far from class' });
+            if (distance > 30 || heightDiff > 5) {
+                res.status(400).json({ error: true, message: 'Distance too far from class' });
+            }
+            else {
+                if (attend_type == 'in' || 'out') {
+                    const currentTime = await time.getCurrentTime();
+                    const secDiff = time.compareBaseTime(currentTime, studentRes.presence_in_time);
+                    if (secDiff < 1800) {
+                        // alter presence in time nya
+                        await student.alterPresenceData(student_nim, attend_type, currentTime);
+                        res.status(200).json({ error: false, message: 'Attend in Succeeded' })
+                    }
+                    else {
+                        res.status(400).json({ error: true, message: 'Attend time is outside the allocated range' })
+                    }
+                }
+
+                else {
+                    res.status(404).json({ error: true, message: 'Bad parameter' })
+                }
+            }
         }
         else {
-            if (attend_type == 'in' || 'out') {
-                const currentTime = await time.getCurrentTime();
-                const secDiff = time.compareBaseTime(currentTime, studentRes.presence_in_time);
-                if (secDiff < 1800) {
-                    // alter presence in time nya
-                    student.alterPresenceData(student_nim, attend_type, currentTime);
-                    res.status(200).json({ error: false, message: 'Attend in Succeeded' })
-                }
-                else {
-                    res.status(400).json({ error: true, message: 'Attend time is outside the allocated range' })
-                }
-            }
-
-            else {
-                res.status(404).json({ error: true, message: 'Bad parameter' })
-            }
+            res.status(400).json({ error: true, message: 'Attend attempt failed' })
         }
-    }
-    else {
-        res.status(400).json({ error: true, message: 'Attend attempt failed' })
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error : true, message : 'Attend operation failed'})
     }
 })
 
