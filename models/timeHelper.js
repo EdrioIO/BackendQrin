@@ -15,13 +15,11 @@ module.exports={
 
 
 
-
-
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    const timeNow = new Date().toTimeString(0,8);
+    const timeNow = new Date().toLocaleTimeString()
     return timeNow;
 }
 
@@ -66,6 +64,8 @@ function compareBaseTime(time1, time2){
     console.log(times2.slicedhour,times2.slicedminute,times2.slicedsec)
     const time2ToSec = times2.slicedhour * 60 * 60 + times2.slicedminute * 60 + times2.slicedsec
     console.log(time2ToSec)
+
+
     const compare = Math.abs(time1ToSec - time2ToSec)
     console.log(compare)
 
