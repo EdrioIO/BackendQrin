@@ -52,13 +52,13 @@ function compareBaseTime(time1, time2){
     console.log(time1)
     let times = timeSlicer(time1)
 
-    console.log(times.slicedhour,times.slicedminute,times.slicedsec);
-    const time1ToSec = times.slicedhour * 60 * 60 + times.slicedminute * 60 + times.slicedsec
+    console.log(Number(times.slicedhour),Number(times.slicedminute),Number(times.slicedsec));
+    const time1ToSec = Number(times.slicedhour) * 60 * 60 + Number(times.slicedminute) * 60 + Number(times.slicedsec)
     console.log(time1ToSec)
     
     let times2 = timeSlicer(time2);
-    console.log(times2.slicedhour,times2.slicedminute,times2.slicedsec)
-    const time2ToSec = times2.slicedhour * 60 * 60 + times2.slicedminute * 60 + times2.slicedsec
+    console.log(Number(times2.slicedhour),Number(times2.slicedminute),Number(times2.slicedsec))
+    const time2ToSec = Number(times2.slicedhour) * 60 * 60 + Number(times2.slicedminute) * 60 + Number(times2.slicedsec)
     console.log(time2ToSec)
 
 
