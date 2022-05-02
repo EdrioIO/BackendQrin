@@ -33,10 +33,10 @@ async function getCurrentTime(){
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
     var timeNow = new Date()
-    var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
-    var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
+    // var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
+    // var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
     
-    return finalTime.toTimeString();
+    return timeNow.toTimeString();
 }
 
 // let date = new Date();
