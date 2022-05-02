@@ -19,14 +19,22 @@ function getTimezoneOffset(){
     return (offset / 60)
 }
 
+var timesss = DateTime.local(DateTime.now());
+
+console.log(timesss.hour);
+console.log(timesss.minute);
+console.log(timesss.second);
 
 
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    var timeNow = DateTime.now().toFormat('MM-dd-yyyy')
-    return timeNow;
+    var timeNow = await DateTime.local(DateTime.now());
+    const timeHour = timeNow.hour;
+    const timeMinute = timeNow.minute;
+    const timeSecond = timeNow.second;
+    return {timeHour, timeMinute, timeSecond};
 }
 
 // const date_ob = db.getTimeDev();
