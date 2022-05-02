@@ -26,7 +26,7 @@ async function getCurrentTime(){
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
     var timeNow = await new Date().toLocaleTimeString();
-    return timeHour;
+    return timeNow;
 }
 
 // let date = new Date();
