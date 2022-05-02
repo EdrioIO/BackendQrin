@@ -21,23 +21,40 @@ function getTimezoneOffset(){
 
 // var timeNow = new Date()
 // console.log(timeNow.getHours(),timeNow.getMinutes(),timeNow.getSeconds(),timeNow.getTime())
-// console.log(timeNow.toDateString())
+// console.log(timeNow.toLocaleTimeString())
 // var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
 
 // var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
 // console.log(finalTime.getHours(),finalTime.getMinutes(),finalTime.getSeconds(),finalTime.getTime())
-// console.log(finalTime.toDateString());
+// console.log(finalTime.toLocaleTimeString());
+
+
+function convertTZ(date, tzString) {
+    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+}
+
+// usage: Asia/Jakarta is GMT+7
+console.log(convertTZ(new Date(), "Asia/Jakarta")) // Tue Apr 20 2012 17:10:30 GMT+0700 (Western Indonesia Time)
+
+// Resulting value is regular Date() object
+const convertedDate = convertTZ("2012/04/20 10:10:30 +0000", "Asia/Jakarta") 
+convertedDate.getHours(); // 17
+
+// Bonus: You can also put Date object to first arg
+const date = new Date()
+convertTZ(date, "Asia/Jakarta") 
+
 
 
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    var timeNow = new Date()
-    var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
-    var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
+    // var timeNow = new Date()
+    // var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
+    // var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
     
-    return finalTime.toTimeString();
+    return convertTZ(new Date(), "Asia/Jakarta")
 }
 
 // let date = new Date();
