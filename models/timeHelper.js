@@ -54,7 +54,7 @@ async function getCurrentTime(){
     // var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
     // var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
     
-    return convertTZ(new Date(), "Asia/Jakarta")
+    return convertTZ(new Date(), "Asia/Jakarta").toLocaleTimeString()
 }
 
 // let date = new Date();
