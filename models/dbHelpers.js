@@ -27,7 +27,6 @@ module.exports = {
     // checkPresenceOut,
     grabAttendData,
     alterPresenceData,
-    getTimeDev,
 }
 
 
