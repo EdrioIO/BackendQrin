@@ -19,23 +19,41 @@ function getTimezoneOffset(){
     return (offset / 60)
 }
 
-var timesss = DateTime.local(DateTime.now());
-
-console.log(timesss.hour);
-console.log(timesss.minute);
-console.log(timesss.second);
 
 
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    var timeNow = await DateTime.local(DateTime.now());
-    const timeHour = timeNow.hour;
-    const timeMinute = timeNow.minute;
-    const timeSecond = timeNow.second;
-    return {timeHour, timeMinute, timeSecond};
+    var timeNow = await new Date().toLocaleTimeString();
+    return timeHour;
 }
+
+// let date = new Date();
+// console.log(date)
+// var tz = date.toString().split("GMT")[1].split(" (")[0];
+// tz = tz.substring(1,5);
+// let hOffset = parseInt(tz[0]+tz[1]);
+// let mOffset = parseInt(tz[2]+tz[3]);
+// let offsets = date.getTimezoneOffset() * 60 * 1000;
+// let localTime = date.getTime();
+// let utcTime = localTime + offsets;
+// let austratia_brisbane = utcTime + (3600000 * hOffset) + (60000 * mOffset);
+// let customDate = new Date(austratia_brisbane);
+
+// let data = {
+//     day: customDate.getDate(),
+//     month: customDate.getMonth() + 1,
+//     year: customDate.getFullYear(),
+//     hour: customDate.getHours(),
+//     min: customDate.getMinutes(),
+//     second: customDate.getSeconds(),
+//     raw: customDate,
+//     stringDate: customDate.toString()
+// }
+
+
+// console.log(data)
 
 // const date_ob = db.getTimeDev();
 // let date = IntTwoChars(date_ob.getDate());
