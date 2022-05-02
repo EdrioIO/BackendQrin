@@ -20,13 +20,14 @@ function getTimezoneOffset(){
 }
 
 
-
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    var timeNow = await new Date().toLocaleTimeString();
-    return timeNow;
+    var timeNow = new Date()
+    var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
+    var finalTime = new Date(timeNow.getTime() - userTimezoneOffset);
+    return finalTime;
 }
 
 // let date = new Date();
