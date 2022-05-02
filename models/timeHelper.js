@@ -27,7 +27,7 @@ async function getCurrentTime(){
     var timeNow = new Date()
     var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
     var finalTime = new Date(timeNow.getTime() - userTimezoneOffset);
-    return finalTime.toLocaleTimeString();
+    return finalTime.toString();
 }
 
 // let date = new Date();
