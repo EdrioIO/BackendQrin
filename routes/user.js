@@ -203,5 +203,15 @@ router.get('/dev', async (req, res) => {
     }
 })
 
+router.patch('/dev2', async(req,res)=>{
+    const{student_nim,attend_type,currentTime,qr_code} = req.body;
+    try{
+        student.alterPresenceData(student_nim,attend_type,currentTime,qr_code)
+        res.status(200).json({error : false, message : 'finished'});
+    }catch(err){
+        res.status(400).json({error : true, message : 'gagal'});
+    }
+})
+
 
 module.exports = router;
