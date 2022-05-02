@@ -20,11 +20,12 @@ function getTimezoneOffset(){
 }
 
 
+
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
-    var timeNow = DateTime.now()
+    var timeNow = DateTime.now().toFormat('MM-dd-yyyy')
     return timeNow;
 }
 
