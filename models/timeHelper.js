@@ -19,14 +19,20 @@ function getTimezoneOffset(){
     return (offset / 60)
 }
 
+// var timeNow = new Date()
+// console.log(timeNow)
+// var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
+// var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
+// console.log(finalTime)
 
 async function getCurrentTime(){
     // const getColTimeFromDate = date => date.toTimeString().slice(0,8);
     // const ex = await getColTimeFromDate(new Date());
     // return ex;
     var timeNow = new Date()
-    var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
-    var finalTime = new Date(timeNow.getTime() - userTimezoneOffset);
+    // var userTimezoneOffset = timeNow.getTimezoneOffset() * 60000;
+    // var finalTime = new Date(timeNow.getTime() - (userTimezoneOffset));
+    
     return finalTime.toString();
 }
 
