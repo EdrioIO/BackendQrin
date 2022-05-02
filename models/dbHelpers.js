@@ -45,7 +45,7 @@ function grabAttendData(student_nim, qr_code) {
         .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
 }
 
-function alterPresenceData(student_nim, attend_type, currentTime) {
+function alterPresenceData(student_nim, attend_type, currentTime,qr_code) {
     if (attend_type == 'in') {
         db('ms_student')
         .join('ms_attendance', 'ms_student.student_id', 'ms_attendance.student_id')

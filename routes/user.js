@@ -153,7 +153,7 @@ router.patch('/attend', async (req, res) => {
                     console.log(secDiff);
                     if (secDiff < 1800) {
                         // alter presence in time nya
-                        await student.alterPresenceData(student_nim, attend_type, currentTime);
+                        await student.alterPresenceData(student_nim, attend_type, currentTime,qr_code);
                         res.status(200).json({ error: false, message: 'Attend IN Succeeded' })
                     }
                     else{
