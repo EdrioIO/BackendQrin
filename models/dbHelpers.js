@@ -33,7 +33,7 @@ module.exports = {
 
 async function alterStudentProfile(student_id, student_email, student_phone, hashedPassword) {
     const checkUnique = await verifyRegister(student_email,student_phone);
-    console.log("check unique : " + checkUnique);
+    console.log(checkUnique);
     if (!checkUnique) {
         return db('ms_student')
             .where({ student_id })
