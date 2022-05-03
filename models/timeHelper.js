@@ -31,8 +31,6 @@ convertTZ(date, "Asia/Jakarta")
 
 
 async function getCurrentTime(){
-
-    
     return convertTZ(new Date(), "Asia/Jakarta").toTimeString()
 }
 
