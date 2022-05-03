@@ -26,14 +26,14 @@ module.exports = {
     // checkPresenceIn,
     // checkPresenceOut,
     grabAttendData,
-    alterPresenceData
+    alterPresenceData,
+    submitInquiry,
 }
 
-
-function getTimeDev() {
-    const timeNow = new Date()
-    return timeNow
+function submitInquiry(student_id,details){
+    return db('ms_inquiry').insert({student_id,details},['student_id', 'details'])
 }
+
 
 function grabAttendData(student_nim, qr_code) {
     return db('ms_student')

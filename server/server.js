@@ -9,6 +9,7 @@ const server = express();
 server.use(express.json());
 
 server.get('/qrtest', async (req,res)=>{
+    const {course_id, session_id} = req.body
     const qr_url = await qr.generateQR("1234567890");
     res.status(200).json({error : false, message : 'qr generated', qr_url})
 })

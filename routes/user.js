@@ -187,6 +187,24 @@ router.patch('/attend', async (req, res) => {
     }
 })
 
+router.post('/inquiry', async (req,res)=>{
+    const {student_id, details} = req.body
+
+    try{
+        const dbHolder = await student.submitInquiry(student_id,details)
+        if(dbHolder){
+            res.status(200).json({error : false, message : "Inquiry submitted succesfully"});
+        }
+        else{
+            res.status(400).json({error : true, message : "Error"})
+        }
+    }catch(err){
+        console.log(err);
+        res.status(400).json({error : true, message : 'Inquiry operation failed'});
+    }
+
+})
+
 
 router.get('/dev', async (req, res) => {
     const { student_nim, qr_code, location_x, location_y, location_z, attend_type } = req.body
