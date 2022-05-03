@@ -223,6 +223,8 @@ router.patch('/editProfile', async (req, res) => {
             const hashedPassword = await bcrypt.hash(student_password, salt);
             const result = await student.alterStudentProfile(student_id, student_email, student_phone, hashedPassword)
 
+            console.log(result);
+            
             if (result) {
                 res.status(200).json({ error: false, message: 'Edit profile success', result });
             }
