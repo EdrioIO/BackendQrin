@@ -236,7 +236,7 @@ router.patch('/dev2', async (req, res) => {
 })
 
 router.patch('/dev3', async (req, res) => {
-    const {attendance_id}
+    // const {attendance_id}
     try {
         student.alterPresenceDate()
         res.status(200).json({ error: false, message: 'finished' });
