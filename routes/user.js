@@ -204,10 +204,10 @@ router.get('/dev', async (req, res) => {
 })
 
 router.patch('/dev2', async(req,res)=>{
-    const{student_nim,attend_type,currentTime,qr_code} = req.body;
+    const{attendance_id,attend_type} = req.body;
     try{
-        const updatedData = await student.alterPresenceData(student_nim,attend_type,currentTime,qr_code)
-        res.status(200).json({error : false, message : 'finished'},updatedData);
+        const updatedData = await student.alterPresenceData(attendance_id,attend_type,'08:35:00')
+        res.status(200).json({error : false, message : 'finished');
     }catch(err){
         res.status(400).json({error : true, message : 'gagal'});
     }
