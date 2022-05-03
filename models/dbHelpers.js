@@ -31,15 +31,18 @@ module.exports = {
     alterStudentProfile
 }
 
-async function alterStudentProfile(student_id,student_email,student_phone, student_password){
+async function alterStudentProfile(student_id, student_email, student_phone, student_password) {
     const checkUnique = verifyRegister(student_email)
-    db('ms_student')
-    .where({student_id})
-    .update({student_email , student_phone})
+    if (!checkUnique) {
+        return db('ms_student')
+            .where({ student_id })
+            .update({ student_email, student_phone })
+    }
+
 }
 
-function submitInquiry(student_id,details){
-    return db('ms_inquiry').insert({student_id,details},['student_id', 'details'])
+function submitInquiry(student_id, details) {
+    return db('ms_inquiry').insert({ student_id, details }, ['student_id', 'details'])
 }
 
 
