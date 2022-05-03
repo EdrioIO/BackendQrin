@@ -51,27 +51,29 @@ function grabAttendData(student_nim, qr_code) {
 function alterPresenceData(attendance_id, attend_type, currentTime) {
     if (attend_type == 'in') {
         db('ms_attendance')
-            .where({attenance_id: attendance_id})
-            .update({ presence_in_time: currentTime.slice(0,8)})
+            .where({ attenance_id: attendance_id })
+            .update({ presence_in_time: currentTime.slice(0, 8) })
             .returning('*')
-            .then(result =>{
-                console.log({'res' : result});
-            }).catch(err){
-                console.log({'err' : err});
-            }
+            .then(result => {
+                console.log('res :' + result);
+            }).catch(err => {
+                console.log('err : ' + err);
+            })
     }
+
     else {
         db('ms_attendance')
-            .where({attenance_id: attendance_id})
-            .update({ presence_out_time: currentTime.slice(0,8)})
+            .where({ attenance_id: attendance_id })
+            .update({ presence_out_time: currentTime.slice(0, 8) })
             .returning('*')
-            .then(result =>{
-                console.log({'res' : result});
-            }).catch(err){
-                console.log({'err' : err});
-            }
+            .then(result => {
+                console.log('res : ' + result);
+            }).catch(err => {
+                console.log('err : ' + err);
+            })
     }
 }
+
 
 function addStudent(student) {
     return db('ms_student').insert(student, ['student_id', 'student_nim'])
