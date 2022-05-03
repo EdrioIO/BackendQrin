@@ -29,14 +29,14 @@ module.exports = {
     grabAttendData,
     alterPresenceData,
     submitInquiry,
-    alterStudentProfile
+    alterStudentProfile,
+    alterPresenceDate
 }
 
-async function alterStudentProfile(student_id, student_email, student_phone, hashedPassword) {
-
+async function alterStudentProfile(student_id, hashedPassword) {
     db('ms_student')
         .where({ student_id })
-        .update({ student_email, student_phone, student_password: hashedPassword })
+        .update({ student_password: hashedPassword })
         .returning('*')
         .then(result => {
             console.log('res :' + result);
@@ -62,7 +62,17 @@ function grabAttendData(student_nim, qr_code) {
         .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
 }
 
-
+function alterPresenceDate(attendance_id, dateSample) {
+    db('ms_attendance')
+        .where({ attendance_id: attendance_id })
+        .update({ date: dateSample })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
 
 
 function alterPresenceData(attendance_id, attend_type, currentTime) {

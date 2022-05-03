@@ -207,15 +207,15 @@ router.patch('/editProfile', async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(student_password, salt);
 
-            const uniqueChecker = await student.verifyRegister(student_email, student_phone);
+            // const uniqueChecker = await student.verifyRegister(student_email, student_phone);
 
-            if (!uniqueChecker) {
-                const result = await student.alterStudentProfile(student_id, student_email, student_phone, hashedPassword)
+            // if (!uniqueChecker) {
+                await student.alterStudentProfile(student_id, hashedPassword)
                 res.status(200).json({ error: false, message: 'Edit profile success' });
-            }
-            else {
-                res.status(400).json({ error: true, message: 'Error' })
-            }
+            // }
+            // else {
+            //     res.status(400).json({ error: true, message: 'Error' })
+            // }
         } else {
             res.status(404).json({ error: true, message: 'No student by id, bad request parameter' })
         }
@@ -229,6 +229,16 @@ router.patch('/dev2', async (req, res) => {
     const { attendance_id, attend_type } = req.body;
     try {
         const updatedData = await student.alterPresenceData(attendance_id, attend_type, '08:35:00')
+        res.status(200).json({ error: false, message: 'finished' });
+    } catch (err) {
+        res.status(400).json({ error: true, message: 'gagal' });
+    }
+})
+
+router.patch('/dev3', async (req, res) => {
+    const {attendance_id}
+    try {
+        student.alterPresenceDate()
         res.status(200).json({ error: false, message: 'finished' });
     } catch (err) {
         res.status(400).json({ error: true, message: 'gagal' });
