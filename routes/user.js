@@ -212,7 +212,7 @@ router.get('/dev', async (req, res) => {
     }
 })
 
-router.patch('./editProfile', async (req, res) => {
+router.patch('/editProfile', async (req, res) => {
     const { student_id, student_email, student_phone, student_password } = req.body;
 
     try {
