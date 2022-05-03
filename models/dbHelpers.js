@@ -50,6 +50,7 @@ function grabAttendData(student_nim, qr_code) {
 
 function alterPresenceData(attendance_id, attend_type, currentTime) {
     if (attend_type == 'in') {
+        console.log(currentTime)
         db('ms_attendance')
             .where({'attenance_id': attendance_id})
             .update({ 'presence_in_time': currentTime })
