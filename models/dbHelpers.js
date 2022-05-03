@@ -54,7 +54,7 @@ function alterGrabCheck(student_nim, qr_code) {
         .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
         .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
         .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
-        .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code }).
+        .where({ 'ms_student.student_nim': student_nim, 'ms_session.qr_code': qr_code })
 
 }
 
