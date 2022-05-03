@@ -127,18 +127,8 @@ router.patch('/attend', async (req, res) => {
                     console.log(secDiff);
                     if (secDiff < 1800) {
                         // alter presence in time nya
-                        try {
-                            const alterHolder = await student.alterPresenceData(studentRes[0].attendance_id, attend_type, currentTime);
-                            if(alterHolder){
-                                res.status(200).json({ error: false, message: 'Attend IN Succeeded' });
-                            }
-                            else{
-                                res.status(400).json({error : true, message : 'Error on altering'})
-                            }
-                        } catch (err) {
-                            console.log(err);
-                            res.status(400).json({ error: true, message: 'column value wrong' });
-                        }
+                        await student.alterPresenceData(studentRes[0].attendance_id, attend_type, currentTime);
+                        res.status(200).json({ error: false, message: 'Attend IN Succeeded' });
                     }
                     else {
                         res.status(400).json({ error: true, message: 'Attend time is outside the allocated range' })
