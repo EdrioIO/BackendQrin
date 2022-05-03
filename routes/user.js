@@ -127,8 +127,13 @@ router.patch('/attend', async (req, res) => {
                     console.log(secDiff);
                     if (secDiff < 1800) {
                         // alter presence in time nya
-                        await student.alterPresenceData(studentRes[0].attendance_id, attend_type, currentTime);
-                        res.status(200).json({ error: false, message: 'Attend IN Succeeded' });
+                        try {
+                            await student.alterPresenceData(studentRes[0].attendance_id, attend_type, currentTime);
+                            res.status(200).json({ error: false, message: 'Attend IN Succeeded' });
+                        } catch (err) {
+                            console.log(err);
+                            res.status(400).json({ error: true, message: 'column value wrong' });
+                        }
                     }
                     else {
                         res.status(400).json({ error: true, message: 'Attend time is outside the allocated range' })
@@ -206,12 +211,12 @@ router.patch('/editProfile', async (req, res) => {
         if (dbHolder) {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(student_password, salt);
-            
-            const uniqueChecker = await student.verifyRegister(student_email,student_phone);
+
+            const uniqueChecker = await student.verifyRegister(student_email, student_phone);
 
             if (!uniqueChecker) {
                 const result = await student.alterStudentProfile(student_id, student_email, student_phone, hashedPassword)
-                res.status(200).json({ error: false, message: 'Edit profile success'});
+                res.status(200).json({ error: false, message: 'Edit profile success' });
             }
             else {
                 res.status(400).json({ error: true, message: 'Error' })
