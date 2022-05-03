@@ -68,7 +68,7 @@ function alterPresenceData(attendance_id, attend_type, currentTime) {
     if (attend_type == 'in') {
         return db('ms_attendance')
             .where({ attendance_id: attendance_id })
-            .update({ presence_in_time: currentTime.slice(0, 8) ,date : currentTime})
+            .update({ presence_in_time: currentTime.toTImeString().slice(0,8) ,date : currentTime.toLocaleDateString()})
             .returning('*')
             .then(result => {
                 console.log('res :' + result);
