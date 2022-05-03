@@ -32,21 +32,19 @@ module.exports = {
 }
 
 async function alterStudentProfile(student_id, student_email, student_phone, hashedPassword) {
-    const checkUnique = await verifyRegister(student_email,student_phone);
-    console.log(checkUnique);
-    if (!checkUnique) {
-        return db('ms_student')
-            .where({ student_id })
-            .update({ student_email, student_phone, student_password : hashedPassword})
-            .returning('*')
-            .then(result => {
-                console.log('res :' + result);
-            }).catch(err => {
-                console.log('err : ' + err);
-            })
-    }
 
+    db('ms_student')
+        .where({ student_id })
+        .update({ student_email, student_phone, student_password: hashedPassword })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
 }
+
+
 
 function submitInquiry(student_id, details) {
     return db('ms_inquiry').insert({ student_id, details }, ['student_id', 'details'])

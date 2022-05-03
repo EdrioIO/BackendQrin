@@ -221,12 +221,12 @@ router.patch('/editProfile', async (req, res) => {
         if (dbHolder) {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(student_password, salt);
-            const result = await student.alterStudentProfile(student_id, student_email, student_phone, hashedPassword)
-
-            console.log(result);
             
-            if (result) {
-                res.status(200).json({ error: false, message: 'Edit profile success', result });
+            const uniqueChecker = await student.verifyRegister(student_email,student_phone);
+
+            if (!uniqueChecker) {
+                const result = await student.alterStudentProfile(student_id, student_email, student_phone, hashedPassword)
+                res.status(200).json({ error: false, message: 'Edit profile success'});
             }
             else {
                 res.status(400).json({ error: true, message: 'Error' })
