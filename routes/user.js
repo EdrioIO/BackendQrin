@@ -19,21 +19,6 @@ router.post('/showuser', (req, res) => {
     })
 })
 
-router.post('/login', (req, res) => {
-    const { student_nim, student_password } = req.body;
-    student.findUserForLogin(student_nim, student_password)
-        .then(student => {
-            if (student) {
-                res.status(200).json({ error: false, message: 'Login parameter matched alert', student });
-            }
-            else {
-                res.status(404).json({ error: true, message: 'Login Error : Wrong Credentials', student });
-            }
-        }).catch(err => {
-            res.status(500).json({ message: 'Unable to perform operation' });
-        })
-})
-
 router.post('./profile', (req, res) => {
     const { student_id } = req.body;
     student.findStudentById(student_id)
@@ -83,7 +68,7 @@ router.post('/register', async (req, res) => {
 })
 
 //TODO : MIGRATE THIS TO BE THE MAIN LOGIN ROUTES
-router.post('/login/bcrypt', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { student_nim, student_password } = req.body;
 
     try {
