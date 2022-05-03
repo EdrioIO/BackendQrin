@@ -109,7 +109,8 @@ function findStudentByNIM(student_nim) {
 
 function verifyRegister(student_email, student_phone) {
     return db("ms_student")
-        .Where({ student_email: student_email })
+        .select('*')
+        .where({ student_email: student_email })
         .orWhere({ student_phone: student_phone })
         .first()
 }
