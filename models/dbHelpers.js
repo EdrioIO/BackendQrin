@@ -74,6 +74,7 @@ function alterPresenceData(attendance_id, attend_type, currentTime) {
             .then(result => {
                 console.log('res :' + result);
             }).catch(err => {
+                console.log(time.getCurrentDate());
                 console.log('err : ' + err);
             })
     }
