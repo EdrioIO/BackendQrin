@@ -28,6 +28,14 @@ module.exports = {
     grabAttendData,
     alterPresenceData,
     submitInquiry,
+    alterStudentProfile
+}
+
+async function alterStudentProfile(student_id,student_email,student_phone, student_password){
+    const checkUnique = verifyRegister(student_email)
+    db('ms_student')
+    .where({student_id})
+    .update({student_email , student_phone})
 }
 
 function submitInquiry(student_id,details){
@@ -96,10 +104,9 @@ function findStudentByNIM(student_nim) {
         .first()
 }
 
-function verifyRegister(student_nim, student_email, student_phone) {
+function verifyRegister(student_email, student_phone) {
     return db("ms_student")
-        .where({ student_nim: student_nim })
-        .orWhere({ student_email: student_email })
+        .Where({ student_email: student_email })
         .orWhere({ student_phone: student_phone })
         .first()
 }

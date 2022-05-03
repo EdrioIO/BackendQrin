@@ -49,47 +49,36 @@ router.post('./profile', (req, res) => {
         })
 })
 
-router.put('./editprofile', (req, res) => {
-    const { student_id } = req.body;
-    student.findStudentById(student_id)
-        .then(student => {
-            if (student) {
-                res.status(200).json({ error: false, message: 'Login parameter matched alert', student });
-            }
-            else {
-                res.status(400).json({ error: true, message: 'Login Error alert' });
-            }
-        }).catch(err => {
-            res.status(500).json({ message: 'Unable to perform operation' });
-        })
-})
+
 
 router.post('/register', async (req, res) => {
     const credentials = req.body
     const { student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program } = credentials;
-    if (student_nim && student_name && student_email && student_phone && student_password && student_dob && student_study_program) {
+    try {
         //kalo semuanya ada data
-        const uniqueChecker = await student.verifyRegister(student_nim, student_email, student_phone)
+        const uniqueChecker = await student.verifyRegister(student_email, student_phone)
         if (!uniqueChecker) {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(student_password, salt);
             const finalCredentials = { student_nim, student_name, student_email, student_phone, student_password: hashedPassword, student_dob, student_study_program }
 
-            student.addStudent(finalCredentials)
-                .then(student => {
-                    if (student) {
-                        res.status(200).json({ error: false, message: 'Register Success', student });
-                    }
-                    else {
-                        res.status(404).json({ error: true, message: 'Register Failed' });
-                    }
-                }).catch(err => {
-                    console.log(err)
-                    res.status(500).json({ error: true, message: 'Unable to perform operation' });
-                })
+            try {
+                const dbHolderInsert = await student.addStudent(finalCredentials)
+                if (dbHolderInsert) {
+                    res.status(200).json({ error: false, message: 'Register Success', dbHolderInsert });
+                }
+                else {
+                    res.status(400).json({ error: true, message: 'Register Failed' });
+                }
+            } catch (err) {
+                res.status(500).json({ error: true, message: 'Insert operation failed' })
+            }
+
         } else {
-            res.status(400).json({ error: true, message: 'Value inputted already existed' });
+            res.status(400).json({ error: true, message: 'Value [phone / email ] inputted already existed' });
         }
+    } catch (err) {
+        res.status(500).json({ error: true, message: 'Register operation failed' })
     }
 })
 
@@ -137,7 +126,7 @@ router.patch('/attend', async (req, res) => {
         const studentRes = await student.grabAttendData(student_nim, qr_code);
         if (studentRes) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
-            const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude),Number(studentRes[0].longitude));
+            const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
             const heightDiff = Math.abs(location_z - studentRes[0].altitude);
 
@@ -154,10 +143,10 @@ router.patch('/attend', async (req, res) => {
                     if (secDiff < 1800) {
                         // alter presence in time nya
                         await student.alterPresenceData(studentRes[0].attendance_id, attend_type, currentTime);
-                        res.status(200).json({ error: false, message: 'Attend IN Succeeded'});
+                        res.status(200).json({ error: false, message: 'Attend IN Succeeded' });
                     }
-                    else{
-                        res.status(400).json({error : true, message : 'Attend time is outside the allocated range'})
+                    else {
+                        res.status(400).json({ error: true, message: 'Attend time is outside the allocated range' })
                     }
                 }
                 else if (attend_type == 'out') {
@@ -187,23 +176,25 @@ router.patch('/attend', async (req, res) => {
     }
 })
 
-router.post('/inquiry', async (req,res)=>{
-    const {student_id, details} = req.body
+router.post('/inquiry', async (req, res) => {
+    const { student_id, details } = req.body
 
-    try{
-        const dbHolder = await student.submitInquiry(student_id,details)
-        if(dbHolder){
-            res.status(200).json({error : false, message : "Inquiry submitted succesfully"});
+    try {
+        const dbHolder = await student.submitInquiry(student_id, details)
+        if (dbHolder) {
+            res.status(200).json({ error: false, message: "Inquiry submitted succesfully" });
         }
-        else{
-            res.status(400).json({error : true, message : "Error"})
+        else {
+            res.status(400).json({ error: true, message: "Error" })
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(400).json({error : true, message : 'Inquiry operation failed'});
+        res.status(400).json({ error: true, message: 'Inquiry operation failed' });
     }
-
 })
+
+
+
 
 
 router.get('/dev', async (req, res) => {
@@ -221,13 +212,39 @@ router.get('/dev', async (req, res) => {
     }
 })
 
-router.patch('/dev2', async(req,res)=>{
-    const{attendance_id,attend_type} = req.body;
-    try{
-        const updatedData = await student.alterPresenceData(attendance_id,attend_type,'08:35:00')
-        res.status(200).json({error : false, message : 'finished'});
-    }catch(err){
-        res.status(400).json({error : true, message : 'gagal'});
+router.patch('./editProfile', async (req, res) => {
+    const { student_id, student_email, student_phone, student_password } = req.body;
+
+    try {
+        const dbHolder = student.findStudentById(student_id);
+
+        if (dbHolder) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(student_password, salt);
+            const result = student.alterStudentProfile(student_id, student_email, student_phone, hashedPassword)
+
+            if (result) {
+                res.status(200).json({ error: false, message: 'Edit profile success', result });
+            }
+            else {
+                res.status(400).json({ error: true, message: 'Error' })
+            }
+        } else {
+            res.status(404).json({ error: true, message: 'No student by id, bad request parameter' })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'editProfile operation failed' })
+    }
+})
+
+router.patch('/dev2', async (req, res) => {
+    const { attendance_id, attend_type } = req.body;
+    try {
+        const updatedData = await student.alterPresenceData(attendance_id, attend_type, '08:35:00')
+        res.status(200).json({ error: false, message: 'finished' });
+    } catch (err) {
+        res.status(400).json({ error: true, message: 'gagal' });
     }
 })
 
