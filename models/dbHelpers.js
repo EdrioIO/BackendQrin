@@ -66,7 +66,7 @@ function grabAttendData(student_nim, qr_code) {
 
 function alterPresenceData(attendance_id, attend_type, currentTime) {
     if (attend_type == 'in') {
-        db('ms_attendance')
+        return db('ms_attendance')
             .where({ attendance_id: attendance_id })
             .update({ presence_in_time: currentTime.slice(0, 8) ,date : currentTime})
             .returning('*')
@@ -78,7 +78,7 @@ function alterPresenceData(attendance_id, attend_type, currentTime) {
     }
 
     else {
-        db('ms_attendance')
+        return db('ms_attendance')
             .where({ attendance_id: attendance_id })
             .update({ presence_out_time: currentTime.slice(0, 8) })
             .returning('*')
