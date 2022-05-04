@@ -113,6 +113,7 @@ router.patch('/attend', async (req, res) => {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
+            console.log(distance);
             const heightDiff = Math.abs(location_z - studentRes[0].altitude);
 
 
@@ -198,7 +199,7 @@ router.get('/dev', async (req, res) => {
 })
 
 router.patch('/editProfile', async (req, res) => {
-    const { student_id, student_email, student_phone, student_password } = req.body;
+    const { student_id, student_password } = req.body;
 
     try {
         const dbHolder = student.findStudentById(student_id);
