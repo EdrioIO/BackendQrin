@@ -113,8 +113,9 @@ router.patch('/attend', async (req, res) => {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
-            console.log(distance);
+            console.log('distance : ' + distance);
             const heightDiff = Math.abs(location_z - studentRes[0].altitude);
+            console.log('height :'  + heightDiff);
 
 
             if (distance > 30 || heightDiff > 5) {
