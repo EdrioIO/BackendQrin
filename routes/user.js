@@ -105,10 +105,10 @@ router.post('/login', async (req, res) => {
 // })
 
 router.patch('/attend', async (req, res) => {
-    const { student_nim, qr_code, location_x, location_y, location_z, attend_type } = req.body
+    const { student_id, qr_code, location_x, location_y, location_z, attend_type } = req.body
 
     try {
-        const studentRes = await student.grabAttendData(student_nim, qr_code);
+        const studentRes = await student.grabAttendData(student_id, qr_code);
         if (studentRes) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
