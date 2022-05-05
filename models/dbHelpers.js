@@ -29,11 +29,35 @@ module.exports = {
     grabAttendData,
     alterPresenceData,
     submitInquiry,
-    alterStudentProfile,
-    alterPresenceDate
+    alterStudentProfilePassword,
+    alterStudentProfilePhone,
+    alterPresenceDate,
+    grabTakenCourse,
+
 }
 
-async function alterStudentProfile(student_id, hashedPassword) {
+function grabTakenCourse(student_id){
+    return db('ms_student')
+    .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
+    .join('ms_course','ms_course_taken.course_id', 'ms_course.course_id')
+    .join('ms_session','ms_session.course_id','ms_course.course_id')
+    .select('student_id', 'course_id','course_name', 'course_code', 'session_id','session_name')
+    .where({ 'ms_student.student_id': student_id})
+}
+
+async function alterStudentProfilePhone(student_id,student_phone){
+    db('ms_student')
+        .where({ student_id })
+        .update({ student_phone})
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+async function alterStudentProfilePassword(student_id, hashedPassword) {
     db('ms_student')
         .where({ student_id })
         .update({ student_password: hashedPassword })
@@ -74,17 +98,15 @@ function alterPresenceDate(attendance_id, dateSample) {
         })
 }
 
-
-function alterPresenceData(attendance_id, attend_type, currentTime) {
+function alterPresenceData(attendance_id, attend_type, currentTime,isNotLateIn,isNotLateOut) {
     if (attend_type == 'in') {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
-            .update({ presence_in_time: currentTime.slice(0, 8) })
+            .update({ presence_in_time: currentTime.slice(0, 8), presence_in_status : isNotLateIn})
             .returning('*')
             .then(result => {
                 console.log('res :' + result);
             }).catch(err => {
-                console.log(time.getCurrentDate());
                 console.log('err : ' + err);
             })
     }
@@ -92,7 +114,7 @@ function alterPresenceData(attendance_id, attend_type, currentTime) {
     else {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
-            .update({ presence_out_time: currentTime.slice(0, 8) })
+            .update({ presence_out_time: currentTime.slice(0, 8), presence_out_status : isLateOut })
             .returning('*')
             .then(result => {
                 console.log('res : ' + result);
@@ -112,6 +134,7 @@ function addStudent(student) {
 // user & student func
 function findStudentById(student_id) {
     return db("ms_student")
+        .select('*')
         .where({ student_id: student_id })
         .first()
 }
