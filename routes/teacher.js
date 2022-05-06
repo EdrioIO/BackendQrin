@@ -38,13 +38,12 @@ router.patch('/editPassword', async (req, res) => {
         const teacherRes = await teacher.findTeacherById(teacher_id);
         if (teacherRes) {
             try {
-                console.log(teacher_password, teacherRes[0].teacherPassword)
-                const passwordMatched = await bcrypt.compare(teacher_password, teacherRes.teacherPassword)
+                const passwordMatched = await bcrypt.compare(teacher_password, teacherRes.teacher_password)
                 if (passwordMatched) {
                     try {
                         const salt = await bcrypt.genSalt(10);
                         const hashedPassword = await bcrypt.hash(teacher_password_new, salt);
-                        await teacher.alterTeacherProfilePassword(teacher_id, hashedPassword);
+                        await student.alterTeacherProfilePassword(teacher_id, hashedPassword);
                         res.status(200).json({ error: false, message: 'Password successfuly changed' });
                     } catch (err) {
                         console.log(err)
@@ -63,7 +62,7 @@ router.patch('/editPassword', async (req, res) => {
         }
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: true, message: 'Edit Password failed' })
+        res.status(500).json({ error: true, message: 'Edit password operation failed' })
     }
 })
 
