@@ -44,7 +44,7 @@ router.patch('/editPassword', async (req, res) => {
                     try {
                         const salt = await bcrypt.genSalt(10);
                         const hashedPassword = await bcrypt.hash(teacher_password_new, salt);
-                        await student.alterTeacherProfilePassword(teacher_id, hashedPassword);
+                        await teacher.alterTeacherProfilePassword(teacher_id, hashedPassword);
                         res.status(200).json({ error: false, message: 'Password successfuly changed' });
                     } catch (err) {
                         console.log(err)
