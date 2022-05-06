@@ -41,8 +41,8 @@ function grabTakenCourse(student_id){
     .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
     .join('ms_course','ms_course_taken.course_id', 'ms_course.course_id')
     .join('ms_session','ms_session.course_id','ms_course.course_id')
-    .select('student_id', 'course_id','course_name', 'course_code', 'session_id','session_name')
-    .where({ 'ms_student.student_id': student_id})
+    .select('ms_student.student_id', 'ms_course.course_id','ms_course.course_name', 'ms_course.course_code', 'ms_session.session_id','ms_session.session_name')
+    .where({'ms_student.student_id' : student_id})
 }
 
 async function alterStudentProfilePhone(student_id,student_phone){
