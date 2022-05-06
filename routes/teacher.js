@@ -97,6 +97,7 @@ router.get('/loginTeacher', async (req, res) => {
             }
         }
     } catch (err) {
+        console.log(err);
         res.status(500).json({ error: true, message: 'Unable to perform the operation' })
     }
 })
