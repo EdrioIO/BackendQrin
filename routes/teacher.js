@@ -38,7 +38,7 @@ router.patch('/editPassword', async (req, res) => {
         teacherRes = await teacher.findTeacherById(teacher_id);
         if (teacherRes) {
             try {
-                const passwordMatched = await bcrypt.compare(teacherPassword, teacherRes[0].teacherPassword)
+                const passwordMatched = await bcrypt.compare(teacherPassword, teacherRes.teacherPassword)
                 if (passwordMatched) {
                     try {
                         const salt = await bcrypt.genSalt(10);
