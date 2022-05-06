@@ -34,7 +34,51 @@ module.exports = {
     alterPresenceDate,
     grabTakenCourse,
 
+
+    // teacher 
+    findTeacherByNIP,
+    findTeacherById,
+    showAllTeacher,
+    alterTeacherProfilePassword
+
+
 }
+
+////////////////teacher/////////////////
+
+async function alterTeacherProfilePassword(teacher_id, hashedPassword) {
+    db('ms_teacher')
+        .where({ teacher_id })
+        .update({ teacher_password : hashedPassword })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+
+function findTeacherById(teacher_id) {
+    return db("ms_teacher")
+        .select('*')
+        .where({ teacher_id })
+        .first()
+}
+
+
+function findTeacherByNIP(teacher_nip) {
+    return db("ms_teacher")
+        .select('*')
+        .where({ teacher_nim })
+        .first()
+}
+function showAllTeacher() {
+    return db("ms_teacher")
+}
+
+
+//////////////student/////////////
 
 function grabTakenCourse(student_id){
     return db('ms_student')
