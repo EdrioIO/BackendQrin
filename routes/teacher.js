@@ -23,15 +23,6 @@ router.get('/showTeacher', async (req, res) => {
     }
 })
 
-
-///////////////////// END OF PRODUCTION /////////////////////
-
-
-
-
-
-///////////////////// DEVELOPMENT /////////////////////
-
 router.patch('/editPassword', async (req, res) => {
     const { teacher_id, teacher_password, teacher_password_new } = req.body
     try {
@@ -64,6 +55,63 @@ router.patch('/editPassword', async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: true, message: 'Edit password operation failed' })
+    }
+})
+
+///////////////////// END OF PRODUCTION /////////////////////
+
+
+
+
+
+///////////////////// DEVELOPMENT /////////////////////
+
+router.get('/loginTeacher', async (req, res) => {
+
+    const { teacher_nip, teacher_password } = req.body;
+
+    try {
+        const teacherRes = await teacher.findTeacherByNIP(teacher_nip)
+        if (!teacherRes) {
+            res.status(400).json({ error: true, message: 'Login Error alert' })
+        }
+        else {
+            try {
+                const passwordMatched = await bcrypt.compare(teacher_password, teacherRes.teacher_password)
+                if (passwordMatched) {
+
+                    // for cookies session purpose
+                    // req.session.user = {
+                    //     id: teacherRes.teacher_id,
+                    //     username: teacherRes.teacher_name
+                    // }
+
+                    res.status(200).json({ error: false, message: 'Login parameter matched alert', teacherRes })
+                }
+                else {
+                    res.status(400).json({ error: true, message: 'Login Error alert' });
+                }
+            } catch (err) {
+                console.log(err)
+                res.status(500).json({ error: true, message: 'Unable to perform the operation' })
+            }
+        }
+    } catch (err) {
+        res.status(500).json({ error: true, message: 'Unable to perform the operation' })
+    }
+})
+
+router.get('/logoutTeacher', (req, res) => {
+    if (req.session) {
+        req.session.destroy(error => {
+            if (error) {
+                res.status(500).json({ error: true, message: 'Something wrongs with session when logging out' });
+            } else {
+                res.status(200).json({ error: false, message: 'Successfuly logged out' });
+            }
+        })
+    } else {
+        res.status(200).json({ error: false, message: 'Not Logged in cannot log out' });
     }
 })
 
