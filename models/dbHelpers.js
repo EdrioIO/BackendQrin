@@ -70,7 +70,7 @@ function findTeacherById(teacher_id) {
 function findTeacherByNIP(teacher_nip) {
     return db("ms_teacher")
         .select('*')
-        .where({ teacher_nim })
+        .where({ teacher_nip })
         .first()
 }
 function showAllTeacher() {
