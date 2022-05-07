@@ -33,6 +33,7 @@ module.exports = {
     alterStudentProfilePhone,
     alterPresenceDate,
     grabTakenCourse,
+    grabCourseSession,
     userAttendance,
 
 
@@ -49,24 +50,24 @@ module.exports = {
 
 ////////////////teacher/////////////////
 
-async function showTeacherRelatedCourse(teacher_id){
+async function showTeacherRelatedCourse(teacher_id) {
     return db('ms_teacher')
-    .join('ms_course_teached','ms_course_teached.teacher_id','ms_teacher.teacher_id')
-    .join('ms_course','ms_course_teached.course_id','ms_course.course_id')
-    .select('ms_course.course_id', 'ms_course.course_name')
-    .where({'ms_teacher.teacher_id' : teacher_id})
+        .join('ms_course_teached', 'ms_course_teached.teacher_id', 'ms_teacher.teacher_id')
+        .join('ms_course', 'ms_course_teached.course_id', 'ms_course.course_id')
+        .select('ms_course.course_id', 'ms_course.course_name')
+        .where({ 'ms_teacher.teacher_id': teacher_id })
 }
 
-function showCourseRelatedSession(course_id){
+function showCourseRelatedSession(course_id) {
     return db('ms_session')
-    .where({course_id})
+        .where({ course_id })
 }
 
-function grabSessionQRCode(session_id){
+function grabSessionQRCode(session_id) {
     return db('ms_session')
-    .select('qr_code')
-    .where({session_id})
-    .first()
+        .select('qr_code')
+        .where({ session_id })
+        .first()
 }
 
 async function alterTeacherProfilePassword(teacher_id, hashedPassword) {
@@ -102,6 +103,17 @@ function showAllTeacher() {
 
 
 //////////////student/////////////
+
+function grabCourseSession(student_id, course_id) {
+    return db('ms_course')
+        .join('ms_session', 'ms_course.course_id', 'ms_session.course_id')
+        .join('ms_session_header', 'ms_session_header.session_id', 'ms_session.session_id')
+        .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header_id')
+        .select('ms_session.session_name', 'ms_session.base_in_time', 'ms_session.base_out_time',
+                'ms_attendance.presence_in_time', 'ms_attendance.presence_out_time', 'ms_attendance.presence_in_status',
+                'ms_attendance.presence_out_status')
+        .where({ 'ms_course.course_id': course_id, 'ms_attendance.student_id': student_id })
+}
 
 function userAttendance(student_id) {
     return db('ms_student')

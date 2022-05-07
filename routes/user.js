@@ -117,9 +117,26 @@ router.post('/inquiry', async (req, res) => {
     }
 })
 
+router.get('/courseSession', async(req,res)=>{
+    const{course_id, student_id} = req.body;
+    try{
+        const sessionRes = await student.grabCourseSession(student_id,course_id);
+
+        if(sessionRes[0]){
+            res.status(200).json({sessionRes});
+        }
+        else{
+            res.status(404).json({error : true, message : 'No session on inputed course'});
+        }
+
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error : true, message : 'Grab Course Session failed'});
+    }
+})
 
 router.get('/takenCourse/:student_id', async (req, res) => {
-    const { student_id } = req.params
+    const { student_id } = req.params;
     console.log(student_id)
     try {
         const takenCourseRes = await student.grabTakenCourse(student_id);
