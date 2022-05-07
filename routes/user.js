@@ -123,9 +123,9 @@ router.get('/takenCourse/:student_id', async (req, res) => {
     console.log(student_id)
     try {
         const takenCourseRes = await student.grabTakenCourse(student_id);
-        
+
         if (takenCourseRes[0]) {
-            res.status(200).json({ error: false, message: 'takenCourse operation success', takenCourseRes })
+            res.status(200).json({ error: false, message: 'takenCourse operation success', student_id, takenCourseRes })
         }
         else {
             res.status(404).json({ error: true, message: 'No Taken Course data on id was found' });
@@ -249,6 +249,21 @@ router.post('/showuser', (req, res) => {
     })
 })
 
+router.get('/getAttendance/:student_id', async (req, res) => {
+    const { student_id } = req.params;
+
+    try {
+        const attendDataRes = await student.userAttendance(student_id);
+        if (attendDataRes) {
+            res.status(200).json({ error: false, message: 'Grab attend data operation succeed' })
+        } else {
+            res.status(404).json({ error: true, message: 'No Data matches the criteria' })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'Get Attendance Failed' })
+    }
+})
 
 
 
