@@ -8,36 +8,6 @@ const router = express.Router();
 
 /////////////////////////PRODUCTION////////////////////////////////////
 
-router.post('/register', async (req, res) => {
-    const credentials = req.body
-    const { student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program } = credentials;
-    try {
-        //kalo semuanya ada data
-        const uniqueChecker = await student.verifyRegister(student_email, student_phone)
-        if (!uniqueChecker) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(student_password, salt);
-            const finalCredentials = { student_nim, student_name, student_email, student_phone, student_password: hashedPassword, student_dob, student_study_program }
-
-            try {
-                const dbHolderInsert = await student.addStudent(finalCredentials)
-                if (dbHolderInsert) {
-                    res.status(200).json({ error: false, message: 'Register Success', dbHolderInsert });
-                }
-                else {
-                    res.status(400).json({ error: true, message: 'Register Failed' });
-                }
-            } catch (err) {
-                res.status(500).json({ error: true, message: 'Insert operation failed' })
-            }
-
-        } else {
-            res.status(400).json({ error: true, message: 'Value [phone / email ] inputted already existed' });
-        }
-    } catch (err) {
-        res.status(500).json({ error: true, message: 'Register operation failed' })
-    }
-})
 
 router.post('/login', async (req, res) => {
     const { student_nim, student_password } = req.body;
@@ -148,11 +118,13 @@ router.post('/inquiry', async (req, res) => {
 })
 
 
-router.get('/takenCourse', async (req, res) => {
-    const { student_id } = req.body;
+router.get('/takenCourse/:student_id', async (req, res) => {
+    const { student_id } = req.params
+    console.log(student_id)
     try {
-        takenCourseRes = await student.grabTakenCourse(student_id);
-        if (takenCourseRes) {
+        const takenCourseRes = await student.grabTakenCourse(student_id);
+        
+        if (takenCourseRes[0]) {
             res.status(200).json({ error: false, message: 'takenCourse operation success', takenCourseRes })
         }
         else {
@@ -198,23 +170,23 @@ router.patch('/editPassword', async (req, res) => {
     }
 })
 
-router.patch('/editPhone', async (req,res) =>{
-    const {student_id, student_phone} = req.body
-    try{
+router.patch('/editPhone', async (req, res) => {
+    const { student_id, student_phone } = req.body
+    try {
         const studentRes = await student.findStudentById(student_id);
 
-        if(studentRes) {
-            try{
-                await student.alterStudentProfilePhone(student_id,student_phone)
-                res.status(200).json({error : false, message : 'Phone number changed succesfully'})
-            }catch(err){
+        if (studentRes) {
+            try {
+                await student.alterStudentProfilePhone(student_id, student_phone)
+                res.status(200).json({ error: false, message: 'Phone number changed succesfully' })
+            } catch (err) {
                 console.log(err);
-                res.status(404).json({error : true, message : 'Failed on altering phone number'})
+                res.status(404).json({ error: true, message: 'Failed on altering phone number' })
             }
-        }else{
-            res.status(404).json({error : true, message : 'Student with inputed ID not found'});
+        } else {
+            res.status(404).json({ error: true, message: 'Student with inputed ID not found' });
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
         res.status(500).json('Error on grabbing student data') // todo
     }
@@ -242,33 +214,7 @@ router.get('/dev', async (req, res) => {
     }
 })
 
-router.patch('/editProfile', async (req, res) => {
-    const { student_id, student_password } = req.body;
 
-    try {
-        const dbHolder = student.findStudentById(student_id);
-
-        if (dbHolder) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(student_password, salt);
-
-            // const uniqueChecker = await student.verifyRegister(student_email, student_phone);
-
-            // if (!uniqueChecker) {
-            await student.alterStudentProfile(student_id, hashedPassword)
-            res.status(200).json({ error: false, message: 'Edit profile success' });
-            // }
-            // else {
-            //     res.status(400).json({ error: true, message: 'Error' })
-            // }
-        } else {
-            res.status(404).json({ error: true, message: 'No student by id, bad request parameter' })
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: true, message: 'editProfile operation failed' })
-    }
-})
 
 router.patch('/dev2', async (req, res) => {
     const { attendance_id, attend_type } = req.body;
@@ -303,20 +249,7 @@ router.post('/showuser', (req, res) => {
     })
 })
 
-router.post('/profile', (req, res) => {
-    const { student_id } = req.body;
-    student.findStudentById(student_id)
-        .then(student => {
-            if (student) {
-                res.status(200).json({ error: false, message: 'Login parameter matched alert', student });
-            }
-            else {
-                res.status(400).json({ error: true, message: 'Login Error alert' });
-            }
-        }).catch(err => {
-            res.status(500).json({ message: 'Unable to perform operation' });
-        })
-})
+
 
 
 ////////////////////END OF DEVELOPMENT/////////////////////////
