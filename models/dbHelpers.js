@@ -33,6 +33,7 @@ module.exports = {
     alterStudentProfilePhone,
     alterPresenceDate,
     grabTakenCourse,
+    userAttendance,
 
 
     // teacher 
@@ -49,7 +50,7 @@ module.exports = {
 async function alterTeacherProfilePassword(teacher_id, hashedPassword) {
     db('ms_teacher')
         .where({ teacher_id })
-        .update({ teacher_password : hashedPassword })
+        .update({ teacher_password: hashedPassword })
         .returning('*')
         .then(result => {
             console.log('res :' + result);
@@ -80,19 +81,33 @@ function showAllTeacher() {
 
 //////////////student/////////////
 
-function grabTakenCourse(student_id){
+function userAttendance(student_id) {
     return db('ms_student')
-    .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
-    .join('ms_course','ms_course_taken.course_id', 'ms_course.course_id')
-    .join('ms_session','ms_session.course_id','ms_course.course_id')
-    .select('ms_student.student_id', 'ms_course.course_id','ms_course.course_name', 'ms_course.course_code', 'ms_session.session_id','ms_session.session_name')
-    .where({'ms_student.student_id' : student_id})
+        .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
+        .join('ms_course', 'ms_course_taken.course_id', 'ms_course.course_id')
+        .join('ms_session', 'ms_session.course_id', 'ms_course.course_id')
+        .join('ms_session_header', 'ms_session.session_id', 'ms_session_header.session_id')
+        .join('ms_attendance', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
+        .select('ms_student.student_id', 'ms_course.course_id', 'ms_course.course_name',
+            'ms_course.course_code', 'ms_session.session_id', 'ms_session.session_name', 'ms_session.base_in_time',
+            'ms_session.base_out_time', 'ms_attendance.presence_in_time', 'ms_attendance.presence_out_time',
+            'ms_attendance.presence_in_status', 'ms_attendance.presence_out_status')
+        .where({ 'ms_student.student_id': student_id })
 }
 
-async function alterStudentProfilePhone(student_id,student_phone){
+function grabTakenCourse(student_id) {
+    return db('ms_student')
+        .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
+        .join('ms_course', 'ms_course_taken.course_id', 'ms_course.course_id')
+        .join('ms_session', 'ms_session.course_id', 'ms_course.course_id')
+        .select('ms_student.student_id', 'ms_course.course_id', 'ms_course.course_name')
+        .where({ 'ms_student.student_id': student_id })
+}
+
+async function alterStudentProfilePhone(student_id, student_phone) {
     db('ms_student')
         .where({ student_id })
-        .update({ student_phone})
+        .update({ student_phone })
         .returning('*')
         .then(result => {
             console.log('res :' + result);
@@ -142,11 +157,11 @@ function alterPresenceDate(attendance_id, dateSample) {
         })
 }
 
-function alterPresenceData(attendance_id, attend_type, currentTime,isNotLateIn,isNotLateOut) {
+function alterPresenceData(attendance_id, attend_type, currentTime, isNotLateIn, isNotLateOut) {
     if (attend_type == 'in') {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
-            .update({ presence_in_time: currentTime.slice(0, 8), presence_in_status : isNotLateIn})
+            .update({ presence_in_time: currentTime.slice(0, 8), presence_in_status: isNotLateIn })
             .returning('*')
             .then(result => {
                 console.log('res :' + result);
@@ -158,7 +173,7 @@ function alterPresenceData(attendance_id, attend_type, currentTime,isNotLateIn,i
     else {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
-            .update({ presence_out_time: currentTime.slice(0, 8), presence_out_status : isLateOut })
+            .update({ presence_out_time: currentTime.slice(0, 8), presence_out_status: isLateOut })
             .returning('*')
             .then(result => {
                 console.log('res : ' + result);
