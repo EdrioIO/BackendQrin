@@ -37,12 +37,12 @@ router.post('/login', async (req, res) => {
 
 router.patch('/attend', async (req, res) => {
     const { student_id, qr_code, location_x, location_y, location_z, attend_type } = req.body
-    const isNotLateIn = false;
-    const isNotLateOut = false;
+    let isNotLateIn = false;
+    let isNotLateOut = false;
     try {
         const studentRes = await student.grabAttendData(student_id, qr_code);
         const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id);
-        
+
         if (studentRes && isRegistered) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
