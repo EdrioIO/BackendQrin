@@ -51,8 +51,8 @@ router.get('/generateReport', (req,res) =>{
 router.get('/ms_student', async (req,res) =>{
 
     try{
-    const res = await admin.show_ms_student()
-        if(res){
+    const resp = await admin.show_ms_student()
+        if(resp){
             res.status(200).json({res})
         }
         else{
