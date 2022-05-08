@@ -138,10 +138,17 @@ function grabCourseSession(student_id, course_id) {
         .join('ms_session', 'ms_course.course_id', 'ms_session.course_id')
         .join('ms_session_header', 'ms_session_header.session_id', 'ms_session.session_id')
         .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header_id')
+        .join('ms_student','ms_atttendance.student_id', 'ms_student.student_id')
+        .join('ms_course_taken', 'ms_course_taken.student_id', 'ms_student.student_id')
         .select('ms_session.session_name', 'ms_session.base_in_time', 'ms_session.base_out_time',
                 'ms_attendance.presence_in_time', 'ms_attendance.presence_out_time', 'ms_attendance.presence_in_status',
                 'ms_attendance.presence_out_status')
         .where({ 'ms_course.course_id': course_id, 'ms_attendance.student_id': student_id })
+}
+
+function grabCSession(student_id,course_id){
+    return db('ms_course')
+    .join('ms_session', 'ms_course.course_id', 'ms_session.course_id')
 }
 
 function userAttendance(student_id) {
