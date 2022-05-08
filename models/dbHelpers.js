@@ -35,6 +35,7 @@ module.exports = {
     grabTakenCourse,
     grabCourseSession,
     userAttendance,
+    checkRegisteredCourse,
 
 
     // teacher 
@@ -133,6 +134,15 @@ function showAllTeacher() {
 
 //////////////student/////////////
 
+
+function checkRegisteredCourse(student_id, session_id){
+    return db ('ms_course_taken')
+    .join('ms_course','ms_course.course_id', 'ms_course_taken.course_id')
+    .join('ms_session','ms_session.course_id', 'ms_course.course_id')
+    .select('ms_course.course_name', 'ms_session.session_name','ms_course_taken.student_id')
+    .where({'ms_course_taken.student_id' : student_id, 'ms_session.session_id' : session_id})
+}
+
 function grabCourseSession(student_id, course_id) {
     return db('ms_course')
         .join('ms_session', 'ms_course.course_id', 'ms_session.course_id')
@@ -208,7 +218,7 @@ function grabAttendData(student_id, qr_code) {
         .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
         .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
         .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
-        .select('student_nim', 'qr_code', 'latitude', 'longitude', 'altitude', 'presence_in_time', 'presence_out_time', 'base_in_time', 'base_out_time', 'attendance_id')
+        .select('student_nim', 'qr_code', 'latitude', 'longitude', 'altitude', 'presence_in_time', 'presence_out_time', 'base_in_time', 'base_out_time', 'attendance_id','session_id')
         .where({ 'ms_student.student_id': student_id, 'ms_session.qr_code': qr_code })
 }
 

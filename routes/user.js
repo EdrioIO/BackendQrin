@@ -41,7 +41,9 @@ router.patch('/attend', async (req, res) => {
     const isNotLateOut = false;
     try {
         const studentRes = await student.grabAttendData(student_id, qr_code);
-        if (studentRes) {
+        const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id);
+        
+        if (studentRes && isRegistered) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
             const distance = userCoor.distanceTo(sessionClassCoor, true);
@@ -244,13 +246,32 @@ router.patch('/dev2', async (req, res) => {
 })
 
 router.patch('/dev3', async (req, res) => {
-    // const {attendance_id}
+    const {student_id, session_id} = req.body
     try {
-        student.alterPresenceDate()
-        res.status(200).json({ error: false, message: 'finished' });
+        const temps = await student.checkRegisteredCourse(student_id,session_id)
+        if(temps){
+            res.status(200).json({ error: false, message: 'finished' ,temps});
+        }else{
+            res.status(203).json({error : true, message : 'error'})
+        }
+        
     } catch (err) {
+        console.log(err)
         res.status(400).json({ error: true, message: 'gagal' });
     }
+})
+
+router.post('/showuser', (req, res) => {
+    student.showAllUser().then(student => {
+        if (student) {
+            res.status(200).json({ error: false, student });
+        }
+        else {
+            res.status(404).json({ error: true, message: 'No Student Data existed' });
+        }
+    }).catch(err => {
+        res.status(500).json({ message: 'Unable to perform operation' });
+    })
 })
 
 router.post('/showuser', (req, res) => {
