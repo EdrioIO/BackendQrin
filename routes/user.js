@@ -117,8 +117,8 @@ router.post('/inquiry', async (req, res) => {
     }
 })
 
-router.get('/courseSession', async(req,res)=>{
-    const{course_id, student_id} = req.body;
+router.get('/takenCourse/:student_id/course/:course_id', async(req,res)=>{
+    const{course_id, student_id} = req.params;
     try{
         const sessionRes = await student.grabCourseSession(student_id,course_id);
 
