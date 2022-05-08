@@ -41,8 +41,11 @@ router.patch('/attend', async (req, res) => {
     let isNotLateOut = false;
     try {
         const studentRes = await student.grabAttendData(student_id, qr_code);
-        const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id);
-
+        try{
+            const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id);
+        }catch(err){
+            res.status(404).json({error : true, message : 'Student not registeres to course'})
+        }
         if (studentRes && isRegistered) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
