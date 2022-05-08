@@ -49,7 +49,10 @@ router.get('/generateReport', (req,res) =>{
 
 
 router.get('/ms_student', (req,res) =>{
-    
+
+    const res = admin.show_ms_student()
+    res.status(200).json({res})
+
 })
 
 
