@@ -41,11 +41,8 @@ router.patch('/attend', async (req, res) => {
     let isNotLateOut = false;
     try {
         const studentRes = await student.grabAttendData(student_id, qr_code);
-        try{
-            const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id);
-        }catch(err){
-            
-        }
+        const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id)
+
         if (studentRes && isRegistered) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
             const sessionClassCoor = await new GeoPoint(Number(studentRes[0].latitude), Number(studentRes[0].longitude));
@@ -101,7 +98,7 @@ router.patch('/attend', async (req, res) => {
         }
     } catch (err) {
         console.log(err);
-        res.status(500).json({ error: true, message: 'Attend operation failed' })
+        res.status(500).json({ error: true, message: 'Attend operation failed (Student not exist or not registered to course)' })
     }
 })
 
