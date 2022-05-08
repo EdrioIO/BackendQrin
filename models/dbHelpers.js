@@ -46,7 +46,36 @@ module.exports = {
     showCourseRelatedSession,
     grabSessionQRCode,
 
+    // admin
+    generateReport,
+    show_ms_student,
 }
+
+
+/////////////////////ADMIN//////////////////
+
+
+function show_ms_student(){
+    return db('ms_student')
+}
+
+async function generateReport(course_id,session_id,student_generation){
+    return db('ms_student')
+    .join('ms_taken_course', 'ms_student.student_id','ms_taken_course.student_id')
+    .join('ms_course','ms_course.course_id', 'ms_taken_course.course_id')
+    .join('ms_session', 'ms_course.course_id', 'ms_session.course_id')
+    .join('ms_session_header', 'ms_session_header.session_id','ms_session.session_id')
+    .join('ms_attendance','ms_attendance.session_header_id' , 'ms_session_header.session_header_id')
+    .select('ms_student')
+    
+}
+
+
+
+
+
+
+
 
 ////////////////teacher/////////////////
 
