@@ -9,31 +9,31 @@ const router = express.Router();
 /////////////////////////PRODUCTION////////////////////////////////////
 
 
-router.post('/login', async (req, res) => {
-    const { student_nim, student_password } = req.body;
-    try {
-        const studentRes = await student.findStudentByNIM(student_nim)
-        if (!studentRes) {
-            res.status(400).json({ error: true, message: 'Login Error alert' })
-        }
-        else {
-            try {
-                const passwordMatched = await bcrypt.compare(student_password, studentRes.student_password)
-                if (passwordMatched) {
-                    res.status(200).json({ error: false, message: 'Login parameter matched alert', studentRes })
-                }
-                else {
-                    res.status(400).json({ error: true, message: 'Login Error alert' });
-                }
-            } catch (err) {
-                console.log(err)
-                res.status(500).json({ error: true, message: 'Unable to perform the operation' })
-            }
-        }
-    } catch (err) {
-        res.status(500).json({ error: true, message: 'Unable to perform the operation' })
-    }
-})
+// router.post('/login', async (req, res) => {
+//     const { student_nim, student_password } = req.body;
+//     try {
+//         const studentRes = await student.findStudentByNIM(student_nim)
+//         if (!studentRes) {
+//             res.status(400).json({ error: true, message: 'Login Error alert' })
+//         }
+//         else {
+//             try {
+//                 const passwordMatched = await bcrypt.compare(student_password, studentRes.student_password)
+//                 if (passwordMatched) {
+//                     res.status(200).json({ error: false, message: 'Login parameter matched alert', studentRes })
+//                 }
+//                 else {
+//                     res.status(400).json({ error: true, message: 'Login Error alert' });
+//                 }
+//             } catch (err) {
+//                 console.log(err)
+//                 res.status(500).json({ error: true, message: 'Unable to perform the operation' })
+//             }
+//         }
+//     } catch (err) {
+//         res.status(500).json({ error: true, message: 'Unable to perform the operation' })
+//     }
+// })
 
 router.patch('/attend', async (req, res) => {
     const { student_id, qr_code, location_x, location_y, location_z, attend_type } = req.body
@@ -212,6 +212,22 @@ router.patch('/editPhone', async (req, res) => {
 
 })
 
+router.get('/getAttendance/:student_id', async (req, res) => {
+    const { student_id } = req.params;
+
+    try {
+        const attendDataRes = await student.student
+        if (attendDataRes) {
+            res.status(200).json({ error: false, message: 'Grab attend data operation succeed' })
+        } else {
+            res.status(404).json({ error: true, message: 'No Data matches the criteria' })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'Get Attendance Failed' })
+    }
+})
+
 /////////////////////////END of PRODUCTION////////////////////////
 
 
@@ -274,34 +290,7 @@ router.post('/showuser', (req, res) => {
     })
 })
 
-router.post('/showuser', (req, res) => {
-    student.showAllUser().then(student => {
-        if (student) {
-            res.status(200).json({ error: false, student });
-        }
-        else {
-            res.status(404).json({ error: true, message: 'No Student Data existed' });
-        }
-    }).catch(err => {
-        res.status(500).json({ message: 'Unable to perform operation' });
-    })
-})
 
-router.get('/getAttendance/:student_id', async (req, res) => {
-    const { student_id } = req.params;
-
-    try {
-        const attendDataRes = await student.student
-        if (attendDataRes) {
-            res.status(200).json({ error: false, message: 'Grab attend data operation succeed' })
-        } else {
-            res.status(404).json({ error: true, message: 'No Data matches the criteria' })
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: true, message: 'Get Attendance Failed' })
-    }
-})
 
 
 
