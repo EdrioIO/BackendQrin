@@ -61,7 +61,8 @@ router.post('/login', async (req, res) => {
                         gen : studentRes.student_generation
                     }
 
-                    res.status(200).json({ error: false, message: 'Login parameter matched alert', studentRes })
+
+                    res.status(200).json({ error: false, message: 'Login parameter matched alert'});
                 }
                 else {
                     res.status(400).json({ error: true, message: 'Login Error alert' });
