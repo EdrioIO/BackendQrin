@@ -9,31 +9,31 @@ const router = express.Router();
 /////////////////////////PRODUCTION////////////////////////////////////
 
 
-// router.post('/login', async (req, res) => {
-//     const { student_nim, student_password } = req.body;
-//     try {
-//         const studentRes = await student.findStudentByNIM(student_nim)
-//         if (!studentRes) {
-//             res.status(400).json({ error: true, message: 'Login Error alert' })
-//         }
-//         else {
-//             try {
-//                 const passwordMatched = await bcrypt.compare(student_password, studentRes.student_password)
-//                 if (passwordMatched) {
-//                     res.status(200).json({ error: false, message: 'Login parameter matched alert', studentRes })
-//                 }
-//                 else {
-//                     res.status(400).json({ error: true, message: 'Login Error alert' });
-//                 }
-//             } catch (err) {
-//                 console.log(err)
-//                 res.status(500).json({ error: true, message: 'Unable to perform the operation' })
-//             }
-//         }
-//     } catch (err) {
-//         res.status(500).json({ error: true, message: 'Unable to perform the operation' })
-//     }
-// })
+router.post('/login', async (req, res) => {
+    const { student_nim, student_password } = req.body;
+    try {
+        const studentRes = await student.findStudentByNIM(student_nim)
+        if (!studentRes) {
+            res.status(400).json({ error: true, message: 'Login Error alert' })
+        }
+        else {
+            try {
+                const passwordMatched = await bcrypt.compare(student_password, studentRes.student_password)
+                if (passwordMatched) {
+                    res.status(200).json({ error: false, message: 'Login parameter matched alert', studentRes })
+                }
+                else {
+                    res.status(400).json({ error: true, message: 'Login Error alert' });
+                }
+            } catch (err) {
+                console.log(err)
+                res.status(500).json({ error: true, message: 'Unable to perform the operation' })
+            }
+        }
+    } catch (err) {
+        res.status(500).json({ error: true, message: 'Unable to perform the operation' })
+    }
+})
 
 router.patch('/attend', async (req, res) => {
     const { student_id, qr_code, location_x, location_y, location_z, attend_type } = req.body
