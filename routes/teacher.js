@@ -13,9 +13,9 @@ router.get('/showTeacher', async (req, res) => {
     try {
         const teacherRes = await teacher.showAllTeacher();
         if (teacherRes) {
-            res.status(200).json({ error: false, message: 'Show All Teacher Operation Succeed',teacherRes});
+            res.status(200).json({ error: false, message: 'Show All Teacher Operation Succeed', teacherRes });
         } else {
-            res.status(404).json({error : true, message : 'There is no registered teacher yet'});
+            res.status(404).json({ error: true, message: 'There is no registered teacher yet' });
         }
     } catch (err) {
         console.log(err);
@@ -29,8 +29,8 @@ router.patch('/editPassword', async (req, res) => {
         const teacherRes = await teacher.findTeacherById(teacher_id);
         if (teacherRes) {
             try {
-                console.log(teacher_password,teacherRes.teacher_password);
-                const passwordMatched = await bcrypt.compare(teacher_password,teacherRes.teacher_password)
+                console.log(teacher_password, teacherRes.teacher_password);
+                const passwordMatched = await bcrypt.compare(teacher_password, teacherRes.teacher_password)
                 if (passwordMatched) {
                     try {
                         const salt = await bcrypt.genSalt(10);
@@ -58,15 +58,7 @@ router.patch('/editPassword', async (req, res) => {
     }
 })
 
-///////////////////// END OF PRODUCTION /////////////////////
-
-
-
-
-
-///////////////////// DEVELOPMENT /////////////////////
-
-router.get('/loginTeacher', async (req, res) => {
+router.post('/loginTeacher', async (req, res) => {
 
     const { teacher_nip, teacher_password } = req.body;
 
@@ -101,6 +93,68 @@ router.get('/loginTeacher', async (req, res) => {
         res.status(500).json({ error: true, message: 'Unable to perform the operation' })
     }
 })
+
+///////////////////// END OF PRODUCTION /////////////////////
+
+
+
+
+
+///////////////////// DEVELOPMENT /////////////////////
+
+router.get('/courseTeached/:teacher_id', (req, res) => {
+
+    const { teacher_id } = req.params;
+
+    try {
+        const courseRes = teacher.showTeacherRelatedCourse(teacher_id)
+        if (courseRes[0]) {
+            res.status(200).json({ error: false, message: 'Grab Course Teached Succeed',courseRes});
+        } else {
+            res.status(404).json({ error: true, message: 'Teacher has no course teached' })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'Grab teached course failed' });
+    }
+})
+
+router.get('/courseSession', (req, res) => {
+
+    const { course_id } = req.body;
+
+    try {
+        const sessionRes = teacher.showCourseRelatedSession(course_id);
+        if (sessionRes[0]) {
+            res.status(200).json({ error: false, message: 'Grab course sessions succeed',sessionRes});
+        } else {
+            res.status(404).json({ error: true, message: 'No session in inputted Courese' });
+        }
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'Grab Course Sessions failed' });
+    }
+})
+
+router.get('/showQR', (req,res) =>{
+    const {session_id} = req.body
+
+    try{
+        const qrRes = teacher.grabSessionQRCode(session_id)
+        if(qrRes){
+            res.status(200).json({error : false, message : 'Show QR Succeed', qrRes});
+        }else{
+            res.status(404).json({error : true, message : 'No session id registered'});
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error : true, message : 'Show QR Failed'})
+    }
+
+})
+
+
 
 router.get('/logoutTeacher', (req, res) => {
     if (req.session) {
