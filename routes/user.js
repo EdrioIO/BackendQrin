@@ -102,10 +102,10 @@ router.patch('/attend', async (req, res) => {
 })
 
 router.post('/inquiry', async (req, res) => {
-    const { student_id, details } = req.body
+    const { student_id, details , inquiry_header)} = req.body
 
     try {
-        const dbHolder = await student.submitInquiry(student_id, details)
+        const dbHolder = await student.submitInquiry(student_id, details,inquiry_header)
         if (dbHolder) {
             res.status(200).json({ error: false, message: "Inquiry submitted succesfully" });
         }

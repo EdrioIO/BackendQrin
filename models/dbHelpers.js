@@ -49,15 +49,16 @@ module.exports = {
 
     // admin
     generateReport,
-    show_ms_student,
+    registerStudent,
 }
 
 
 /////////////////////ADMIN//////////////////
 
 
-function show_ms_student(){
-    return db('ms_student')
+function registerStudent(){
+    db('ms_student')
+    .insert()
 }
 
 async function generateReport(course_id,session_id,student_generation){
@@ -208,7 +209,7 @@ async function alterStudentProfilePassword(student_id, hashedPassword) {
 
 
 function submitInquiry(student_id, details) {
-    return db('ms_inquiry').insert({ student_id, details }, ['student_id', 'details'])
+    return db('ms_inquiry').insert({ student_id, details,inquiry_header }, ['student_id', 'details','inquiry_header'])
 }
 
 
