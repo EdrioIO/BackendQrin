@@ -54,7 +54,7 @@ router.patch('/attend', async (req, res) => {
             // if (distance > 30 || heightDiff > 5) {
             //     res.status(400).json({ error: true, message: 'Distance too far from class' });
             // }
-            else {
+            // else {
                 if (attend_type == 'in') {
                     const currentTime = await time.getCurrentTime();
                     console.log('base in time : ' + studentRes[0].base_in_time)
@@ -88,11 +88,10 @@ router.patch('/attend', async (req, res) => {
                     }
                 }
                 else {
-                    isLate = true;
                     res.status(404).json({ error: true, message: 'Bad parameter' })
                 }
             }
-        }
+        // }
         else {
             res.status(400).json({ error: true, message: 'Attend attempt failed' })
         }
