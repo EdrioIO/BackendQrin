@@ -51,9 +51,9 @@ router.patch('/attend', async (req, res) => {
             const heightDiff = Math.abs(Number(location_z) - studentRes[0].altitude);
             console.log('height :' + heightDiff);
 
-            if (distance > 30 || heightDiff > 5) {
-                res.status(400).json({ error: true, message: 'Distance too far from class' });
-            }
+            // if (distance > 30 || heightDiff > 5) {
+            //     res.status(400).json({ error: true, message: 'Distance too far from class' });
+            // }
             else {
                 if (attend_type == 'in') {
                     const currentTime = await time.getCurrentTime();
