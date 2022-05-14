@@ -208,8 +208,8 @@ async function alterStudentProfilePassword(student_id, hashedPassword) {
 
 
 
-function submitInquiry(student_id, details) {
-    return db('ms_inquiry').insert({ student_id, details,inquiry_header }, ['student_id', 'details','inquiry_header'])
+function submitInquiry(student_id,inquiry_header, details) {
+    return db('ms_inquiry').insert({ student_id,inquiry_header, details }, ['student_id', 'details','inquiry_header'])
 }
 
 
