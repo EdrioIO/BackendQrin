@@ -105,7 +105,7 @@ router.post('/inquiry', async (req, res) => {
     const { student_id, inquiry_header, details} = req.body
 
     try {
-        const dbHolder = await student.submitInquiry(student_id,inquiry_header , details)
+        const dbHolder = await student.submitInquiry(student_id,inquiry_header,details)
         if (dbHolder) {
             res.status(200).json({ error: false, message: "Inquiry submitted succesfully" });
         }

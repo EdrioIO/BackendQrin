@@ -4,8 +4,12 @@ const bcrypt = require('bcrypt');
 const GeoPoint = require('geopoint');
 const time = require('../models/timeHelper');
 const { database } = require('pg/lib/defaults');
+const bodyParser = require('body-parser')
 
 const router = express.Router();
+
+// const jsonParser = bodyParser.json()
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 /////////////////////PRODUCTION/////////////////////
 router.get('/showTeacher', async (req, res) => {
@@ -101,7 +105,7 @@ router.get('/courseTeached/:teacher_id', async (req, res) => {
     try {
         const courseRes = await teacher.showTeacherRelatedCourse(teacher_id)
         if (courseRes[0]) {
-            res.status(200).json({ error: false, message: 'Grab Course Teached Succeed',courseRes});
+            res.status(200).json({ error: false, message: 'Grab Course Teached Succeed', courseRes });
         } else {
             res.status(404).json({ error: true, message: 'Teacher has no course teached' })
         }
@@ -118,7 +122,7 @@ router.get('/courseSession:course_id', async (req, res) => {
     try {
         const sessionRes = await teacher.showCourseRelatedSession(course_id);
         if (sessionRes[0]) {
-            res.status(200).json({ error: false, message: 'Grab course sessions succeed',sessionRes});
+            res.status(200).json({ error: false, message: 'Grab course sessions succeed', sessionRes });
         } else {
             res.status(404).json({ error: true, message: 'No session in inputted Course' });
         }
@@ -129,19 +133,19 @@ router.get('/courseSession:course_id', async (req, res) => {
     }
 })
 
-router.get('/showQR/:session_id', async (req,res) =>{
-    const {session_id} = req.params
+router.get('/showQR/:session_id', async (req, res) => {
+    const { session_id } = req.params
 
-    try{
+    try {
         const qrRes = await teacher.grabSessionQRCode(session_id)
-        if(qrRes){
-            res.status(200).json({error : false, message : 'Show QR Succeed', qrRes});
-        }else{
-            res.status(404).json({error : true, message : 'No session id registered'});
+        if (qrRes) {
+            res.status(200).json({ error: false, message: 'Show QR Succeed', qrRes });
+        } else {
+            res.status(404).json({ error: true, message: 'No session id registered' });
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error : true, message : 'Show QR Failed'})
+        res.status(500).json({ error: true, message: 'Show QR Failed' })
     }
 })
 
@@ -153,21 +157,80 @@ router.get('/showQR/:session_id', async (req,res) =>{
 
 ///////////////////// DEVELOPMENT /////////////////////
 
-router.get('/genCheck/:session_id', (req,res)=>{
-    const {session_id} = req.params;
+router.get('/genCheck/:session_id', async (req, res) => {
+    const { session_id } = req.params;
 
-    try{
-        const qrRes = teacher.grabSessionQRCode(session_id)
-        if(qrRes){
-            res.status(200).json({error : false, message : 'Show QR Succeed', qrRes});
-        }else{
-            res.status(404).json({error : true, message : 'No session id registered'});
+    try {
+        const qrRes = await teacher.showGenerationRelatedForSession(session_id)
+        if (qrRes) {
+            res.status(200).json({ error: false, message: 'Show generation Succeed', qrRes });
+        } else {
+            res.status(404).json({ error: true, message: 'No session id registered' });
         }
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error : true, message : 'Show QR Failed'})
+        res.status(500).json({ error: true, message: 'Show Generation Failed' })
     }
+})
 
+router.get('/classAttendData/:session_id/:student_generation', async (req, res) => {
+    const { session_id, student_generation } = req.params
+
+    try {
+        const attendRes = await teacher.displayListAttendance(session_id, student_generation)
+        if (attendRes) {
+            res.status(200).json({ error: false, message: 'Show list attendance Succeed', attendRes });
+        } else {
+            res.status(404).json({ error: true, message: 'No data' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'Show Attendance Failed' })
+    }
+})
+
+
+// let sum = 0;
+// const numbers = [65, 44, 12, 4];
+// numbers.forEach(myFunction);
+
+// function myFunction(item) {
+//   sum += item;
+// }
+
+router.get('/')
+
+router.get('/manualAtttend', urlencodedParser, async (req, res) => {
+    // const {string, array} = req.body
+
+    const session_id = req.body.session_id
+    const studentRes = req.body.student
+    console.log(studentRes[0].student_name)
+
+    // async function doSomething() {
+    //     for (item of items) {
+    //         await promiseAction(item)
+    //     }
+    // }
+
+
+    try {
+        for (student in studentRes) {
+            var temps = await teacher.grabAttendDataLecturerVer(data.student_id, data.session_id)
+            if (data.check_in_status == 'manual') {
+                await teacher.manualAttend(temps[0].attendance_id, "in", temps[0].base_in_time, temps[0].base_out_time) // manual absen sesuai dengan treshold session
+            }
+            if (data.check_out_status == 'manual') {
+                await teacher.manualAttend(temps[0].attendance_id, "out", temps[0].base_in_time, temps[0].base_out_time)
+            }
+        }
+
+        res.status(200).json({ error: false, message: 'Manual Check Succeed' });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: true, message: "Manual Check Operation Failed" })
+    }
 })
 
 

@@ -22,45 +22,49 @@ const router = express.Router();
 
 // TODO : Reporting (JSON to CSV with option be it date or student generation)
 
-router.get('/adminAccess', (req,res)=>{
+router.get('/adminAccess', (req, res) => {
     const adminKey = req.body
 
-    if(adminKey == process.env.adminKey){
+    if (adminKey == process.env.adminKey) {
         // TODO : create session that saves adminKey, FE go to homepage(2 menu generate report and register data)
     }
 
 })
 
-router.get('/generateReport', (req,res) =>{
+router.get('/generateReport', (req, res) => {
 
-    const {course_id,session_id, student_generation} = req.body();
+    const { course_id, session_id, student_generation } = req.body();
     //grab admin key from session
 
     // to do wrap try catch on if session.adminKey == proccess.env.ADMIN_KEY
 
-    try{
+    try {
         // const reportRes = admin.
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error : true, message : 'Generate Report Failed'});
+        res.status(500).json({ error: true, message: 'Generate Report Failed' });
     }
 
 })
 
 
-router.get('/ms_student', async (req,res) =>{
 
-    try{
-    const resp = await admin.show_ms_student()
-        if(resp){
-            res.status(200).json({res})
+
+router.get('/registerUser', async (req, res) => {
+
+    const { student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program, student_genereation } = req.body
+
+    try {
+        const adminRes = await admin.show_ms_student()
+        if (resp) {
+            res.status(200).json({ res })
         }
-        else{
-            res.status(501).json({error : true})
+        else {
+            res.status(501).json({ error: true })
         }
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        res.status(500).json({error : true})
+        res.status(500).json({ error: true })
     }
 
 })
