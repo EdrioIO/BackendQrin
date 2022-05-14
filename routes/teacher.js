@@ -94,20 +94,12 @@ router.post('/loginTeacher', async (req, res) => {
     }
 })
 
-///////////////////// END OF PRODUCTION /////////////////////
-
-
-
-
-
-///////////////////// DEVELOPMENT /////////////////////
-
-router.get('/courseTeached/:teacher_id', (req, res) => {
+router.get('/courseTeached/:teacher_id', async (req, res) => {
 
     const { teacher_id } = req.params;
 
     try {
-        const courseRes = teacher.showTeacherRelatedCourse(teacher_id)
+        const courseRes = await teacher.showTeacherRelatedCourse(teacher_id)
         if (courseRes[0]) {
             res.status(200).json({ error: false, message: 'Grab Course Teached Succeed',courseRes});
         } else {
@@ -119,12 +111,12 @@ router.get('/courseTeached/:teacher_id', (req, res) => {
     }
 })
 
-router.get('/courseSession:course_id', (req, res) => {
+router.get('/courseSession:course_id', async (req, res) => {
 
     const { course_id } = req.params;
 
     try {
-        const sessionRes = teacher.showCourseRelatedSession(course_id);
+        const sessionRes = await teacher.showCourseRelatedSession(course_id);
         if (sessionRes[0]) {
             res.status(200).json({ error: false, message: 'Grab course sessions succeed',sessionRes});
         } else {
@@ -137,8 +129,32 @@ router.get('/courseSession:course_id', (req, res) => {
     }
 })
 
-router.get('/showQR/:session_id', (req,res) =>{
+router.get('/showQR/:session_id', async (req,res) =>{
     const {session_id} = req.params
+
+    try{
+        const qrRes = await teacher.grabSessionQRCode(session_id)
+        if(qrRes){
+            res.status(200).json({error : false, message : 'Show QR Succeed', qrRes});
+        }else{
+            res.status(404).json({error : true, message : 'No session id registered'});
+        }
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error : true, message : 'Show QR Failed'})
+    }
+})
+
+///////////////////// END OF PRODUCTION /////////////////////
+
+
+
+
+
+///////////////////// DEVELOPMENT /////////////////////
+
+router.get('/genCheck/:session_id', (req,res)=>{
+    const {session_id} = req.params;
 
     try{
         const qrRes = teacher.grabSessionQRCode(session_id)
@@ -151,7 +167,9 @@ router.get('/showQR/:session_id', (req,res) =>{
         console.log(err);
         res.status(500).json({error : true, message : 'Show QR Failed'})
     }
+
 })
+
 
 
 
