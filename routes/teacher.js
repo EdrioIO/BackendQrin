@@ -119,16 +119,16 @@ router.get('/courseTeached/:teacher_id', (req, res) => {
     }
 })
 
-router.get('/courseSession', (req, res) => {
+router.get('/courseSession:course_id', (req, res) => {
 
-    const { course_id } = req.body;
+    const { course_id } = req.params;
 
     try {
         const sessionRes = teacher.showCourseRelatedSession(course_id);
         if (sessionRes[0]) {
             res.status(200).json({ error: false, message: 'Grab course sessions succeed',sessionRes});
         } else {
-            res.status(404).json({ error: true, message: 'No session in inputted Courese' });
+            res.status(404).json({ error: true, message: 'No session in inputted Course' });
         }
 
     } catch (err) {
@@ -137,8 +137,8 @@ router.get('/courseSession', (req, res) => {
     }
 })
 
-router.get('/showQR', (req,res) =>{
-    const {session_id} = req.body
+router.get('/showQR/:session_id', (req,res) =>{
+    const {session_id} = req.params
 
     try{
         const qrRes = teacher.grabSessionQRCode(session_id)
@@ -151,7 +151,6 @@ router.get('/showQR', (req,res) =>{
         console.log(err);
         res.status(500).json({error : true, message : 'Show QR Failed'})
     }
-
 })
 
 
