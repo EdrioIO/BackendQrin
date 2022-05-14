@@ -115,7 +115,7 @@ router.get('/courseTeached/:teacher_id', async (req, res) => {
     }
 })
 
-router.get('/courseSession:course_id', async (req, res) => {
+router.get('/courseSession/:course_id', async (req, res) => {
 
     const { course_id } = req.params;
 
@@ -206,13 +206,6 @@ router.get('/manualAtttend', urlencodedParser, async (req, res) => {
     const session_id = req.body.session_id
     const studentRes = req.body.student
     console.log(studentRes[0].student_name)
-
-    // async function doSomething() {
-    //     for (item of items) {
-    //         await promiseAction(item)
-    //     }
-    // }
-
 
     try {
         for (student in studentRes) {
