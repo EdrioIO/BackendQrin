@@ -41,7 +41,7 @@ router.patch('/attend', async (req, res) => {
     let isNotLateOut = false;
     try {
         const studentRes = await student.grabAttendData(student_id, qr_code);
-        const isRegistered = await student.checkRegisteredCourse(student_id,studentRes[0].session_id)
+        const isRegistered = await student.checkRegisteredCourse(student_id, studentRes[0].session_id)
 
         if (studentRes && isRegistered) {
             const userCoor = await new GeoPoint(Number(location_x), Number(location_y));
@@ -51,10 +51,10 @@ router.patch('/attend', async (req, res) => {
             const heightDiff = Math.abs(Number(location_z) - studentRes[0].altitude);
             console.log('height :' + heightDiff);
 
-            // if (distance > 30 || heightDiff > 5) {
-            //     res.status(400).json({ error: true, message: 'Distance too far from class' });
-            // }
-            // else {
+            if (distance > 30 || heightDiff > 5) {
+                res.status(400).json({ error: true, message: 'Distance too far from class' });
+            }
+            else {
                 if (attend_type == 'in') {
                     const currentTime = await time.getCurrentTime();
                     console.log('base in time : ' + studentRes[0].base_in_time)
@@ -91,7 +91,7 @@ router.patch('/attend', async (req, res) => {
                     res.status(404).json({ error: true, message: 'Bad parameter' })
                 }
             }
-        // }
+        }
         else {
             res.status(400).json({ error: true, message: 'Attend attempt failed' })
         }
@@ -102,10 +102,10 @@ router.patch('/attend', async (req, res) => {
 })
 
 router.post('/inquiry', async (req, res) => {
-    const { student_id, inquiry_header, details} = req.body
+    const { student_id, inquiry_header, details } = req.body
 
     try {
-        const dbHolder = await student.submitInquiry(student_id,inquiry_header,details)
+        const dbHolder = await student.submitInquiry(student_id, inquiry_header, details)
         if (dbHolder) {
             res.status(200).json({ error: false, message: "Inquiry submitted succesfully" });
         }
@@ -118,21 +118,21 @@ router.post('/inquiry', async (req, res) => {
     }
 })
 
-router.get('/takenCourse/:student_id/course/:course_id', async(req,res)=>{
-    const{course_id, student_id} = req.params;
-    try{
-        const sessionRes = await student.grabCourseSession(student_id,course_id);
+router.get('/takenCourse/:student_id/course/:course_id', async (req, res) => {
+    const { course_id, student_id } = req.params;
+    try {
+        const sessionRes = await student.grabCourseSession(student_id, course_id);
 
-        if(sessionRes[0]){
-            res.status(200).json({sessionRes});
+        if (sessionRes[0]) {
+            res.status(200).json({ sessionRes });
         }
-        else{
-            res.status(404).json({error : true, message : 'No session on inputed course'});
+        else {
+            res.status(404).json({ error: true, message: 'No session on inputed course' });
         }
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({error : true, message : 'Grab Course Session failed'});
+        res.status(500).json({ error: true, message: 'Grab Course Session failed' });
     }
 })
 
@@ -143,7 +143,7 @@ router.get('/takenCourse/:student_id', async (req, res) => {
         const takenCourseRes = await student.grabTakenCourse(student_id);
 
         if (takenCourseRes[0]) {
-            res.status(200).json({takenCourseRes})
+            res.status(200).json({ takenCourseRes })
         }
         else {
             res.status(404).json({ error: true, message: 'No Taken Course data on id was found' });
@@ -261,15 +261,15 @@ router.patch('/dev2', async (req, res) => {
 })
 
 router.patch('/dev3', async (req, res) => {
-    const {student_id, session_id} = req.body
+    const { student_id, session_id } = req.body
     try {
-        const temps = await student.checkRegisteredCourse(student_id,session_id)
-        if(temps){
-            res.status(200).json({ error: false, message: 'finished' ,temps});
-        }else{
-            res.status(203).json({error : true, message : 'error'})
+        const temps = await student.checkRegisteredCourse(student_id, session_id)
+        if (temps) {
+            res.status(200).json({ error: false, message: 'finished', temps });
+        } else {
+            res.status(203).json({ error: true, message: 'error' })
         }
-        
+
     } catch (err) {
         console.log(err)
         res.status(400).json({ error: true, message: 'gagal' });
