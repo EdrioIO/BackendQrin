@@ -135,13 +135,13 @@ function registerProgram(program_name){
     })
 }
 
-function registerStudentCourse(student_id,course_id){{
-    db('ms_course_taken')
-    .insert({
-        student_id : student_id,
-        course_id : course_id
-    })
-}}
+// function registerStudentCourse(student_id,course_id){{
+//     db('ms_course_taken')
+//     .insert({
+//         student_id : student_id,
+//         course_id : course_id
+//     })
+// }}
 
 
 
