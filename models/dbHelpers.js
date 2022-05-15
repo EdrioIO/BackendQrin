@@ -54,18 +54,24 @@ module.exports = {
 
     // admin
     generateReport,
+    showAllCourse,
     registerStudent,
     registerTeacher,
     registerCourse,
     registerSession, 
     registerClass,
     registerProgram,
+    registerStudentCourse,
 
 }
 
 
 /////////////////////ADMIN//////////////////
 
+function showAllCourse(){
+    return db('ms_course')
+    .select('ms_course.course_id', 'ms_course.course_name')
+}
 
 function registerStudent(student_nim, student_name,student_email, student_phone,student_dob,student_study_program,student_generation) {
     db('ms_student')
@@ -108,7 +114,7 @@ function registerSession(session_name,base_in_time,base_out_time,qr_code,course_
         base_in_time : base_in_time,
         base_out_time : base_out_time,
         qr_code : qr_code,
-        course_id : course_ids
+        course_id : course_id
     })
 }
 
@@ -129,7 +135,13 @@ function registerProgram(program_name){
     })
 }
 
-// function 
+function registerStudentCourse(student_id,course_id){{
+    db('ms_course_taken')
+    .insert({
+        student_id : student_id,
+        course_id : course_id
+    })
+}}
 
 
 
