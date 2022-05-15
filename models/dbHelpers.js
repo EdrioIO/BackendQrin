@@ -63,7 +63,7 @@ module.exports = {
     registerClass,
     registerProgram,
     registerStudentCourse,
-    
+    registerTeachedCourse,
 
 }
 
@@ -145,6 +145,13 @@ function registerStudentCourse(student_id,course_id){{
     })
 }}
 
+function registerTeachedCourse(teacher_id,course_id){
+    db('ms_course_teached')
+    .insert({
+        teacher_id : teacher_id,
+        course_id : course_id
+    })
+}
 
 
 

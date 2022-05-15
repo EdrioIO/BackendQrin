@@ -229,9 +229,9 @@ router.post('/registerTeachedCourse', async(req,res)=>{
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const takenCourseRes = await admin.registerTeachedCourse(student_id,course_id)
-            if (takenCourseRes[0]) {
-                res.status(200).json({ error: false, message: 'Register course succeed', takenCourseRes})
+            const teachedCourseRes = await admin.registerTeachedCourse(teacher_id,course_id)
+            if (teachedCourseRes[0]) {
+                res.status(200).json({ error: false, message: 'Register course succeed', teachedCourseRes})
             }
             else {
                 res.status(501).json({ error: true })
