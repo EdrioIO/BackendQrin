@@ -162,7 +162,7 @@ function showCourseRelatedSession(course_id) {
         .where({ course_id })
 }
 
-function grabSessionQRCode() {
+function grabSessionQRCode(session_id) {
     return db('ms_session')
         .select('qr_code')
         .where({ session_id })
