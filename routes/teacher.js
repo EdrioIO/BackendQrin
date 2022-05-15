@@ -200,7 +200,7 @@ router.get('/classAttendData/:session_id/:student_generation', async (req, res) 
 
 router.get('/')
 
-router.patch('/manualAtttend', urlencodedParser, async (req, res) => {
+router.patch('/manualAttend', urlencodedParser, async (req, res) => {
     // const {string, array} = req.body
 
     const session_id = req.body.session_id
