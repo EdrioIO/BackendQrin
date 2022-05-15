@@ -54,16 +54,16 @@ router.get('/generateReport', (req, res) => {
 })
 
 
-router.post('/registerUser', async (req, res) => {
+router.post('/registerUser',async (req, res) => {
 
     const { adminPass, student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
 
     if (adminPass == proccess.env.ADMIN_ACCESS1) {
 
         try {
-            const adminRes = await admin.registerUser(student_nim, student_name,student_email, student_phone,student_dob,student_study_program,student_generation)
+            const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation)
             if (adminRes) {
-                res.status(200).json({error:false, message : 'Register student succeed', adminRes })
+                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
             }
             else {
                 res.status(501).json({ error: true })
@@ -74,21 +74,20 @@ router.post('/registerUser', async (req, res) => {
         }
 
     }
-    else{
-        res.status(500).json({error : true, message : 'You are not an admin'})
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
 
-router.post('/registerUser', async (req, res) => {
-
-    const { adminPass, student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
+router.post('/registerTeacher', async (req, res) => {
+    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob} = req.body
 
     if (adminPass == proccess.env.ADMIN_ACCESS1) {
 
         try {
-            const adminRes = await admin.registerUser(student_nim, student_name,student_email, student_phone,student_dob,student_study_program,student_generation)
+            const adminRes = await admin.registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob)
             if (adminRes) {
-                res.status(200).json({error:false, message : 'Register student succeed', adminRes })
+                res.status(200).json({ error: false, message: 'Register student succeed', adminRes})
             }
             else {
                 res.status(501).json({ error: true })
@@ -97,35 +96,9 @@ router.post('/registerUser', async (req, res) => {
             console.log(err)
             res.status(500).json({ error: true })
         }
-
     }
-    else{
-        res.status(500).json({error : true, message : 'You are not an admin'})
-    }
-})
-
-
-router.post('/registerTeacher', async (req,res) =>{
-    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, student_dob, student_study_program, student_generation } = req.body
-
-    if (adminPass == proccess.env.ADMIN_ACCESS1) {
-
-        try {
-            const adminRes = await admin.registerUser(student_nim, student_name,student_email, student_phone,student_password,student_dob,student_study_program,student_generation)
-            if (adminRes) {
-                res.status(200).json({error:false, message : 'Register student succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({ error: true })
-        }
-
-    }
-    else{
-        res.status(500).json({error : true, message : 'You are not an admin'})
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
 
