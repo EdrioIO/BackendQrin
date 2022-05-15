@@ -175,7 +175,7 @@ async function generateReport(course_id, session_id, student_generation) {
 
 ////////////////teacher/////////////////
 
-async function alterTeacherProfilePhone(teacher_id, student_phone) {
+async function alterTeacherProfilePhone(teacher_id, teacher_phone) {
     db('ms_teacher')
         .where({ teacher_id })
         .update({ teacher_phone })
