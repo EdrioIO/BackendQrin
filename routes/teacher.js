@@ -205,7 +205,7 @@ router.patch('/manualAttend', urlencodedParser, async (req, res) => {
 
     const session_id = req.body.session_id
     const studentRes = req.body.student
-    console.log(studentRes[0].student_name)
+   
 
     try {
         for (student in studentRes) {

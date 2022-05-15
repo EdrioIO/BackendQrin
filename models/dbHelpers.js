@@ -61,7 +61,7 @@ module.exports = {
     registerSession, 
     registerClass,
     registerProgram,
-    registerStudentCourse,
+    // registerStudentCourse,
 
 }
 
