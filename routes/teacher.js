@@ -210,10 +210,10 @@ router.patch('/manualAtttend', urlencodedParser, async (req, res) => {
     try {
         for (student in studentRes) {
             var temps = await teacher.grabAttendDataLecturerVer(student.student_id, session_id)
-            if (data.check_in_status == 'manual') {
+            if (student.check_in_status == 'manual') {
                 await teacher.manualAttend(temps[0].attendance_id, "in", temps[0].base_in_time, temps[0].base_out_time) // manual absen sesuai dengan treshold session
             }
-            if (data.check_out_status == 'manual') {
+            if (student.check_out_status == 'manual') {
                 await teacher.manualAttend(temps[0].attendance_id, "out", temps[0].base_in_time, temps[0].base_out_time)
             }
         }
