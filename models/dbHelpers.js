@@ -98,7 +98,7 @@ function displayListAttendance(session_id, student_generation){
     .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header_id')
     .join('ms_student','ms_student.student_id','ms_attendance.student_id')
     .select('ms_student.student_id','ms_student.student_name', 'ms_attendance.presence_in_time',
-    'ms_attenndance.presence_in_status', 'ms_attendance.presence_out_time', 'ms_attendance.presence_out_status')
+    'ms_attendance.presence_in_status', 'ms_attendance.presence_out_time', 'ms_attendance.presence_out_status')
     .where({'ms_student.student_generation' : student_generation , 'ms_session_header.session_id' : session_id})
 }
 
