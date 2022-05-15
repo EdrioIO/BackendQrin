@@ -24,7 +24,7 @@ const sessionConfig ={
 }
 
 server.use(express.json());
-server.use(session(sessionConfig));
+// server.use(session(sessionConfig));
 
 
 server.get('/qrtest', async (req,res)=>{
@@ -38,7 +38,9 @@ server.get('/', (req,res)=>{
 })
 
 
-server.use('/api/user', restrictedUser, userRouter);
+server.use('/api/user', 
+// restrictedUser,
+ userRouter);
 server.use('/api/admin',adminRouter);
 server.use('/api/teacher', teacherRouter);
 server.use('/api/auth', authRouter);
