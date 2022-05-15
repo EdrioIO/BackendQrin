@@ -208,8 +208,8 @@ router.patch('/manualAttend', urlencodedParser, async (req, res) => {
    
 
     try {
-        for (student in studentRes) {
-            var temps = await teacher.grabAttendDataLecturerVer(student.student_id, session_id)
+        for (student = 0 ; student < studentRes.length; student++) {
+            var temps = await teacher.grabAttendDataLecturerVer(studentRes[student].student_id, session_id)
             if (student.check_in_status == 'manual') {
                 await teacher.manualAttend(temps[0].attendance_id, "in", temps[0].base_in_time, temps[0].base_out_time) // manual absen sesuai dengan treshold session
             }
@@ -264,6 +264,42 @@ router.post('/inquiryTeacher', async (req,res)=>{
 })
 
 ///////////////////// END OF DEVELOPMENT /////////////////////
+
+
+router.patch('/dev', urlencodedParser, async (req, res) => {
+    // const {string, array} = req.body
+
+    const session_id = req.body.session_id
+    const studentRes = req.body.student
+    console.log(session_id)
+    // console.log(studentRes)
+    var x = 0;
+
+
+    for(x = 0 ; x< studentRes.length; x++){
+        console.log(studentRes[x].student_id)
+        console.log(studentRes[x].check_in_status)
+        console.log(studentRes[x].check_out_status)
+    }
+
+    // try {
+    //     for (student in studentRes) {
+    //         var temps = await teacher.grabAttendDataLecturerVer(student.student_id, session_id)
+    //         if (student.check_in_status == 'manual') {
+    //             await teacher.manualAttend(temps[0].attendance_id, "in", temps[0].base_in_time, temps[0].base_out_time) // manual absen sesuai dengan treshold session
+    //         }
+    //         if (student.check_out_status == 'manual') {
+    //             await teacher.manualAttend(temps[0].attendance_id, "out", temps[0].base_in_time, temps[0].base_out_time)
+    //         }
+    //     }
+
+        res.status(200).json({ error: false, message: 'Manual Check Succeed' });
+
+    // } catch (error) {
+    //     console.log(error);
+    //     res.status(500).json({ error: true, message: "Manual Check Operation Failed" })
+    // }
+})
 
 
 module.exports = router;

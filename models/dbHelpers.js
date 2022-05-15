@@ -185,7 +185,7 @@ function grabAttendDataLecturerVer(student_id, session_id) {
         .join('ms_attendance', 'ms_student.student_id', 'ms_attendance.student_id')
         .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
         .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
-        .select('attendance_id', 'ms_session.base_in_time', 'ms_session.base_out_time')
+        .select('ms_attendance.attendance_id', 'ms_session.base_in_time', 'ms_session.base_out_time')
         .where({ 'ms_student.student_id': student_id, 'ms_session.session_id': session_id })
 }
 
