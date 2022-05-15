@@ -51,6 +51,7 @@ module.exports = {
     manualAttend,
     displayListAttendance,
     submitInquiryTeacher,
+    alterTeacherProfilePhone,
 
     // admin
     generateReport,
@@ -61,7 +62,8 @@ module.exports = {
     registerSession, 
     registerClass,
     registerProgram,
-    // registerStudentCourse,
+    registerStudentCourse,
+    
 
 }
 
@@ -135,13 +137,13 @@ function registerProgram(program_name){
     })
 }
 
-// function registerStudentCourse(student_id,course_id){{
-//     db('ms_course_taken')
-//     .insert({
-//         student_id : student_id,
-//         course_id : course_id
-//     })
-// }}
+function registerStudentCourse(student_id,course_id){{
+    db('ms_course_taken')
+    .insert({
+        student_id : student_id,
+        course_id : course_id
+    })
+}}
 
 
 
@@ -166,6 +168,17 @@ async function generateReport(course_id, session_id, student_generation) {
 
 ////////////////teacher/////////////////
 
+async function alterTeacherProfilePhone(teacher_id, student_phone) {
+    db('ms_teacher')
+        .where({ teacher_id })
+        .update({ teacher_phone })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
 
 function submitInquiryTeacher(teacher_id, details, inquiry_header){
     return db('ms_inquiry_teacher').insert({ teacher_id, inquiry_header, details }, ['teacher_id', 'details', 'inquiry_header'])

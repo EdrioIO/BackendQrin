@@ -62,6 +62,29 @@ router.patch('/editPassword', async (req, res) => {
     }
 })
 
+router.patch('/editPhone', async (req, res) => {
+    const { teacher_id, teacher_phone } = req.body
+    try {
+        const teacherRes = await teacher.findTeacherById(teacher_id);
+
+        if (teacherRes) {
+            try {
+                await teacher.alterStudentProfilePhone(teacher_id, teacher_phone)
+                res.status(200).json({ error: false, message: 'Phone number changed succesfully' })
+            } catch (err) {
+                console.log(err);
+                res.status(404).json({ error: true, message: 'Failed on altering phone number' })
+            }
+        } else {
+            res.status(404).json({ error: true, message: 'Student with inputed ID not found' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json('Error on grabbing teacher data') 
+    }
+
+})
+
 router.post('/loginTeacher', async (req, res) => {
 
     const { teacher_nip, teacher_password } = req.body;

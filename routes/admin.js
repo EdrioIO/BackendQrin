@@ -198,31 +198,55 @@ router.post('/registerProgram', async (req,res) =>{
 })
 
 
+router.post('/registerStudentCourse', async(req,res)=>{
 
-// router.post('/registerStudentCourse', async(res,res)=>{
+    const {adminPass, student_id,course_id} = req.body
 
-//     const {adminPass, student_id,course_id} = req.body
+    if (adminPass == process.env.ADMIN_ACCESS1) {
 
-//     if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const takenCourseRes = await admin.registerStudentCourse(student_id,course_id)
+            if (takenCourseRes[0]) {
+                res.status(200).json({ error: false, message: 'Register course succeed', takenCourseRes})
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
 
-//         try {
-//             const takenCourseRes = await admin.registerProgram(program_name)
-//             if (takenCourseRes[0]) {
-//                 res.status(200).json({ error: false, message: 'Register course succeed', takenCourseRes})
-//             }
-//             else {
-//                 res.status(501).json({ error: true })
-//             }
-//         } catch (err) {
-//             console.log(err)
-//             res.status(500).json({ error: true })
-//         }
-//     }
-//     else {
-//         res.status(500).json({ error: true, message: 'You are not an admin' })
-//     }
+router.post('/registerTeachedCourse', async(req,res)=>{
 
-// })
+    const {adminPass, teacher_id,course_id} = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const takenCourseRes = await admin.registerTeachedCourse(student_id,course_id)
+            if (takenCourseRes[0]) {
+                res.status(200).json({ error: false, message: 'Register course succeed', takenCourseRes})
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+
 
 
 ///////////////////// END OF DEVELOPMENT /////////////////////
