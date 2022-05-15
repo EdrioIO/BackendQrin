@@ -69,7 +69,7 @@ router.patch('/editPhone', async (req, res) => {
 
         if (teacherRes) {
             try {
-                await teacher.alterStudentProfilePhone(teacher_id, teacher_phone)
+                await teacher.alterTeacherProfilePhone(teacher_id, teacher_phone)
                 res.status(200).json({ error: false, message: 'Phone number changed succesfully' })
             } catch (err) {
                 console.log(err);
