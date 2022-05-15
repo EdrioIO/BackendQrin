@@ -244,15 +244,24 @@ router.get('/logoutTeacher', (req, res) => {
 })
 
 
+router.post('/inquiryTeacher', async (req,res)=>{
 
+    const { teacher_id, inquiry_header, details} = req.body
 
+    try {
+        const dbHolder = await teacher.submitInquiry(teacher_id,inquiry_header,details)
+        if (dbHolder) {
+            res.status(200).json({ error: false, message: "Inquiry submitted succesfully" });
+        }
+        else {
+            res.status(404).json({ error: true, message: "Error" })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: true, message: 'Inquiry operation failed' });
+    }
 
-//TODO : alter teacher pass
-//TODO : Register teacher
-//TODO : Show QR
-//TODO : Inquiry
-//TODO : manual absen
-
+})
 
 ///////////////////// END OF DEVELOPMENT /////////////////////
 

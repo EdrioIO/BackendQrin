@@ -50,20 +50,89 @@ module.exports = {
     grabAttendDataLecturerVer,
     manualAttend,
     displayListAttendance,
+    submitInquiryTeacher,
 
     // admin
     generateReport,
     registerStudent,
+    registerTeacher,
+    registerCourse,
+    registerSession, 
+    registerClass,
+    registerProgram,
+
 }
 
 
 /////////////////////ADMIN//////////////////
 
 
-function registerStudent() {
+function registerStudent(student_nim, student_name,student_email, student_phone,student_dob,student_study_program,student_generation) {
     db('ms_student')
-        .insert()
+        .insert({
+            student_nim : student_nim,
+            student_name : student_name,
+            student_email : student_email,
+            student_phone : student_phone,
+            student_password: "QRin"+ student_nim,
+            student_dob : student_dob,
+            student_study_program : student_study_program,
+            student_generation : student_generation
+        })
 }
+
+function registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob){
+    db('ms_teacher')
+        .insert({
+            teacher_nip : teacher_nip,
+            teacher_name : teacher_name,
+            teacher_email : teacher_email,
+            teacher_phone : teacher_phone,
+            teacher_password: "QRin"+ teacher_nip,
+            teacher_dob : teacher_dob,
+        })
+}
+
+function registerCourse(course_name,course_code){
+    db('ms_course')
+    .insert({
+        course_name : course_name,
+        course_code : course_code
+    })
+}
+
+function registerSession(session_name,base_in_time,base_out_time,qr_code,course_id){
+    db('ms_session')
+    .insert({
+        session_name : session_name,
+        base_in_time : base_in_time,
+        base_out_time : base_out_time,
+        qr_code : qr_code,
+        course_id : course_ids
+    })
+}
+
+function registerClass(class_name,latitude,longitude,altitude){
+    db('ms_class')
+    .insert({
+        class_name : class_name,
+        latitude : latitude,
+        longitude : longitude,
+        altitude : altitude
+    })
+}
+
+function registerProgram(program_name){
+    db('ms_program')
+    .insert({
+        program_name : program_name
+    })
+}
+
+// function 
+
+
+
 
 async function generateReport(course_id, session_id, student_generation) {
     return db('ms_student')
@@ -85,21 +154,18 @@ async function generateReport(course_id, session_id, student_generation) {
 
 ////////////////teacher/////////////////
 
-// select presence_in_time, presence_out_time, base_in_time, base_out_time, 
-// presence_in_status,presence_out_status, student_name,student_nim
-// from ms_session_header as seh 
-// join ms_attendance as att on att.session_header_id = seh.session_header_id
-// join ms_student as stu on stu.student_id = att.student_id
-// join ms_session as ses on ses.session_id = seh.session_id
-// where student_generation = 1 and ses.session_id = 1
 
-function displayListAttendance(session_id, student_generation){
+function submitInquiryTeacher(teacher_id, details, inquiry_header){
+    return db('ms_inquiry_teacher').insert({ teacher_id, inquiry_header, details }, ['teacher_id', 'details', 'inquiry_header'])
+}
+
+function displayListAttendance(session_id, student_generation) {
     return db('ms_session_header')
-    .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header_id')
-    .join('ms_student','ms_student.student_id','ms_attendance.student_id')
-    .select('ms_student.student_id','ms_student.student_name', 'ms_attendance.presence_in_time',
-    'ms_attendance.presence_in_status', 'ms_attendance.presence_out_time', 'ms_attendance.presence_out_status')
-    .where({'ms_student.student_generation' : student_generation , 'ms_session_header.session_id' : session_id})
+        .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header_id')
+        .join('ms_student', 'ms_student.student_id', 'ms_attendance.student_id')
+        .select('ms_student.student_id', 'ms_student.student_name', 'ms_attendance.presence_in_time',
+            'ms_attendance.presence_in_status', 'ms_attendance.presence_out_time', 'ms_attendance.presence_out_status')
+        .where({ 'ms_student.student_generation': student_generation, 'ms_session_header.session_id': session_id })
 }
 
 function grabAttendDataLecturerVer(student_id, session_id) {
@@ -107,11 +173,11 @@ function grabAttendDataLecturerVer(student_id, session_id) {
         .join('ms_attendance', 'ms_student.student_id', 'ms_attendance.student_id')
         .join('ms_session_header', 'ms_session_header.session_header_id', 'ms_attendance.session_header_id')
         .join('ms_session', 'ms_session_header.session_id', 'ms_session.session_id')
-        .select('attendance_id','ms_session.base_in_time', 'ms_session.base_out_time')
-        .where({ 'ms_student.student_id': student_id, 'ms_session.session_id' : session_id})
+        .select('attendance_id', 'ms_session.base_in_time', 'ms_session.base_out_time')
+        .where({ 'ms_student.student_id': student_id, 'ms_session.session_id': session_id })
 }
 
-function manualAttend(attendance_id, attend_type,base_in_time,base_out_time) {
+function manualAttend(attendance_id, attend_type, base_in_time, base_out_time) {
     if (attend_type == 'in') {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
@@ -124,7 +190,7 @@ function manualAttend(attendance_id, attend_type,base_in_time,base_out_time) {
             })
     }
 
-    else if(attend_type == 'out') {
+    else if (attend_type == 'out') {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
             .update({ presence_out_time: base_out_time, presence_out_status: true })
@@ -142,11 +208,11 @@ function showGenerationRelatedForSession(session_id) {
     return db('ms_teacher')
         .join('ms_course_teached', 'ms_course_teached.teacher_id', 'ms_teacher.teacher_id')
         .join('ms_course', 'ms_course_teached.course_id', 'ms_course.course_id')
-        .join('ms_session','ms_course.course_id', 'ms_session.course_id')
-        .join('ms_course_taken','ms_course_taken.course_id','ms_course.course_id')
-        .join('ms_student', 'ms_student.student_id','ms_course_taken.student_id')
+        .join('ms_session', 'ms_course.course_id', 'ms_session.course_id')
+        .join('ms_course_taken', 'ms_course_taken.course_id', 'ms_course.course_id')
+        .join('ms_student', 'ms_student.student_id', 'ms_course_taken.student_id')
         .distinct('ms_student.student_generation')
-        .where({'ms_session.session_id' : session_id})
+        .where({ 'ms_session.session_id': session_id })
 }
 
 async function showTeacherRelatedCourse(teacher_id) {
