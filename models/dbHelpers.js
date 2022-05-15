@@ -95,7 +95,7 @@ async function generateReport(course_id, session_id, student_generation) {
 
 function displayListAttendance(session_id, student_generation){
     return db('ms_session_header')
-    .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header.id')
+    .join('ms_attendance', 'ms_attendance.session_header_id', 'ms_session_header.session_header_id')
     .join('ms_student','ms_student.student_id','ms_attendance.student_id')
     .select('ms_student.student_id','ms_student.student_name', 'ms_attendance.presence_in_time',
     'ms_attenndance.presence_in_status', 'ms_attendance.presence_out_time', 'ms_attendance.presence_out_status')
