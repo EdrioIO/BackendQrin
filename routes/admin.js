@@ -323,9 +323,6 @@ router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
 
     const { course_id } = req.params;
     const adminPass = req.body.adminPass;
-    console.log(adminPass)
-    console.log(process.env.ADMIN_ACCESS1)
-    console.log(process.env.adminPass)
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
