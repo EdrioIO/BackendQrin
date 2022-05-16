@@ -71,10 +71,24 @@ module.exports = {
     editStudentData,
     showAllUser,
     showAllTeacher,
+    editTeacherData,
 }
 
 
 /////////////////////ADMIN//////////////////
+
+function editTeacherData(teacher_id, teacher_nip,teacher_name,teacher_email,teacher_password,hashed_password, teacher_dob){
+    return db('ms_teacher')
+    .where({ teacher_id })
+    .update({ teacher_nip,teacher_name,teacher_email,teacher_password,teachher_password : hashed_password, teacher_dob })
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+    
+}
 
 function showAllTeacher(){
     return db('ms_teacher')

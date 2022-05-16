@@ -87,14 +87,9 @@ router.post('/studentData/edit/:student_id', async (req, res) => {
         try {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(student_password, salt);
-            const adminRes = await admin.editStudentData(student_id, student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
+            await admin.editStudentData(student_id, student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
+            res.status(200).json({ error: false, message: 'Register student succeed'})
 
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
@@ -114,14 +109,10 @@ router.post('/teacherData/add', async (req, res) => {
         try {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(teacher_password, salt);
-            const adminRes = await admin.registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register teacher succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
-        } catch (err) {
+            await admin.editTeacherData(teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
+            res.status(200).json({ error: false, message: 'Edit teacher succeed' })
+        }
+        catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
         }
@@ -300,15 +291,15 @@ router.post('/teacherData/showAll', async (req, res) => {
     const { adminPass } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
-        try{
+        try {
             const adminRes = await admin.showAllTeacher()
-            if(adminRes[0]){
-                res.status(200).json({error : false, message : 'grab Teacher Data Succeed'});
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'grab Teacher Data Succeed' });
             }
-            else{
-                res.status(404).json({error : true, message : 'No Teacher Data'})
+            else {
+                res.status(404).json({ error: true, message: 'No Teacher Data' })
             }
-        }catch(er){
+        } catch (er) {
             console.log(err)
             res.status(500).json({ error: true })
         }
@@ -319,7 +310,7 @@ router.post('/teacherData/showAll', async (req, res) => {
 
 router.post('/teacherData/edit/:teacher_id', async (req, res) => {
 
-    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob} = req.body
+    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
