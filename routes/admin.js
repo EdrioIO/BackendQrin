@@ -37,12 +37,8 @@ router.post('/studentData/add', async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(student_password, salt);
             const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+            res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
+
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
