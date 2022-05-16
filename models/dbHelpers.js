@@ -73,10 +73,47 @@ module.exports = {
     editTeacherData,
     editCoursedata,
     editSessionData,
+    showAllClass,
+    editClassData,
+    showAllProgram,
+    editProgramData,
+
 }
 
 
 /////////////////////ADMIN//////////////////
+
+function editProgramData(program_id, program_name){
+    return db('ms_program')
+    .where({ program_id })
+    .update({ program_name})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
+
+function showAllProgram(){
+    return db('ms_program')
+}
+
+function editClassData(class_id, class_name, latitude,longitude,altitude){
+    return db('ms_class')
+    .where({ class_id })
+    .update({ class_name, latitude,longitude,altitude})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
+
+function showAllClass(){
+    return db('ms_class')
+}
 
 function reviewInquiryUser(inquiry_id, is_reviewed){
     return db('ms_inquiry')
