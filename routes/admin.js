@@ -37,7 +37,7 @@ router.post('/studentData/add', async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(student_password, salt);
             const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
-            res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
+            res.status(200).json({ error: false, message: 'Register student succeed'})
 
         } catch (err) {
             console.log(err)
@@ -867,6 +867,24 @@ router.post('/courseNot/:student_id', async (req, res) => {
 
 })
 
+
+router.post('/dev', async (req, res) => {
+
+    const {student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
+
+        try {
+            const student_password = "QRin" + student_nim;
+            const salt = await bcrypt.genSalt(10);
+            const hashed_password = await bcrypt.hash(student_password, salt);
+            const studentEntity = {student_nim, student_name, student_email, student_phone,student_password: hashed_password, student_dob, student_study_program, student_generation}
+            const adminRes = await admin.addStudent(studentEntity)
+            res.status(200).json({ error: false, message: 'Register student succeed'})
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+})
 
 
 
