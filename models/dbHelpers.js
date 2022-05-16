@@ -78,14 +78,50 @@ module.exports = {
     showAllProgram,
     editProgramData,
     editCourseTeachedData,
+    editCourseTakenData,
     showAllCourseTeached,
+    showAllCourseTaken,
+    showStudentGeneration,
+    showGenerationList,
+    showAllSession,
+
 }
 
 
 /////////////////////ADMIN//////////////////
 
+function showAllSession(){
+    return db('ms_session')
+}
+
+function showStudentGeneration(student_generation){
+    return db('ms_student')
+    .where({student_generation})
+}
+
+function showGenerationList(){
+    return db('ms_student')
+    .distinct('student_generation')
+}
+
+function showAllCourseTaken(){
+    return db('ms_course_taken')
+}
+
 function showAllCourseTeached(){
     return db('ms_course_teached')
+}
+
+function editCourseTakenData(course_taken_id,course_id, student_id){
+    return db('ms_course_taken')
+    .where({course_taken_id})
+    .update({ course_id,student_id})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
 }
 
 function editCourseTeachedData(course_teached_id,course_id,teacher_id){
