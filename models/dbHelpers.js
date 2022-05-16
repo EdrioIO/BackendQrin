@@ -15,16 +15,13 @@ module.exports = {
     findAttendanceInquiry,
     deleteInquiry,
     //start project export
+
+    //User
     findUserForLogin,
     findStudentById,
     findStudentByNIM,
     verifyRegister,
     addStudent,
-    // courseTakenById,
-    // checkQRCode,
-    // checkStudentLocation,
-    // checkPresenceIn,
-    // checkPresenceOut,
     grabAttendData,
     alterPresenceData,
     submitInquiry,
@@ -67,15 +64,67 @@ module.exports = {
     grabStudentData,
     grabStudentCourseNot,
     showInquiryUser,
+    reviewInquiryUser,
     showInquiryTeacher,
+    reviewInquiryTeacher,
     editStudentData,
     showAllUser,
     showAllTeacher,
     editTeacherData,
+    editCoursedata,
+    editSessionData,
 }
 
 
 /////////////////////ADMIN//////////////////
+
+function reviewInquiryUser(inquiry_id, is_reviewed){
+    return db('ms_inquiry')
+    .where({ inquiry_id })
+    .update({is_reviewed})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
+
+function reviewInquiryTeacher(inquiry_teacher_id, is_reviewed){
+    return db('ms_inquiry_teacher')
+    .where({ inquiry_teacher_id })
+    .update({is_reviewed})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
+
+function editSessionData(session_id, session_name, base_in_time, base_out_time, qr_code, course_id){
+    return db('ms_session')
+    .where({ session_id })
+    .update({ session_name, base_in_time, base_out_time, qr_code, course_id})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
+
+function editCoursedata(course_id, course_name, course_code){
+    return db('ms_course')
+    .where({ course_id })
+    .update({ course_name, course_code})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
 
 function editTeacherData(teacher_id, teacher_nip,teacher_name,teacher_email,teacher_password,hashed_password, teacher_dob){
     return db('ms_teacher')
@@ -134,7 +183,6 @@ function grabStudentData(){
 
 function showAllCourse(){
     return db('ms_course')
-    .select('ms_course.course_id', 'ms_course.course_name')
 }
 
 function registerStudent(student_nim, student_name,student_email, student_phone,hashed_password,student_dob,student_study_program,student_generation) {
