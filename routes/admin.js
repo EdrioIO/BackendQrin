@@ -10,8 +10,265 @@ const router = express.Router();
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 /////////////////////PRODUCTION/////////////////////
+router.post('/adminAccess', urlencodedParser, (req, res) => {
+    const adminKey = req.body.adminKey
+
+    if (adminKey == process.env.ADMIN_KEY) {
+
+        const adminPass = process.env.ADMIN_ACCESS1;
+        res.status(200).json({ error: false, message: 'You are authorized', adminPass });
+    }
+
+    else {
+        res.status(400).json({ error: true, message: 'You are Unauthorized' });
+    }
+})
+
+router.post('/studentData/add', urlencodedParser, async (req, res) => {
+
+    const { adminPass, student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
 
 
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const student_password = "QRin" + student_nim;
+            const salt = await bcrypt.genSalt(10);
+            const hashed_password = await bcrypt.hash(student_password, salt);
+            const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.post('/studentData/showAll', async (req, res) => {
+
+    const { adminPass } = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const studentRes = await admin.showAllUser()
+            if (studentRes[0]) {
+                res.status(200).json({ error: false, message: 'Register student succeed', studentRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+router.post('/studentData/edit/:student_id', async (req, res) => {
+
+    const { adminPass, student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program, student_generation } = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hashed_password = await bcrypt.hash(student_password, salt);
+            const adminRes = await admin.registerStudent(student_id, student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
+
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.post('/teacherData/add', async (req, res) => {
+    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_password, teacher_phone, teacher_dob } = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const salt = await bcrypt.genSalt(10);
+            const hashed_password = await bcrypt.hash(teacher_password, salt);
+            const adminRes = await admin.registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Register teacher succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+
+router.post('/showAllCourse', async (req, res) => {
+
+    const { adminPass } = req.body;
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const courseRes = await admin.showAllCourse();
+            if (courseRes[0]) {
+                res.status(200).json({ error: false, message: 'Grab All Course Succeed', courseRes });
+            }
+            else {
+                res.status(404).json({ error: true, message: 'No Course Registered' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
+
+    const { course_id } = req.params;
+    const adminPass = req.body.adminPass;
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const sessionRes = await admin.showCourseRelatedSession(course_id);
+            if (sessionRes[0]) {
+                res.status(200).json({ error: false, message: 'Grab course sessions succeed', sessionRes });
+            } else {
+                res.status(404).json({ error: true, message: 'No session in inputted Course' });
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Grab Course Sessions failed' });
+        }
+    }
+    else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+router.post('/genCheck/:session_id', urlencodedParser, async (req, res) => {
+    const { session_id } = req.params;
+    const adminPass = req.body.adminPass;
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const qrRes = await admin.showGenerationRelatedForSession(session_id)
+            if (qrRes) {
+                res.status(200).json({ error: false, message: 'Show generation Succeed', qrRes });
+            } else {
+                res.status(404).json({ error: true, message: 'No session id registered' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Show Generation Failed' })
+        }
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+router.post('/classAttendData/:session_id/:student_generation', urlencodedParser, async (req, res) => {
+    const { session_id, student_generation } = req.params
+    const adminPass = req.body.adminPass;
+
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const attendRes = await admin.displayListAttendance(session_id, student_generation)
+            if (attendRes) {
+                res.status(200).json({ error: false, message: 'Show list attendance Succeed', attendRes });
+            } else {
+                res.status(404).json({ error: true, message: 'No data' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Show Attendance Failed' })
+        }
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+router.post('/inquiry_user', urlencodedParser, async (req, res) => {
+
+    const adminPass = req.body.adminPass;
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const inquiryRes = await admin.showInquiryUser()
+
+            if (inquiryRes[0]) {
+                res.status(200).json({ error: false, message: 'Show Student Inquiry data succeed', inquiryRes });
+            }
+            else {
+                res.status(404).json({ error: true, message: 'No Inquiry data' });
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(404).json({ error: true, message: 'No user inquiry yet' })
+        }
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+
+router.post('/inquiry_teacher', urlencodedParser, async (req, res) => {
+
+    const adminPass = req.body.adminPass;
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const inquiryRes = await admin.showInquiryTeacher()
+
+            if (inquiryRes[0]) {
+                res.status(200).json({ error: false, message: 'Show Student Inquiry data succeed', inquiryRes });
+            }
+            else {
+                res.status(404).json({ error: true, message: 'No Inquiry data' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(404).json({ error: true, message: 'No user inquiry yet' })
+        }
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+
+})
 
 ///////////////////// END OF PRODUCTION /////////////////////
 
@@ -21,25 +278,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 ///////////////////// DEVELOPMENT /////////////////////
 
-// TODO : Register ALL DATA
 
-// TODO : Reporting (JSON to CSV with option be it date or student generation)
-
-router.post('/adminAccess', urlencodedParser, (req, res) => {
-    const adminKey = req.body.adminKey
-
-    if (adminKey == process.env.ADMIN_KEY) {
-
-        const adminPass = process.env.ADMIN_ACCESS1;
-        // TODO : create session that saves adminKey, FE go to homepage(2 menu generate report and register data)
-        res.status(200).json({ error: false, message: 'You are authorized', adminPass });
-    }
-
-    else {
-        res.status(400).json({ error: true, message: 'You are Unauthorized' });
-    }
-
-})
 
 router.get('/generateReport', (req, res) => {
 
@@ -57,90 +296,23 @@ router.get('/generateReport', (req, res) => {
 
 })
 
-
-router.post('/studentData/add', async (req, res) => {
-
-    const { adminPass, student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
+router.post('/teacherData/showAll', async (req, res) => {
+    const { adminPass } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
-
-        try {
-            const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
+        try{
+            const adminRes = await admin.showAllTeacher()
+            if(adminRes[0]){
+                res.status(200).json({error : false, message : 'grab Teacher Data Succeed'});
             }
-            else {
-                res.status(501).json({ error: true })
+            else{
+                res.status(404).json({error : true, message : 'No Teacher Data'})
             }
-        } catch (err) {
+        }catch(er){
             console.log(err)
             res.status(500).json({ error: true })
         }
-
-    }
-    else {
-        res.status(500).json({ error: true, message: 'You are not an admin' })
-    }
-})
-
-router.post('/studentData/showAll', urlencodedParser, async(req,res) =>{
-
-    const {adminPass} = req.body.adminPass
-
-    if(adminPass == process.env.ADMIN_ACCESS1){
-
-    }else{
-        res.status(400).json({error : true, message : 'You are unauthorized'})
-    }
-
-})
-
-router.post('/studentData/edit/:student_id', async(req,res)=>{
-
-    // const {studentEdit} : 
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-
-        try {
-            const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({ error: true })
-        }
-
-    }
-    else {
-        res.status(500).json({ error: true, message: 'You are not an admin' })
-    }
-})
-
-
-
-router.post('/registerTeacher', async (req, res) => {
-    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob } = req.body
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-
-        try {
-            const adminRes = await admin.registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register teacher succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({ error: true })
-        }
-    }
-    else {
+    } else {
         res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
@@ -168,28 +340,7 @@ router.post('/registerCourse', async (req, res) => {
     }
 })
 
-router.post('/showAllCourse', async (req, res) => {
 
-    const { adminPass } = req.body;
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const courseRes = await admin.showAllCourse();
-            if (courseRes[0]) {
-                res.status(200).json({ error: false, message: 'Grab All Course Succeed', courseRes });
-            }
-            else {
-                res.status(404).json({ error: true, message: 'No Course Registered' });
-            }
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: true })
-        }
-    }
-    else {
-        res.status(500).json({ error: true, message: 'You are not an admin' })
-    }
-})
 
 router.post('/registerCourseSession', async (req, res) => {
 
@@ -240,26 +391,7 @@ router.post('/registerProgram', async (req, res) => {
     }
 })
 
-router.post('/showAllStudent', async (req, res) => {
 
-    const { adminPass } = req.body
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const studentRes = await admin.grabStudentData();
-
-            if (studentRes[0]) {
-                res.status(200).json({ error: false, message: 'Show all student succeed' });
-            } else {
-                res.status(404).json({ error: true, message: 'No registered student' })
-            }
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: true, message: 'Show all student failed' })
-        }
-    }
-})
 
 router.post('/courseNot/:student_id', async (req, res) => {
 
@@ -333,149 +465,10 @@ router.post('/registerTeachedCourse', async (req, res) => {
     }
 })
 
-router.post('/showAllCourse', urlencodedParser, async (req, res) => {
-
-    const adminPass = req.body.adminPass
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-
-        try {
-            const courseRes = await admin.showAllCourse();
-
-            if (courseRes[0]) {
-                res.status(200).json({ error: false, message: 'Grab Course Succeed' })
-            }
-            else {
-                res.status(404).json({ error: true, message: 'No Course Registered' })
-            }
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: true, message: 'Get all course failed' })
-        }
-
-    } else {
-        res.status(400).json({ error: true, message: 'You are unauthorized' })
-    }
-})
-
-router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
-
-    const { course_id } = req.params;
-    const adminPass = req.body.adminPass;
-
-    console.log(course_id)
-    console.log(adminPass)
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const sessionRes = await admin.showCourseRelatedSession(course_id);
-            if (sessionRes[0]) {
-                res.status(200).json({ error: false, message: 'Grab course sessions succeed', sessionRes });
-            } else {
-                res.status(404).json({ error: true, message: 'No session in inputted Course' });
-            }
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: true, message: 'Grab Course Sessions failed' });
-        }
-    }
-    else {
-        res.status(400).json({ error: true, message: 'You are unauthorized' })
-    }
-})
-
-router.post('/genCheck/:session_id', urlencodedParser, async (req, res) => {
-    const { session_id } = req.params;
-    const adminPass = req.body.adminPass;
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const qrRes = await admin.showGenerationRelatedForSession(session_id)
-            if (qrRes) {
-                res.status(200).json({ error: false, message: 'Show generation Succeed', qrRes });
-            } else {
-                res.status(404).json({ error: true, message: 'No session id registered' });
-            }
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: true, message: 'Show Generation Failed' })
-        }
-    } else {
-        res.status(400).json({ error: true, message: 'You are unauthorized' })
-    }
-})
-
-router.post('/classAttendData/:session_id/:student_generation', urlencodedParser, async (req, res) => {
-    const { session_id, student_generation } = req.params
-    const adminPass = req.body.adminPass;
 
 
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const attendRes = await admin.displayListAttendance(session_id, student_generation)
-            if (attendRes) {
-                res.status(200).json({ error: false, message: 'Show list attendance Succeed', attendRes });
-            } else {
-                res.status(404).json({ error: true, message: 'No data' });
-            }
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: true, message: 'Show Attendance Failed' })
-        }
-    } else {
-        res.status(400).json({ error: true, message: 'You are unauthorized' })
-    }
-})
 
 
-router.post('/inquiry_user', urlencodedParser, async (req, res) => {
-
-    const adminPass = req.body.adminPass;
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const inquiryRes = await admin.showInquiryUser()
-
-            if(inquiryRes[0]){
-                res.status(200).json({error : false, message : 'Show Student Inquiry data succeed', inquiryRes});
-            }
-            else{
-                res.status(404).json({error : true, message : 'No Inquiry data'});
-            }
-
-        } catch (err) {
-            console.log(err);
-            res.status(404).json({ error: true, message: 'No user inquiry yet' })
-        }
-    } else {
-        res.status(400).json({ error: true, message: 'You are unauthorized' })
-    }
-})
-
-
-router.post('/inquiry_teacher', urlencodedParser, async (req, res) => {
-
-    const adminPass = req.body.adminPass;
-
-    if (adminPass == process.env.ADMIN_ACCESS1) {
-        try {
-            const inquiryRes = await admin.showInquiryTeacher()
-
-            if(inquiryRes[0]){
-                res.status(200).json({error : false, message : 'Show Student Inquiry data succeed', inquiryRes});
-            }
-            else{
-                res.status(404).json({error : true, message : 'No Inquiry data'});
-            }
-        } catch (err) {
-            console.log(err);
-            res.status(404).json({ error: true, message: 'No user inquiry yet' })
-        }
-    } else {
-        res.status(400).json({ error: true, message: 'You are unauthorized' })
-    }
-
-})
 
 
 ///////////////////// END OF DEVELOPMENT /////////////////////

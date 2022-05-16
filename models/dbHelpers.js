@@ -19,7 +19,6 @@ module.exports = {
     findStudentById,
     findStudentByNIM,
     verifyRegister,
-    showAllUser,
     addStudent,
     // courseTakenById,
     // checkQRCode,
@@ -69,11 +68,30 @@ module.exports = {
     grabStudentCourseNot,
     showInquiryUser,
     showInquiryTeacher,
-
+    editStudentData,
+    showAllUser,
+    showAllTeacher,
 }
 
 
 /////////////////////ADMIN//////////////////
+
+function showAllTeacher(){
+    return db('ms_teacher')
+}
+
+function editStudentData(student_id, student_nim,student_name,student_email,student_phone,hashed_password, student_dob,student_study_program, student_generation){
+    return db('ms_student')
+    .where({ student_id })
+    .update({ student_nim,student_name,student_email, student_phone, student_password : hashed_password, student_dob, student_study_program, student_generation })
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+    
+}
 
 function showInquiryTeacher(){
     return db('ms_inquiry_teacher')
@@ -105,28 +123,28 @@ function showAllCourse(){
     .select('ms_course.course_id', 'ms_course.course_name')
 }
 
-function registerStudent(student_nim, student_name,student_email, student_phone,student_dob,student_study_program,student_generation) {
+function registerStudent(student_nim, student_name,student_email, student_phone,hashed_password,student_dob,student_study_program,student_generation) {
     db('ms_student')
         .insert({
             student_nim : student_nim,
             student_name : student_name,
             student_email : student_email,
             student_phone : student_phone,
-            student_password: "QRin"+ student_nim,
+            student_password: hashed_password,
             student_dob : student_dob,
             student_study_program : student_study_program,
             student_generation : student_generation
         })
 }
 
-function registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob){
+function registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone,hashed_password, teacher_dob){
     db('ms_teacher')
         .insert({
             teacher_nip : teacher_nip,
             teacher_name : teacher_name,
             teacher_email : teacher_email,
             teacher_phone : teacher_phone,
-            teacher_password: "QRin"+ teacher_nip,
+            teacher_password: hashed_password,
             teacher_dob : teacher_dob,
         })
 }
