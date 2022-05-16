@@ -58,7 +58,7 @@ router.get('/generateReport', (req, res) => {
 })
 
 
-router.post('/registerUser', async (req, res) => {
+router.post('/studentData/add', async (req, res) => {
 
     const { adminPass, student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
 
@@ -82,6 +82,45 @@ router.post('/registerUser', async (req, res) => {
         res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
+
+router.post('/studentData/showAll', urlencodedParser, async(req,res) =>{
+
+    const {adminPass} = req.body.adminPass
+
+    if(adminPass == process.env.ADMIN_ACCESS1){
+
+    }else{
+        res.status(400).json({error : true, message : 'You are unauthorized'})
+    }
+
+})
+
+router.post('/studentData/edit/:student_id', async(req,res)=>{
+
+    // const {studentEdit} : 
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const adminRes = await admin.registerStudent(student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation)
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Register student succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+
 
 router.post('/registerTeacher', async (req, res) => {
     const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob } = req.body
@@ -323,6 +362,9 @@ router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
 
     const { course_id } = req.params;
     const adminPass = req.body.adminPass;
+
+    console.log(course_id)
+    console.log(adminPass)
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
