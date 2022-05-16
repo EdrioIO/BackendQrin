@@ -52,6 +52,7 @@ module.exports = {
     displayListAttendance,
     submitInquiryTeacher,
     alterTeacherProfilePhone,
+    submitInquiryTeacher
 
     // admin
     generateReport,
@@ -64,11 +65,33 @@ module.exports = {
     registerProgram,
     registerStudentCourse,
     registerTeachedCourse,
+    grabStudentData,
+    grabStudentCourseNot,
+    showInquiryUser,
+    showInquiryTeacher,
 
 }
 
 
 /////////////////////ADMIN//////////////////
+
+function showInquiryTeacher(){
+    return db
+}
+
+function showInquiryUser(){{
+
+}}
+
+function grabStudentCourseNot(student_id){
+    return db('ms_course')
+    .whereNotExists(db.select('*').from('ms_course_taken').whereRaw('ms_course.course_id = ms_course_taken.course_id'))
+}
+
+function grabStudentData(){
+    return db('ms_student')
+    .select('student_id','student_nim','student_name')
+}
 
 function showAllCourse(){
     return db('ms_course')
@@ -174,6 +197,11 @@ async function generateReport(course_id, session_id, student_generation) {
 
 
 ////////////////teacher/////////////////
+
+
+function submitInquiry(teacher_id, inquiry_header, details) {
+    return db('ms_inquiry_teacher').insert({ teacher_id, inquiry_header, details }, ['teacher_id', 'details', 'inquiry_header'])
+}
 
 async function alterTeacherProfilePhone(teacher_id, teacher_phone) {
     db('ms_teacher')
