@@ -319,9 +319,9 @@ router.post('/showAllCourse', urlencodedParser, async (req, res) => {
     }
 })
 
-router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
+router.post('/courseSession', urlencodedParser, async (req, res) => {
 
-    const { course_id } = req.params;
+    const { course_id } = req.body.course_id;
     const adminPass = req.body.adminPass;
 
     console.log(course_id)
