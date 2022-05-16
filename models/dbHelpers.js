@@ -77,11 +77,28 @@ module.exports = {
     editClassData,
     showAllProgram,
     editProgramData,
-
+    editCourseTeachedData,
+    showAllCourseTeached,
 }
 
 
 /////////////////////ADMIN//////////////////
+
+function showAllCourseTeached(){
+    return db('ms_course_teached')
+}
+
+function editCourseTeachedData(course_teached_id,course_id,teacher_id){
+    return db('ms_course_teached')
+    .where({course_teached_id})
+    .update({ course_id,teacher_id})
+    .returning('*')
+    .then(result => {
+        console.log('res :' + result);
+    }).catch(err => {
+        console.log('err : ' + err);
+    })
+}
 
 function editProgramData(program_id, program_name){
     return db('ms_program')
