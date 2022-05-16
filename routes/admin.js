@@ -216,6 +216,7 @@ router.post('/classAttendData/:session_id/:student_generation', urlencodedParser
 router.post('/inquiry_user', urlencodedParser, async (req, res) => {
 
     const adminPass = req.body.adminPass;
+
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const inquiryRes = await admin.showInquiryUser()
@@ -376,7 +377,7 @@ router.post('/courseData/add', async (req, res) => {
     }
 })
 
-router.post('/courseData/showAll', (req, res) => {
+router.post('/courseData/showAll', async(req, res) => {
     const adminPass = req.body
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
@@ -522,7 +523,7 @@ router.get('/generateReport', (req, res) => {
 })
 
 
-router.post()
+// router.post()
 
 
 
