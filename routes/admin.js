@@ -54,9 +54,9 @@ router.post('/studentData/add', async (req, res) => {
     }
 })
 
-router.post('/studentData/showAll', async (req, res) => {
+router.post('/studentData/showAll',urlencodedParser, async (req, res) => {
 
-    const { adminPass } = req.body
+    const { adminPass } = req.body.adminPass
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
@@ -129,9 +129,9 @@ router.post('/teacherData/add', async (req, res) => {
 })
 
 
-router.post('/showAllCourse', async (req, res) => {
+router.post('/showAllCourse', urlencodedParser, async (req, res) => {
 
-    const { adminPass } = req.body;
+    const { adminPass } = req.body.adminPass;
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
@@ -310,8 +310,8 @@ router.patch('/inquiry_teacher/review', urlencodedParser, async (req, res) => {
     }
 })
 
-router.post('/teacherData/showAll', async (req, res) => {
-    const { adminPass } = req.body
+router.post('/teacherData/showAll',urlencodedParser, async (req, res) => {
+    const { adminPass } = req.body.adminPass
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
@@ -379,8 +379,8 @@ router.post('/courseData/add', async (req, res) => {
     }
 })
 
-router.post('/courseData/showAll', async (req, res) => {
-    const adminPass = req.body
+router.post('/courseData/showAll',urlencodedParser, async (req, res) => {
+    const adminPass = req.body.adminPass
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const adminRes = await admin.showAllCourse()
@@ -445,9 +445,9 @@ router.post('/sessionData/add', async (req, res) => {
 
 })
 
-router.post('/sessionData/courseSession/:course_id', async (req, res) => {
+router.post('/sessionData/courseSession/:course_id',urlencodedParser, async (req, res) => {
     const { course_id } = req.params;
-    const { adminPass } = req.body
+    const { adminPass } = req.body.adminPass
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
@@ -513,8 +513,8 @@ router.post('/roomData/add', async (req, res) => {
     }
 })
 
-router.post('/roomData/showAll', async (req, res) => {
-    const adminPass = req.body
+router.post('/roomData/showAll',urlencodedParser, async (req, res) => {
+    const adminPass = req.body.adminPass
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const adminRes = await admin.showAllClass()
@@ -561,6 +561,7 @@ router.post('/programData/add', async (req, res) => {
 
     const { adminPass, program_name } = req.body
 
+
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
@@ -581,8 +582,9 @@ router.post('/programData/add', async (req, res) => {
     }
 })
 
-router.post('/programData/showAll', async (req, res) => {
-    const adminPass = req.body
+router.post('/programData/showAll',urlencodedParser, async (req, res) => {
+    const adminPass = req.body.adminPass
+    
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const adminRes = await admin.showAllProgram()
@@ -628,9 +630,9 @@ router.get('/generateReport', (req, res) => {
 })
 
 
-router.post('/programData/edit/:program_id', async (req, res) => {
+router.post('/programData/edit/:program_id',urlencodedParser, async (req, res) => {
     const { program_id } = req.params
-    const adminPass = req.body
+    const adminPass = req.body.adminPass
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
@@ -657,9 +659,9 @@ router.post('/programData/edit/:program_id', async (req, res) => {
 
 
 
-router.post('/courseNot/:student_id', async (req, res) => {
+router.post('/courseNot/:student_id',urlencodedParser, async (req, res) => {
 
-    const { adminPass } = req.body
+    const { adminPass } = req.body.adminPass
     const { student_id } = req.params;
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
