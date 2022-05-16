@@ -25,8 +25,12 @@ const router = express.Router();
 router.post('/adminAccess', (req, res) => {
     const adminKey = req.body
 
+    console.log(adminKey);
+    console.log(process.env.ADMIN_KEY);
     if (adminKey == process.env.ADMIN_KEY) {
+        
         const adminPass = process.env.ADMIN_ACCESS1;
+        console.log(adminPass);
         // TODO : create session that saves adminKey, FE go to homepage(2 menu generate report and register data)
         res.status(200).json({ error: false, message: 'You are authorized', adminPass });
     }
