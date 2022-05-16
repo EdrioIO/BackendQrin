@@ -25,15 +25,12 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // TODO : Reporting (JSON to CSV with option be it date or student generation)
 
-router.post('/adminAccess',urlencodedParser, (req, res) => {
+router.post('/adminAccess', urlencodedParser, (req, res) => {
     const adminKey = req.body.adminKey
 
-    console.log(adminKey);
-    console.log(process.env.ADMIN_KEY);
     if (adminKey == process.env.ADMIN_KEY) {
-        
+
         const adminPass = process.env.ADMIN_ACCESS1;
-        console.log(adminPass);
         // TODO : create session that saves adminKey, FE go to homepage(2 menu generate report and register data)
         res.status(200).json({ error: false, message: 'You are authorized', adminPass });
     }
@@ -206,7 +203,7 @@ router.post('/registerProgram', async (req, res) => {
 
 router.post('/showAllStudent', async (req, res) => {
 
-    const {adminPass} = req.bodyS
+    const { adminPass } = req.bodyS
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
@@ -227,7 +224,7 @@ router.post('/showAllStudent', async (req, res) => {
 
 router.post('/courseNot/:student_id', async (req, res) => {
 
-    const {adminPass} = req.body
+    const { adminPass } = req.body
     const { student_id } = req.params;
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
@@ -297,62 +294,146 @@ router.post('/registerTeachedCourse', async (req, res) => {
     }
 })
 
+router.post('/showAllCourse', urlencodedParser, async (req, res) => {
 
+    const adminPass = req.body.adminPass
+    if (adminPass == process.env.adminPass) {
 
-////
+        try {
+            const courseRes = await admin.showAllCourse();
 
-router.get
+            if (courseRes[0]) {
+                res.status(200).json({ error: false, message: 'Grab Course Succeed' })
+            }
+            else {
+                res.status(404).json({ error: true, message: 'No Course Registered' })
+            }
 
-router.get('/courseSession/:course_id', async (req, res) => {
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Get all course failed' })
+        }
+
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
 
     const { course_id } = req.params;
+    const adminPass = req.body.adminPass;
 
-    try {
-        const sessionRes = await admin.showCourseRelatedSession(course_id);
-        if (sessionRes[0]) {
-            res.status(200).json({ error: false, message: 'Grab course sessions succeed', sessionRes });
-        } else {
-            res.status(404).json({ error: true, message: 'No session in inputted Course' });
+    if (adminPass == process.env.adminPass) {
+        try {
+            const sessionRes = await admin.showCourseRelatedSession(course_id);
+            if (sessionRes[0]) {
+                res.status(200).json({ error: false, message: 'Grab course sessions succeed', sessionRes });
+            } else {
+                res.status(404).json({ error: true, message: 'No session in inputted Course' });
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Grab Course Sessions failed' });
         }
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: true, message: 'Grab Course Sessions failed' });
+    }
+    else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
     }
 })
 
-router.get('/genCheck/:session_id', async (req, res) => {
+router.post('/genCheck/:session_id', urlencodedParser, async (req, res) => {
     const { session_id } = req.params;
+    const adminPass = req.body.adminPass;
 
-    try {
-        const qrRes = await admin.showGenerationRelatedForSession(session_id)
-        if (qrRes) {
-            res.status(200).json({ error: false, message: 'Show generation Succeed', qrRes });
-        } else {
-            res.status(404).json({ error: true, message: 'No session id registered' });
+    if (adminPass == process.env.adminPass) {
+        try {
+            const qrRes = await admin.showGenerationRelatedForSession(session_id)
+            if (qrRes) {
+                res.status(200).json({ error: false, message: 'Show generation Succeed', qrRes });
+            } else {
+                res.status(404).json({ error: true, message: 'No session id registered' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Show Generation Failed' })
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: true, message: 'Show Generation Failed' })
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
     }
 })
 
-router.get('/classAttendData/:session_id/:student_generation', async (req, res) => {
+router.post('/classAttendData/:session_id/:student_generation', urlencodedParser, async (req, res) => {
     const { session_id, student_generation } = req.params
+    const adminPass = req.body.adminPass;
 
-    try {
-        const attendRes = await admin.displayListAttendance(session_id, student_generation)
-        if (attendRes) {
-            res.status(200).json({ error: false, message: 'Show list attendance Succeed', attendRes });
-        } else {
-            res.status(404).json({ error: true, message: 'No data' });
+
+    if (adminPass == process.env.adminPass) {
+        try {
+            const attendRes = await admin.displayListAttendance(session_id, student_generation)
+            if (attendRes) {
+                res.status(200).json({ error: false, message: 'Show list attendance Succeed', attendRes });
+            } else {
+                res.status(404).json({ error: true, message: 'No data' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Show Attendance Failed' })
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: true, message: 'Show Attendance Failed' })
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
     }
 })
 
+
+router.post('/inquiry_user', urlencodedParser, async (req, res) => {
+
+    const adminPass = req.body.adminPass;
+    if (adminPass == process.env.adminPass) {
+        try {
+            const inquiryRes = await admin.showInquiryUser()
+
+            if(inquiryRes[0]){
+                res.status(200).json({error : false, message : 'Show Student Inquiry data succeed', inquiryRes});
+            }
+            else{
+                res.status(404).json({error : true, message : 'No Inquiry data'});
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(404).json({ error: true, message: 'No user inquiry yet' })
+        }
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+})
+
+
+router.post('/inquiry_teacher', urlencodedParser, async (req, res) => {
+
+    const adminPass = req.body.adminPass;
+
+    if (adminPass == process.env.adminPass) {
+        try {
+            const inquiryRes = await admin.showInquiryTeacher()
+
+            if(inquiryRes[0]){
+                res.status(200).json({error : false, message : 'Show Student Inquiry data succeed', inquiryRes});
+            }
+            else{
+                res.status(404).json({error : true, message : 'No Inquiry data'});
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(404).json({ error: true, message: 'No user inquiry yet' })
+        }
+    } else {
+        res.status(400).json({ error: true, message: 'You are unauthorized' })
+    }
+
+})
 
 
 ///////////////////// END OF DEVELOPMENT /////////////////////

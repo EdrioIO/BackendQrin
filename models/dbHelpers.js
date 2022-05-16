@@ -76,11 +76,18 @@ module.exports = {
 /////////////////////ADMIN//////////////////
 
 function showInquiryTeacher(){
-    return db
+    return db('ms_inquiry_teacher')
+    .join('ms_teacher', 'ms_teacher.teacher_id', 'ms_inquiry_teacher.teacher_id')
+    .select('ms_teacher.teacher_id','ms_teacher.teacher_nip', 'ms_teacher.teacher_name',
+    'ms_inquiry_teacher.inquiry_teacher_id', 'ms_inquiry_teacher.details',
+    'ms_inquiry_teacher.inquiry_header', 'ms_inquiry_teacher.is_reviewed')
 }
 
 function showInquiryUser(){{
-
+    return db('ms_inquiry')
+    .join('ms_student', 'ms_student.student_id', 'ms_inquiry.student_id')
+    .select('ms_student.student_id','ms_student.student_nim', 'ms_student.student_name', 'ms_inquiry.inquiry_id',
+    'ms_inquiry.details', 'ms_inquiry.inquiry_header', 'ms_inquiry.is_reviewed')
 }}
 
 function grabStudentCourseNot(student_id){
