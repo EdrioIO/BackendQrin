@@ -324,6 +324,9 @@ router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
     const { course_id } = req.params;
     const adminPass = req.body.adminPass;
 
+    console.log(course_id)
+    console.log(adminPass);
+
     if (adminPass == process.env.adminPass) {
         try {
             const sessionRes = await admin.showCourseRelatedSession(course_id);
