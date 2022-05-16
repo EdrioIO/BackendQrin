@@ -52,7 +52,7 @@ module.exports = {
     displayListAttendance,
     submitInquiryTeacher,
     alterTeacherProfilePhone,
-    submitInquiryTeacher
+    submitInquiryTeacher,
 
     // admin
     generateReport,
