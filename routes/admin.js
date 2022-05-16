@@ -347,7 +347,7 @@ router.post('/genCheck/:session_id', urlencodedParser, async (req, res) => {
     const { session_id } = req.params;
     const adminPass = req.body.adminPass;
 
-    if (adminPass == process.env.adminPass) {
+    if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const qrRes = await admin.showGenerationRelatedForSession(session_id)
             if (qrRes) {
@@ -369,7 +369,7 @@ router.post('/classAttendData/:session_id/:student_generation', urlencodedParser
     const adminPass = req.body.adminPass;
 
 
-    if (adminPass == process.env.adminPass) {
+    if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const attendRes = await admin.displayListAttendance(session_id, student_generation)
             if (attendRes) {
@@ -390,7 +390,7 @@ router.post('/classAttendData/:session_id/:student_generation', urlencodedParser
 router.post('/inquiry_user', urlencodedParser, async (req, res) => {
 
     const adminPass = req.body.adminPass;
-    if (adminPass == process.env.adminPass) {
+    if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const inquiryRes = await admin.showInquiryUser()
 
@@ -415,7 +415,7 @@ router.post('/inquiry_teacher', urlencodedParser, async (req, res) => {
 
     const adminPass = req.body.adminPass;
 
-    if (adminPass == process.env.adminPass) {
+    if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const inquiryRes = await admin.showInquiryTeacher()
 
