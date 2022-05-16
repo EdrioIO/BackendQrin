@@ -203,7 +203,7 @@ router.post('/registerProgram', async (req, res) => {
 
 router.post('/showAllStudent', async (req, res) => {
 
-    const { adminPass } = req.bodyS
+    const { adminPass } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
