@@ -3,8 +3,11 @@ const admin = require('../models/dbHelpers');
 const bcrypt = require('bcrypt');
 const GeoPoint = require('geopoint');
 const time = require('../models/timeHelper')
+const bodyParser = require('body-parser')
 
 const router = express.Router();
+
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 /////////////////////PRODUCTION/////////////////////
 
@@ -22,8 +25,8 @@ const router = express.Router();
 
 // TODO : Reporting (JSON to CSV with option be it date or student generation)
 
-router.post('/adminAccess', (req, res) => {
-    const adminKey = req.body
+router.post('/adminAccess',urlencodedParser, (req, res) => {
+    const adminKey = req.body.adminKey
 
     console.log(adminKey);
     console.log(process.env.ADMIN_KEY);
