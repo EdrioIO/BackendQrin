@@ -297,7 +297,7 @@ router.post('/registerTeachedCourse', async (req, res) => {
 router.post('/showAllCourse', urlencodedParser, async (req, res) => {
 
     const adminPass = req.body.adminPass
-    if (adminPass == process.env.adminPass) {
+    if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
             const courseRes = await admin.showAllCourse();
@@ -319,15 +319,12 @@ router.post('/showAllCourse', urlencodedParser, async (req, res) => {
     }
 })
 
-router.post('/courseSession', urlencodedParser, async (req, res) => {
+router.post('/courseSession/:course_id', urlencodedParser, async (req, res) => {
 
-    const { course_id } = req.body.course_id;
+    const { course_id } = req.params;
     const adminPass = req.body.adminPass;
 
-    console.log(course_id)
-    console.log(adminPass);
-
-    if (adminPass == process.env.adminPass) {
+    if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const sessionRes = await admin.showCourseRelatedSession(course_id);
             if (sessionRes[0]) {
