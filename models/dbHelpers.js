@@ -298,7 +298,7 @@ function registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone
             teacher_phone : teacher_phone,
             teacher_password: hashed_password,
             teacher_dob : teacher_dob,
-        })
+        },['teacher_nip','teacher_name','teacher_emai','teacher_phone','teacher_password','teacher_dob'])
 }
 
 function registerCourse(course_name,course_code){
