@@ -22,6 +22,7 @@ module.exports = {
     findStudentByNIM,
     verifyRegister,
     addStudent,
+    addTeacher,
     grabAttendData,
     alterPresenceData,
     submitInquiry,
@@ -637,6 +638,9 @@ function addStudent(student) {
     return db('ms_student').insert(student, ['student_id', 'student_nim'])
 }
 
+function addTeacher(teacher){
+    return db('ms_teacher').insert(teacher, ['teacher_id', 'teacher_nip'])
+}
 
 
 // user & student func

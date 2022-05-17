@@ -267,6 +267,8 @@ router.get('/logoutTeacher', (req, res) => {
 })
 
 
+
+
 router.post('/inquiry', async (req,res)=>{
 
     const { teacher_id, inquiry_header, details} = req.body
