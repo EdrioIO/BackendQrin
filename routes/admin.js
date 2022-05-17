@@ -107,13 +107,7 @@ router.post('/teacherData/add', async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(teacher_password, salt);
             const adminRes = await admin.registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'register teacher succeed' })
-            }
-            else {
-                res.status(501).json({ error: false, message: 'Register failed' })
-            }
-
+            res.status(200).json({ error: false, message: 'register teacher succeed' })
         }
         catch (err) {
             console.log(err)
