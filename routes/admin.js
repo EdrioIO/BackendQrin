@@ -354,13 +354,9 @@ router.post('/courseData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const adminRes = await admin.registerCourse(course_name, course_code)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register course succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+            const courseEntity = {course_name,course_code}
+            const adminRes = await admin.addCourse(course_name, course_code)
+            res.status(200).json({ error: false, message: 'Register course succeed', adminRes })
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })

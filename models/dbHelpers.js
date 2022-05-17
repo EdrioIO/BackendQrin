@@ -23,6 +23,7 @@ module.exports = {
     verifyRegister,
     addStudent,
     addTeacher,
+    addCourse,
     grabAttendData,
     alterPresenceData,
     submitInquiry,
@@ -640,6 +641,10 @@ function addStudent(student) {
 
 function addTeacher(teacher){
     return db('ms_teacher').insert(teacher, ['teacher_id', 'teacher_nip'])
+}
+
+function addCourse(course){
+    return db('ms_course').insert(course,['course_id', 'course_name'])
 }
 
 
