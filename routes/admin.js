@@ -77,14 +77,20 @@ router.post('/studentData/showAll', async (req, res) => {
 
 router.patch('/studentData/edit/:student_id', async (req, res) => {
     const { student_id } = req.params;
-    const { adminPass, student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program, student_generation } = req.body
+    const { adminPass, student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program, student_generation, passwordChanged } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const salt = await bcrypt.genSalt(10);
-            const hashed_password = await bcrypt.hash(student_password, salt);
-            await admin.editStudentData(student_id, student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
+            if (passwordChanged) {
+                const salt = await bcrypt.genSalt(10);
+                const hashed_password = await bcrypt.hash(student_password, salt);
+                await admin.editStudentData(student_id, student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation)
+            }
+
+            else {
+                await admin.editStudentData(student_id, student_nim, student_name, student_email, student_phone, student_password, student_dob, student_study_program, student_generation)
+            }
             res.status(200).json({ error: false, message: 'Register student succeed' })
 
         } catch (err) {
