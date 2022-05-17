@@ -355,8 +355,8 @@ router.post('/courseData/add', async (req, res) => {
 
         try {
             const courseEntity = {course_name,course_code}
-            const adminRes = await admin.addCourse(course_name, course_code)
-            res.status(200).json({ error: false, message: 'Register course succeed', adminRes })
+            const adminRes = await admin.addCourse(courseEntity)
+            res.status(200).json({ error: false, message: 'Register course succeed'})
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
