@@ -105,14 +105,15 @@ router.patch('/studentData/edit/:student_id', async (req, res) => {
 })
 
 router.post('/teacherData/add', async (req, res) => {
-    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_password, teacher_phone, teacher_dob } = req.body
+    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_dob } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
+            const defaultPass = "QRin"+teacher_nip
             const salt = await bcrypt.genSalt(10);
-            const hashed_password = await bcrypt.hash(teacher_password, salt);
-            const teacherEntity = { teacher_name, teacher_password: hashed_password, teacher_nip, teacher_email, teacher_phone, teacher_dob }
+            const teacher_password = await bcrypt.hash(defaultPass, salt);
+            const teacherEntity = { teacher_name, teacher_password, teacher_nip, teacher_email, teacher_phone, teacher_dob }
             const adminRes = await admin.addTeacher(teacherEntity)
             res.status(200).json({ error: false, message: 'register teacher succeed' })
         }
@@ -822,8 +823,29 @@ router.post('/courseTakenData/add/:student_generation', async (req, res) => {
 
 ///////////////////// DEVELOPMENT /////////////////////
 
+router.post('/sessionHeaderData/add', async (req, res) => {
 
+    const { adminPass, student_id, course_id } = req.body
 
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const adminRes = await admin.registerStudentCourse(student_id, course_id)
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Register course taken succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
 
 
 
@@ -882,6 +904,8 @@ router.post('/dev', async (req, res) => {
         res.status(500).json({ error: true })
     }
 })
+
+
 
 
 
