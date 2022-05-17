@@ -60,7 +60,7 @@ router.post('/studentData/showAll', async (req, res) => {
         try {
             const studentRes = await admin.showAllUser()
             if (studentRes[0]) {
-                res.status(200).json({ error: false, message: 'Register student succeed', studentRes })
+                res.status(200).json({ error: false, message: 'Show All student succeed', studentRes })
             }
             else {
                 res.status(501).json({ error: true })
@@ -106,8 +106,8 @@ router.post('/teacherData/add', async (req, res) => {
         try {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(teacher_password, salt);
-            const teacherEntity = {teacher_nip,teacher_name,teacher_email,teacher_phone,teacher_password : hashed_password,teacher_dob}
-            const adminRes = await admin.addTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
+            const teacherEntity = {teacher_name, teacher_password : hashed_password, teacher_nip,teacher_email,teacher_phone,teacher_dob}
+            const adminRes = await admin.addTeacher(teacherEntity)
             res.status(200).json({ error: false, message: 'register teacher succeed' })
         }
         catch (err) {
