@@ -316,7 +316,7 @@ router.post('/teacherData/showAll', async (req, res) => {
         try {
             const adminRes = await admin.showAllTeacher()
             if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'grab Teacher Data Succeed' });
+                res.status(200).json({ error: false, message: 'grab Teacher Data Succeed', adminRes});
             }
             else {
                 res.status(404).json({ error: true, message: 'No Teacher Data' })
@@ -825,7 +825,7 @@ router.post('/courseTakenData/add/:student_generation', async (req, res) => {
 
 router.post('/sessionHeaderData/add', async (req, res) => {
 
-    const { adminPass, student_id, course_id } = req.body
+    const { adminPass, session_id, teacher_id, class_id, session_date } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
