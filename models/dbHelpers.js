@@ -24,6 +24,11 @@ module.exports = {
     addStudent,
     addTeacher,
     addCourse,
+    addSession,
+    addClass,
+    addProgram,
+    addTakenCourse,
+    addTeachedCourse,
     grabAttendData,
     alterPresenceData,
     submitInquiry,
@@ -645,6 +650,26 @@ function addTeacher(teacher){
 
 function addCourse(course){
     return db('ms_course').insert(course,['course_id', 'course_name'])
+}
+
+function addSession(session){
+    return db('ms_session').insert(session,['session_id','session_name'])
+}
+
+function addClass(room){
+    return db('ms_class').insert(room, ['class_id','class_name'])
+}
+
+function addProgram(program){
+    return db('ms_class').insert(program, ['program_id','program_name'])
+}
+
+function addTakenCourse(takenCourse){
+    return db('ms_course_taken').insert(takenCourse,['course_taken_id'])
+}
+
+function addTeachedCourse(teachedCourse){
+    return db('ms_course_teached').insert(teachedCourse,['course_teached_id'])
 }
 
 

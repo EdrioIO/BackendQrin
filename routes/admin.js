@@ -37,7 +37,7 @@ router.post('/studentData/add', async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashed_password = await bcrypt.hash(student_password, salt);
             const studentEntity = { student_nim, student_name, student_email, student_phone, student_password: hashed_password, student_dob, student_study_program, student_generation }
-            const adminRes = await admin.addStudent(studentEntity)
+            await admin.addStudent(studentEntity)
             res.status(200).json({ error: false, message: 'Register student succeed' })
 
         } catch (err) {
@@ -110,11 +110,11 @@ router.post('/teacherData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const defaultPass = "QRin"+teacher_nip
+            const defaultPass = "QRin" + teacher_nip
             const salt = await bcrypt.genSalt(10);
             const teacher_password = await bcrypt.hash(defaultPass, salt);
             const teacherEntity = { teacher_name, teacher_password, teacher_nip, teacher_email, teacher_phone, teacher_dob }
-            const adminRes = await admin.addTeacher(teacherEntity)
+            await admin.addTeacher(teacherEntity)
             res.status(200).json({ error: false, message: 'register teacher succeed' })
         }
         catch (err) {
@@ -316,7 +316,7 @@ router.post('/teacherData/showAll', async (req, res) => {
         try {
             const adminRes = await admin.showAllTeacher()
             if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'grab Teacher Data Succeed', adminRes});
+                res.status(200).json({ error: false, message: 'grab Teacher Data Succeed', adminRes });
             }
             else {
                 res.status(404).json({ error: true, message: 'No Teacher Data' })
@@ -362,7 +362,7 @@ router.post('/courseData/add', async (req, res) => {
 
         try {
             const courseEntity = { course_name, course_code }
-            const adminRes = await admin.addCourse(courseEntity)
+            await admin.addCourse(courseEntity)
             res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {
             console.log(err)
@@ -423,7 +423,7 @@ router.post('/sessionData/add', async (req, res) => {
 
         try {
             const sessionEntity = { course_id, session_name, base_in_time, base_out_time, qr_code }
-            await admin.registerSession(sessionEntity)
+            await admin.addSession(sessionEntity)
             res.status(200).json({ error: false, message: 'Register session succeed' })
 
         } catch (err) {
@@ -508,13 +508,10 @@ router.post('/roomData/add', async (req, res) => {
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
-            const programRes = await admin.registerClass(class_name, latitude, longitude, altitude)
-            if (programRes[0]) {
-                res.status(200).json({ error: false, message: 'Register class succeed', programRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+            const roomEntity = { class_name, latitude, longitude, altitude }
+            await admin.addClass(roomEntity)
+            res.status(200).json({ error: false, message: 'Register class succeed' })
+
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
@@ -577,13 +574,9 @@ router.post('/programData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const programRes = await admin.registerProgram(program_name)
-            if (programRes[0]) {
-                res.status(200).json({ error: false, message: 'Register course succeed', programRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+            const programEntiy = { program_name }
+            await admin.registerProgram(programEntiy)
+            res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
@@ -642,13 +635,9 @@ router.post('/courseTeachedData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const adminRes = await admin.registerTeachedCourse(teacher_id, course_id)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register course succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+            const courseTeachedEntity = { teacher_id, course_id }
+            await admin.addTeachedCourse(teacher_id, course_id)
+            res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
@@ -709,13 +698,9 @@ router.post('/courseTakenData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const adminRes = await admin.registerStudentCourse(student_id, course_id)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register course taken succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+            const courseTakenEntity = {student_id, course_id}
+            await admin.addTakenCourse(courseTakenEntity)
+            res.status(200).json({ error: false, message: 'Register course taken succeed'})
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
@@ -823,29 +808,29 @@ router.post('/courseTakenData/add/:student_generation', async (req, res) => {
 
 ///////////////////// DEVELOPMENT /////////////////////
 
-router.post('/sessionHeaderData/add', async (req, res) => {
+// router.post('/sessionHeaderData/add', async (req, res) => {
 
-    const { adminPass, session_id, teacher_id, class_id, session_date } = req.body
+//     const { adminPass, session_id, teacher_id, class_id, session_date } = req.body
 
-    if (adminPass == process.env.ADMIN_ACCESS1) {
+//     if (adminPass == process.env.ADMIN_ACCESS1) {
 
-        try {
-            const adminRes = await admin.registerStudentCourse(student_id, course_id)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Register course taken succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(500).json({ error: true })
-        }
-    }
-    else {
-        res.status(500).json({ error: true, message: 'You are not an admin' })
-    }
-})
+//         try {
+//             const adminRes = await admin.registerStudentCourse(student_id, course_id)
+//             if (adminRes[0]) {
+//                 res.status(200).json({ error: false, message: 'Register course taken succeed', adminRes })
+//             }
+//             else {
+//                 res.status(501).json({ error: true })
+//             }
+//         } catch (err) {
+//             console.log(err)
+//             res.status(500).json({ error: true })
+//         }
+//     }
+//     else {
+//         res.status(500).json({ error: true, message: 'You are not an admin' })
+//     }
+// })
 
 
 
