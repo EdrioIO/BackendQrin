@@ -574,7 +574,7 @@ router.post('/programData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const programEntiy = { program_name }
+            const programEntiy = {program_name}
             await admin.addProgram(programEntiy)
             res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {

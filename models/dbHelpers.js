@@ -661,7 +661,7 @@ function addClass(room){
 }
 
 function addProgram(program){
-    return db('ms_class').insert(program, ['program_id'])
+    return db('ms_program').insert(program, ['program_id'])
 }
 
 function addTakenCourse(takenCourse){
