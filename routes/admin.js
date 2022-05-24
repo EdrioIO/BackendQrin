@@ -575,7 +575,7 @@ router.post('/programData/add', async (req, res) => {
 
         try {
             const programEntiy = { program_name }
-            await admin.registerProgram(programEntiy)
+            await admin.addProgram(programEntiy)
             res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {
             console.log(err)
