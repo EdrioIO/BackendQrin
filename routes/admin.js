@@ -343,7 +343,7 @@ router.patch('/teacherData/edit/:teacher_id', async (req, res) => {
                 const hashed_password = await bcrypt.hash(teacher_password, salt);
                 await admin.editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
             }
-            else{
+            else {
                 await admin.editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob)
             }
 
@@ -555,12 +555,9 @@ router.patch('/roomData/edit/:class_id', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
             const adminRes = await admin.editClassData(class_id, class_name, longitude, latitude, altitude)
-            if (adminRes[0]) {
-                res.status(200).json({ error: false, message: 'Show all room succeed', adminRes })
-            }
-            else {
-                res.status(501).json({ error: true })
-            }
+
+            res.status(200).json({ error: false, message: 'Show all room succeed', adminRes })
+
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })
