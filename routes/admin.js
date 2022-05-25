@@ -333,14 +333,19 @@ router.post('/teacherData/showAll', async (req, res) => {
 router.patch('/teacherData/edit/:teacher_id', async (req, res) => {
 
     const { teacher_id } = req.body.params
-    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob } = req.body
+    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob, } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const salt = await bcrypt.genSalt(10);
-            const hashed_password = await bcrypt.hash(teacher_password, salt);
-            await admin.editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob)
+            if (passwordChanged) {
+                const salt = await bcrypt.genSalt(10);
+                const hashed_password = await bcrypt.hash(teacher_password, salt);
+                await admin.editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob)
+            }
+            else{
+                await admin.editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob)
+            }
 
             res.status(200).json({ error: false, message: 'Register teacher succeed' })
 
@@ -574,7 +579,7 @@ router.post('/programData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const programEntiy = {program_name}
+            const programEntiy = { program_name }
             await admin.addProgram(programEntiy)
             res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {
@@ -698,9 +703,9 @@ router.post('/courseTakenData/add', async (req, res) => {
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
         try {
-            const courseTakenEntity = {student_id, course_id}
+            const courseTakenEntity = { student_id, course_id }
             await admin.addTakenCourse(courseTakenEntity)
-            res.status(200).json({ error: false, message: 'Register course taken succeed'})
+            res.status(200).json({ error: false, message: 'Register course taken succeed' })
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: true })

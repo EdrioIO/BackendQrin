@@ -146,7 +146,7 @@ function editCourseTeachedData(course_teached_id,course_id,teacher_id){
 function editProgramData(program_id, program_name){
     return db('ms_program')
     .where({ program_id })
-    .update({ program_name})
+    .update({program_name})
     .returning('*')
     .then(result => {
         console.log('res :' + result);
