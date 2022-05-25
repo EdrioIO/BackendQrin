@@ -651,10 +651,10 @@ router.post('/courseTeachedData/add', async (req, res) => {
 })
 
 router.post('/courseTeachedData/showAll', async (req, res) => {
-    const {adminPass} = req.body;
+    const { adminPass } = req.body;
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
-        
+
         try {
             const adminRes = await admin.showAllCourseTeached()
             if (adminRes[0]) {
@@ -867,9 +867,7 @@ router.post('/courseNot/:student_id', async (req, res) => {
             console.log(err)
             res.status(500).json({ error: true })
         }
-
     }
-
 })
 
 router.post('/courseTeachedNot/:teacher_id', async (req, res) => {
@@ -914,6 +912,28 @@ router.post('/dev', async (req, res) => {
     } catch (err) {
         console.log(err)
         res.status(500).json({ error: true })
+    }
+})
+
+router.post('/courseTeachedData/:teacher_id', async (req, res) => {
+
+    const { teacher_id } = req.params;
+    const { adminPass } = req.body
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const adminRes = await admin.showTeacherRelatedCourse(teacher_id)
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Grab Course Teached Succeed', adminRes });
+            } else {
+                res.status(404).json({ error: true, message: 'Teacher has no course teached' })
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'Grab teached course failed' });
+        }
+    }
+    else{
+        res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
 

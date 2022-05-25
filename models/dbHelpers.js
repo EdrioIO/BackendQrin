@@ -91,7 +91,8 @@ module.exports = {
     showStudentGeneration,
     showGenerationList,
     showAllSession,
-    grabTeacherCourseNot
+    grabTeacherCourseNot,
+    
 }
 
 
@@ -464,7 +465,7 @@ function showGenerationRelatedForSession(session_id) {
         .where({ 'ms_session.session_id': session_id })
 }
 
-async function showTeacherRelatedCourse(teacher_id) {
+function showTeacherRelatedCourse(teacher_id) {
     return db('ms_teacher')
         .join('ms_course_teached', 'ms_course_teached.teacher_id', 'ms_teacher.teacher_id')
         .join('ms_course', 'ms_course_teached.course_id', 'ms_course.course_id')
