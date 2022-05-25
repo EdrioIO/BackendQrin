@@ -347,7 +347,7 @@ router.patch('/teacherData/edit/:teacher_id', async (req, res) => {
                 await admin.editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob)
             }
 
-            res.status(200).json({ error: false, message: 'Register teacher succeed' })
+            res.status(200).json({ error: false, message: 'Edit teacher succeed' })
 
         } catch (err) {
             console.log(err)
