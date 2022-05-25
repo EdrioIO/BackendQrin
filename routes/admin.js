@@ -651,9 +651,10 @@ router.post('/courseTeachedData/add', async (req, res) => {
 })
 
 router.post('/courseTeachedData/showAll', async (req, res) => {
-    const adminPass = req.body;
+    const {adminPass} = req.body;
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
+        
         try {
             const adminRes = await admin.showAllCourseTeached()
             if (adminRes[0]) {
