@@ -872,7 +872,7 @@ router.post('/courseNot/:student_id', async (req, res) => {
 
 })
 
-router.get('/courseTeachedNot/:teacher_id', async (req, res) => {
+router.post('/courseTeachedNot/:teacher_id', async (req, res) => {
 
     const { adminPass } = req.body;
     const { teacher_id } = req.params;
