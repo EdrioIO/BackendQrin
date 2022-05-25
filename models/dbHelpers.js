@@ -226,7 +226,7 @@ function editCoursedata(course_id, course_name, course_code){
 function editTeacherData(teacher_id, teacher_nip,teacher_name,teacher_email,hashed_password, teacher_dob){
     return db('ms_teacher')
     .where({ teacher_id })
-    .update({ teacher_nip,teacher_name,teacher_email,teacher_password : hashed_password, teacher_dob })
+    .update({ teacher_nip : teacher_nip,teacher_name : teacher_name,teacher_email : teacher_email,teacher_password : hashed_password, teacher_dob : teacher_dob })
     .returning('*')
     .then(result => {
         console.log('res :' + result);
