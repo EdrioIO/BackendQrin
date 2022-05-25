@@ -333,7 +333,7 @@ router.post('/teacherData/showAll', async (req, res) => {
 router.patch('/teacherData/edit/:teacher_id', async (req, res) => {
 
     const { teacher_id } = req.body.params
-    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob, } = req.body
+    const { adminPass, teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password, teacher_dob,passwordChanged } = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
 
