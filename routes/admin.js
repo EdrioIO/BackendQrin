@@ -932,11 +932,33 @@ router.post('/courseTeachedData/:teacher_id', async (req, res) => {
             res.status(500).json({ error: true, message: 'Grab teached course failed' });
         }
     }
-    else{
+    else {
         res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
 
+router.post('/takenCourse/:student_id', async (req, res) => {
+    const { student_id } = req.params;
+    const { adminPass } = req.body
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const adminRes = await admin.grabTakenCourse(student_id);
+
+            if (adminRes[0]) {
+                res.status(200).json({error: false, message : 'Grab Taken Course succeed', adminRes })
+            }
+            else {
+                res.status(404).json({ error: true, message: 'No Taken Course data on id was found' });
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: true, message: 'takenCourse operation failed' });
+        }
+    }
+    else{
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
 
 
 
