@@ -871,6 +871,30 @@ router.post('/courseNot/:student_id', async (req, res) => {
 
 })
 
+router.post('/courseTeachedNot/:teacher_id', async (req, res) => {
+
+    const { adminPass } = req.body;
+    const { teacher_id } = req.params;
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+            const courseRes = await admin.grabTeacherCourseNot(teacher_id)
+            if (courseRes[0]) {
+                res.status(200).json({ error: false, message: 'Grab Not Taken Course succeed', courseRes })
+            }
+            else {
+                res.status(404).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+
+    }
+
+})
+
 
 router.post('/dev', async (req, res) => {
 

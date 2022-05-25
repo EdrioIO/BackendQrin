@@ -91,7 +91,7 @@ module.exports = {
     showStudentGeneration,
     showGenerationList,
     showAllSession,
-
+    grabTeacherCourseNot
 }
 
 
@@ -271,6 +271,11 @@ function showInquiryUser(){{
 function grabStudentCourseNot(student_id){
     return db('ms_course')
     .whereNotExists(db.select('*').from('ms_course_taken').whereRaw('ms_course.course_id = ms_course_taken.course_id'))
+}
+
+function grabTeacherCourseNot(teacher_id){
+    return db('ms_course')
+    .whereNotExists(db.select('*').from('ms_course_teached').whereRaw('ms_course.course_id = ms_course_teached.course_id'))
 }
 
 function grabStudentData(){
