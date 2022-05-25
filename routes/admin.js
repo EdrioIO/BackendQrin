@@ -638,7 +638,7 @@ router.post('/courseTeachedData/add', async (req, res) => {
 
         try {
             const courseTeachedEntity = { teacher_id, course_id }
-            await admin.addTeachedCourse(teacher_id, course_id)
+            await admin.addTeachedCourse(courseTeachedEntity)
             res.status(200).json({ error: false, message: 'Register course succeed' })
         } catch (err) {
             console.log(err)
