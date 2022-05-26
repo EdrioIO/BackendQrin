@@ -282,7 +282,9 @@ function grabTeacherCourseNot(teacher_id){
     .whereNotExists(db.select('*').from('ms_course_teached')
     .where({teacher_id})
     .whereRaw('ms_course.course_id = ms_course_teached.course_id'))
+    .join('ms_course_teached', 'ms_course.course_id', 'ms_course_teached.course_id')
     .select('ms_course.course_id' , 'ms_course.course_name','ms_course_teached.course_teached_id')
+    
 }
 
 function grabStudentData(){
