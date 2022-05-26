@@ -280,7 +280,7 @@ function grabStudentCourseNot(student_id) {
 }
 
 function grabTeacherCourseNot(teacher_id) {
-    return db('ms_course')
+    return db('ms_course_teached')
         .where({teacher_id})
         // .whereNotExists(db.select('*').from('ms_course_teached')
         //     .where({ teacher_id })
