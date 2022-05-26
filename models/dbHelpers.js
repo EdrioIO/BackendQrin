@@ -282,11 +282,11 @@ function grabStudentCourseNot(student_id) {
 function grabTeacherCourseNot(teacher_id) {
     return db('ms_course_teached')
         .whereNotExists(db.select('*').from('ms_course')
-            .where({ teacher_id })
+
             .whereRaw('ms_course.course_id = ms_course_teached.course_id'))
-        // .where({ teacher_id })
-        // .join('ms_course', 'ms_course.course_id','ms_course_teached.course_id')
-        // .select('ms_course.course_id', 'ms_course.course_name')
+        .where({ teacher_id })
+    // .join('ms_course', 'ms_course.course_id','ms_course_teached.course_id')
+    // .select('ms_course.course_id', 'ms_course.course_name')
 
 }
 
