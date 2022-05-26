@@ -879,6 +879,7 @@ router.post('/courseTeachedNot/:teacher_id', async (req, res) => {
 
         try {
             const courseRes = await admin.grabTeacherCourseNot(teacher_id)
+            
             if (courseRes[0]) {
                 res.status(200).json({ error: false, message: 'Grab Not Taken Course succeed', courseRes })
             }
