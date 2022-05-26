@@ -63,7 +63,7 @@ module.exports = {
     registerStudent,
     registerTeacher,
     registerCourse,
-    registerSession, 
+    registerSession,
     registerClass,
     registerProgram,
     registerStudentCourse,
@@ -92,297 +92,295 @@ module.exports = {
     showGenerationList,
     showAllSession,
     grabTeacherCourseNot,
-    
+
 }
 
 
 /////////////////////ADMIN//////////////////
 
-function showAllSession(){
+function showAllSession() {
     return db('ms_session')
 }
 
-function showStudentGeneration(student_generation){
+function showStudentGeneration(student_generation) {
     return db('ms_student')
-    .where({student_generation})
+        .where({ student_generation })
 }
 
-function showGenerationList(){
+function showGenerationList() {
     return db('ms_student')
-    .distinct('student_generation')
+        .distinct('student_generation')
 }
 
-function showAllCourseTaken(){
+function showAllCourseTaken() {
     return db('ms_course_taken')
 }
 
-function showAllCourseTeached(){
+function showAllCourseTeached() {
     return db('ms_course_teached')
 }
 
-function editCourseTakenData(course_taken_id,course_id, student_id){
+function editCourseTakenData(course_taken_id, course_id, student_id) {
     return db('ms_course_taken')
-    .where({course_taken_id})
-    .update({ course_id,student_id})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function editCourseTeachedData(course_teached_id,course_id,teacher_id){
-    return db('ms_course_teached')
-    .where({course_teached_id})
-    .update({ course_id,teacher_id})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function editProgramData(program_id, program_name){
-    return db('ms_program')
-    .where({ program_id })
-    .update({program_name})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function showAllProgram(){
-    return db('ms_program')
-}
-
-function editClassData(class_id, class_name, latitude,longitude,altitude){
-    return db('ms_class')
-    .where({ class_id })
-    .update({ class_name, latitude,longitude,altitude})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function showAllClass(){
-    return db('ms_class')
-}
-
-function reviewInquiryUser(inquiry_id, is_reviewed){
-    return db('ms_inquiry')
-    .where({ inquiry_id })
-    .update({is_reviewed})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function reviewInquiryTeacher(inquiry_teacher_id, is_reviewed){
-    return db('ms_inquiry_teacher')
-    .where({ inquiry_teacher_id })
-    .update({is_reviewed})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function editSessionData(session_id, session_name, base_in_time, base_out_time, qr_code, course_id){
-    return db('ms_session')
-    .where({ session_id })
-    .update({ session_name, base_in_time, base_out_time, qr_code, course_id})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function editCoursedata(course_id, course_name, course_code){
-    return db('ms_course')
-    .where({ course_id })
-    .update({ course_name, course_code})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-}
-
-function editTeacherData(teacher_id, teacher_nip,teacher_name,teacher_email,teacher_phone,hashed_password, teacher_dob){
-    return db('ms_teacher')
-    .where({ teacher_id })
-    .update({ teacher_nip,teacher_name,teacher_email,teacher_phone, teacher_password : hashed_password, teacher_dob})
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-    
-}
-
-function showAllTeacher(){
-    return db('ms_teacher')
-}
-
-function editStudentData(student_id, student_nim,student_name,student_email,student_phone,hashed_password, student_dob,student_study_program, student_generation){
-    return db('ms_student')
-    .where({ student_id })
-    .update({ student_nim,student_name,student_email, student_phone, student_password : hashed_password, student_dob, student_study_program, student_generation })
-    .returning('*')
-    .then(result => {
-        console.log('res :' + result);
-    }).catch(err => {
-        console.log('err : ' + err);
-    })
-    
-}
-
-function showInquiryTeacher(){
-    return db('ms_inquiry_teacher')
-    .join('ms_teacher', 'ms_teacher.teacher_id', 'ms_inquiry_teacher.teacher_id')
-    .select('ms_teacher.teacher_id','ms_teacher.teacher_nip', 'ms_teacher.teacher_name',
-    'ms_inquiry_teacher.inquiry_teacher_id', 'ms_inquiry_teacher.details',
-    'ms_inquiry_teacher.inquiry_header', 'ms_inquiry_teacher.is_reviewed')
-}
-
-function showInquiryUser(){{
-    return db('ms_inquiry')
-    .join('ms_student', 'ms_student.student_id', 'ms_inquiry.student_id')
-    .select('ms_student.student_id','ms_student.student_nim', 'ms_student.student_name', 'ms_inquiry.inquiry_id',
-    'ms_inquiry.details', 'ms_inquiry.inquiry_header', 'ms_inquiry.is_reviewed')
-}}
-
-function grabStudentCourseNot(student_id){
-    return db('ms_course')
-    .whereNotExists(db.select('*').from('ms_course_taken')
-    .where({student_id})
-    .whereRaw('ms_course.course_id = ms_course_taken.course_id'))
-    .select('ms_course.course_id' , 'ms_course.course_name')
-}
-
-function grabTeacherCourseNot(teacher_id){
-    // return db('ms_course')
-    // .whereNotExists(db.select('*').from('ms_course_teached')
-    // .where({teacher_id})
-    // .whereRaw('ms_course.course_id = ms_course_teached.course_id'))
-    // .select('ms_course.course_id' , 'ms_course.course_name')
-    db.select('*').from('ms_course').join('ms_course_teached', function() {
-        this.on('ms_course.course_id', '=', 'ms_course_teached.course_id').onNotExists(function() {
-          this.select('*')
-          .from('ms_course_teached')
-          .where({teacher_id})
-          .whereRaw('ms_course.course_id = ms_course_teached.course_id');
+        .where({ course_taken_id })
+        .update({ course_id, student_id })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
         })
-      })
 }
 
+function editCourseTeachedData(course_teached_id, course_id, teacher_id) {
+    return db('ms_course_teached')
+        .where({ course_teached_id })
+        .update({ course_id, teacher_id })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
 
+function editProgramData(program_id, program_name) {
+    return db('ms_program')
+        .where({ program_id })
+        .update({ program_name })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
 
+function showAllProgram() {
+    return db('ms_program')
+}
 
+function editClassData(class_id, class_name, latitude, longitude, altitude) {
+    return db('ms_class')
+        .where({ class_id })
+        .update({ class_name, latitude, longitude, altitude })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
 
+function showAllClass() {
+    return db('ms_class')
+}
 
-function grabStudentData(){
+function reviewInquiryUser(inquiry_id, is_reviewed) {
+    return db('ms_inquiry')
+        .where({ inquiry_id })
+        .update({ is_reviewed })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+function reviewInquiryTeacher(inquiry_teacher_id, is_reviewed) {
+    return db('ms_inquiry_teacher')
+        .where({ inquiry_teacher_id })
+        .update({ is_reviewed })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+function editSessionData(session_id, session_name, base_in_time, base_out_time, qr_code, course_id) {
+    return db('ms_session')
+        .where({ session_id })
+        .update({ session_name, base_in_time, base_out_time, qr_code, course_id })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+function editCoursedata(course_id, course_name, course_code) {
+    return db('ms_course')
+        .where({ course_id })
+        .update({ course_name, course_code })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+function editTeacherData(teacher_id, teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob) {
+    return db('ms_teacher')
+        .where({ teacher_id })
+        .update({ teacher_nip, teacher_name, teacher_email, teacher_phone, teacher_password: hashed_password, teacher_dob })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+
+}
+
+function showAllTeacher() {
+    return db('ms_teacher')
+}
+
+function editStudentData(student_id, student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation) {
     return db('ms_student')
-    .select('student_id','student_nim','student_name')
+        .where({ student_id })
+        .update({ student_nim, student_name, student_email, student_phone, student_password: hashed_password, student_dob, student_study_program, student_generation })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+
 }
 
-function showAllCourse(){
+function showInquiryTeacher() {
+    return db('ms_inquiry_teacher')
+        .join('ms_teacher', 'ms_teacher.teacher_id', 'ms_inquiry_teacher.teacher_id')
+        .select('ms_teacher.teacher_id', 'ms_teacher.teacher_nip', 'ms_teacher.teacher_name',
+            'ms_inquiry_teacher.inquiry_teacher_id', 'ms_inquiry_teacher.details',
+            'ms_inquiry_teacher.inquiry_header', 'ms_inquiry_teacher.is_reviewed')
+}
+
+function showInquiryUser() {
+    {
+        return db('ms_inquiry')
+            .join('ms_student', 'ms_student.student_id', 'ms_inquiry.student_id')
+            .select('ms_student.student_id', 'ms_student.student_nim', 'ms_student.student_name', 'ms_inquiry.inquiry_id',
+                'ms_inquiry.details', 'ms_inquiry.inquiry_header', 'ms_inquiry.is_reviewed')
+    }
+}
+
+function grabStudentCourseNot(student_id) {
+    return db('ms_course')
+        .whereNotExists(db.select('*').from('ms_course_taken')
+            .where({ student_id })
+            .whereRaw('ms_course.course_id = ms_course_taken.course_id'))
+        .select('ms_course.course_id', 'ms_course.course_name')
+}
+
+function grabTeacherCourseNot(teacher_id) {
+    return db('ms_course_teached')
+        .whereNotExists(db.select('*').from('ms_course')
+            .where({ teacher_id })
+            .whereRaw('ms_course.course_id = ms_course_teached.course_id'))
+        .where({ teacher_id })
+        .select('ms_course.course_id', 'ms_course.course_name')
+
+}
+
+
+
+
+
+
+function grabStudentData() {
+    return db('ms_student')
+        .select('student_id', 'student_nim', 'student_name')
+}
+
+function showAllCourse() {
     return db('ms_course')
 }
 
-function registerStudent(student_nim, student_name,student_email, student_phone,hashed_password,student_dob,student_study_program,student_generation) {
+function registerStudent(student_nim, student_name, student_email, student_phone, hashed_password, student_dob, student_study_program, student_generation) {
     db('ms_student')
         .insert({
-            student_nim : student_nim,
-            student_name : student_name,
-            student_email : student_email,
-            student_phone : student_phone,
+            student_nim: student_nim,
+            student_name: student_name,
+            student_email: student_email,
+            student_phone: student_phone,
             student_password: hashed_password,
-            student_dob : student_dob,
-            student_study_program : student_study_program,
-            student_generation : student_generation
+            student_dob: student_dob,
+            student_study_program: student_study_program,
+            student_generation: student_generation
         })
 }
 
-function registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone,hashed_password, teacher_dob){
+function registerTeacher(teacher_nip, teacher_name, teacher_email, teacher_phone, hashed_password, teacher_dob) {
     db('ms_teacher')
         .insert({
-            teacher_nip : teacher_nip,
-            teacher_name : teacher_name,
-            teacher_email : teacher_email,
-            teacher_phone : teacher_phone,
+            teacher_nip: teacher_nip,
+            teacher_name: teacher_name,
+            teacher_email: teacher_email,
+            teacher_phone: teacher_phone,
             teacher_password: hashed_password,
-            teacher_dob : teacher_dob,
-        },['teacher_nip','teacher_name','teacher_emai','teacher_phone','teacher_password','teacher_dob'])
+            teacher_dob: teacher_dob,
+        }, ['teacher_nip', 'teacher_name', 'teacher_emai', 'teacher_phone', 'teacher_password', 'teacher_dob'])
 }
 
-function registerCourse(course_name,course_code){
+function registerCourse(course_name, course_code) {
     db('ms_course')
-    .insert({
-        course_name : course_name,
-        course_code : course_code
-    })
+        .insert({
+            course_name: course_name,
+            course_code: course_code
+        })
 }
 
-function registerSession(session_name,base_in_time,base_out_time,qr_code,course_id){
+function registerSession(session_name, base_in_time, base_out_time, qr_code, course_id) {
     db('ms_session')
-    .insert({
-        session_name : session_name,
-        base_in_time : base_in_time,
-        base_out_time : base_out_time,
-        qr_code : qr_code,
-        course_id : course_id
-    })
+        .insert({
+            session_name: session_name,
+            base_in_time: base_in_time,
+            base_out_time: base_out_time,
+            qr_code: qr_code,
+            course_id: course_id
+        })
 }
 
-function registerClass(class_name,latitude,longitude,altitude){
+function registerClass(class_name, latitude, longitude, altitude) {
     db('ms_class')
-    .insert({
-        class_name : class_name,
-        latitude : latitude,
-        longitude : longitude,
-        altitude : altitude
-    })
+        .insert({
+            class_name: class_name,
+            latitude: latitude,
+            longitude: longitude,
+            altitude: altitude
+        })
 }
 
-function registerProgram(program_name){
+function registerProgram(program_name) {
     db('ms_program')
-    .insert({
-        program_name : program_name
-    })
+        .insert({
+            program_name: program_name
+        })
 }
 
-function registerStudentCourse(student_id,course_id){{
-    db('ms_course_taken')
-    .insert({
-        student_id : student_id,
-        course_id : course_id
-    })
-}}
+function registerStudentCourse(student_id, course_id) {
+    {
+        db('ms_course_taken')
+            .insert({
+                student_id: student_id,
+                course_id: course_id
+            })
+    }
+}
 
-function registerTeachedCourse(teacher_id,course_id){
+function registerTeachedCourse(teacher_id, course_id) {
     db('ms_course_teached')
-    .insert({
-        teacher_id : teacher_id,
-        course_id : course_id
-    })
+        .insert({
+            teacher_id: teacher_id,
+            course_id: course_id
+        })
 }
 
 
@@ -424,7 +422,7 @@ async function alterTeacherProfilePhone(teacher_id, teacher_phone) {
         })
 }
 
-function submitInquiryTeacher(teacher_id, details, inquiry_header){
+function submitInquiryTeacher(teacher_id, details, inquiry_header) {
     return db('ms_inquiry_teacher').insert({ teacher_id, inquiry_header, details }, ['teacher_id', 'details', 'inquiry_header'])
 }
 
@@ -669,32 +667,32 @@ function addStudent(student) {
     return db('ms_student').insert(student, ['student_id', 'student_nim'])
 }
 
-function addTeacher(teacher){
+function addTeacher(teacher) {
     return db('ms_teacher').insert(teacher, ['teacher_id', 'teacher_nip'])
 }
 
-function addCourse(course){
-    return db('ms_course').insert(course,['course_id', 'course_name'])
+function addCourse(course) {
+    return db('ms_course').insert(course, ['course_id', 'course_name'])
 }
 
-function addSession(session){
-    return db('ms_session').insert(session,['session_id','session_name'])
+function addSession(session) {
+    return db('ms_session').insert(session, ['session_id', 'session_name'])
 }
 
-function addClass(room){
-    return db('ms_class').insert(room, ['class_id','class_name'])
+function addClass(room) {
+    return db('ms_class').insert(room, ['class_id', 'class_name'])
 }
 
-function addProgram(program){
+function addProgram(program) {
     return db('ms_program').insert(program, ['program_id'])
 }
 
-function addTakenCourse(takenCourse){
-    return db('ms_course_taken').insert(takenCourse,['course_taken_id'])
+function addTakenCourse(takenCourse) {
+    return db('ms_course_taken').insert(takenCourse, ['course_taken_id'])
 }
 
-function addTeachedCourse(teachedCourse){
-    return db('ms_course_teached').insert(teachedCourse,['course_teached_id'])
+function addTeachedCourse(teachedCourse) {
+    return db('ms_course_teached').insert(teachedCourse, ['course_teached_id'])
 }
 
 
