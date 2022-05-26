@@ -276,13 +276,11 @@ function grabStudentCourseNot(student_id) {
         .whereNotExists(db.select('*').from('ms_course_taken')
             .where({ student_id })
             .whereRaw('ms_course.course_id = ms_course_taken.course_id'))
-        .select('ms_course.course_id', 'ms_course.course_name')
 }
 
 function grabTeacherCourseNot(teacher_id) {
 
     return db('ms_course')
-        .join('ms_course_teached','ms_course.course_id','ms_course_teached.course_id')
         .whereNotExists(db.select('*').from('ms_course_teached')
             .where({ teacher_id })
             .whereRaw('ms_course.course_id = ms_course_teached.course_id'))
@@ -486,9 +484,11 @@ function showTeacherRelatedCourse(teacher_id) {
     return db('ms_teacher')
         .join('ms_course_teached', 'ms_course_teached.teacher_id', 'ms_teacher.teacher_id')
         .join('ms_course', 'ms_course_teached.course_id', 'ms_course.course_id')
-        .select('ms_course.course_id', 'ms_course.course_name')
+        .select('ms_course.course_id', 'ms_course.course_name','ms_course_teached.course_teached_id')
         .where({ 'ms_teacher.teacher_id': teacher_id })
 }
+
+
 
 function showCourseRelatedSession(course_id) {
     return db('ms_session')
@@ -579,7 +579,7 @@ function grabTakenCourse(student_id) {
     return db('ms_student')
         .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
         .join('ms_course', 'ms_course_taken.course_id', 'ms_course.course_id')
-        .select('ms_student.student_id', 'ms_course.course_id', 'ms_course.course_name')
+        .select('ms_student.student_id', 'ms_course.course_id', 'ms_course.course_name','ms_course_taken.course_taken_id')
         .where({ 'ms_student.student_id': student_id })
 }
 
