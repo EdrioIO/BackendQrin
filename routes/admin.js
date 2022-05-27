@@ -803,50 +803,6 @@ router.post('/courseTakenData/add/:student_generation', async (req, res) => {
         res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
-///////////////////// END OF PRODUCTION /////////////////////
-
-
-
-
-
-///////////////////// DEVELOPMENT /////////////////////
-
-// router.post('/sessionHeaderData/add', async (req, res) => {
-
-//     const { adminPass, session_id, teacher_id, class_id, session_date } = req.body
-
-//     if (adminPass == process.env.ADMIN_ACCESS1) {
-
-//         try {
-//             const adminRes = await admin.registerStudentCourse(student_id, course_id)
-//             if (adminRes[0]) {
-//                 res.status(200).json({ error: false, message: 'Register course taken succeed', adminRes })
-//             }
-//             else {
-//                 res.status(501).json({ error: true })
-//             }
-//         } catch (err) {
-//             console.log(err)
-//             res.status(500).json({ error: true })
-//         }
-//     }
-//     else {
-//         res.status(500).json({ error: true, message: 'You are not an admin' })
-//     }
-// })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 router.post('/courseNot/:student_id', async (req, res) => {
 
@@ -895,27 +851,6 @@ router.post('/courseTeachedNot/:teacher_id', async (req, res) => {
 
 })
 
-
-router.post('/dev', async (req, res) => {
-
-    const { student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
-    console
-    try {
-        const student_password = "QRin" + student_nim;
-        const salt = await bcrypt.genSalt(10);
-        const hashed_password = await bcrypt.hash(student_password, salt);
-        console.log(hashed_password);
-        const studentEntity = { student_nim, student_name, student_email, student_phone, student_password: hashed_password, student_dob, student_study_program, student_generation }
-        console.log(studentEntity)
-        const adminRes = await admin.addStudent(studentEntity)
-        res.status(200).json({ error: false, message: 'Register student succeed' })
-
-    } catch (err) {
-        console.log(err)
-        res.status(500).json({ error: true })
-    }
-})
-
 router.post('/courseTeachedData/:teacher_id', async (req, res) => {
 
     const { teacher_id } = req.params;
@@ -960,6 +895,166 @@ router.post('/takenCourse/:student_id', async (req, res) => {
         res.status(500).json({ error: true, message: 'You are not an admin' })
     }
 })
+///////////////////// END OF PRODUCTION /////////////////////
+
+
+
+
+
+///////////////////// DEVELOPMENT /////////////////////
+
+router.post('/sessionHeaderData/add', async (req, res) => {
+
+    const { adminPass, session_id, teacher_id, class_id, session_date } = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+
+            const sessionHeader = {session_id,teacher_id,class_id,session_date}
+            await admin.addSessionHeader(sessionHeader)
+            res.status(200).json({ error: false, message: 'Register session header succeed' })
+            
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.patch('/sessionHeaderData/edit/:session_header_id', async (req, res) => {
+    const { session_header_id } = req.params;
+    const { adminPass, session_id,teacher_id, class_id, session_date} = req.body
+
+     if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            await admin.editSessionHeaderData(session_header_id, session_id, teacher_id, class_id, session_date)
+            res.status(200).json({ error: false, message: 'Edit session header succeed' })
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.post('/sessionHeaderData/showAll', async (req, res) => {
+    const { adminPass } = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const adminRes = await admin.showAllSessionHeader()
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Show all course taken succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.post('/attendanceData/add', async (req, res) => {
+
+    const { adminPass, session_header_id,student_id } = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+
+        try {
+
+            const attendance = {session_header_id,student_id,presence_in_time : null, presence_out_time : null, presence_in_status : false, presence_out_status : false}
+            await admin.addAttendance(attendance)
+            res.status(200).json({ error: false, message: 'Register session header succeed' })
+            
+
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+router.patch('/attendanceData/edit/:attendance_id', async (req, res) => {
+    const { attendance_id } = req.params;
+    const { adminPass, session_header_id,student_id,presence_in_time,presence_out_time,presence_in_status,presence_out_status} = req.body
+
+     if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            await admin.editAttendanceData(attendance_id, session_header_id, student_id, presence_in_time,presence_out_time,presence_in_status,presence_out_status)
+            res.status(200).json({ error: false, message: 'Edit student Attendance succeed' })
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+}) 
+
+router.post('/sessionHeaderData/showSpesific', async (req, res) => {
+    const { adminPass, session_id, teacher_id, class_id, session_date} = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const adminRes = await admin.findSessionHeaderAtt(session_id, teacher_id, class_id)
+            if (adminRes) {
+                res.status(200).json({ error: false, message: 'Show spesific session header succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+
+router.post('/dev', async (req, res) => {
+
+    const { student_nim, student_name, student_email, student_phone, student_dob, student_study_program, student_generation } = req.body
+    console
+    try {
+        const student_password = "QRin" + student_nim;
+        const salt = await bcrypt.genSalt(10);
+        const hashed_password = await bcrypt.hash(student_password, salt);
+        console.log(hashed_password);
+        const studentEntity = { student_nim, student_name, student_email, student_phone, student_password: hashed_password, student_dob, student_study_program, student_generation }
+        console.log(studentEntity)
+        const adminRes = await admin.addStudent(studentEntity)
+        res.status(200).json({ error: false, message: 'Register student succeed' })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: true })
+    }
+})
+
+
+
+
+
+
 
 
 

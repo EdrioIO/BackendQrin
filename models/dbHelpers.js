@@ -29,6 +29,8 @@ module.exports = {
     addProgram,
     addTakenCourse,
     addTeachedCourse,
+    addSessionHeader,
+    addAttendance,
     grabAttendData,
     alterPresenceData,
     submitInquiry,
@@ -86,12 +88,16 @@ module.exports = {
     editProgramData,
     editCourseTeachedData,
     editCourseTakenData,
+    editSessionHeaderData,
+    editAttendanceData,
     showAllCourseTeached,
     showAllCourseTaken,
+    showAllSessionHeader,
     showStudentGeneration,
     showGenerationList,
     showAllSession,
     grabTeacherCourseNot,
+    findSessionHeaderAtt,
 
 }
 
@@ -114,6 +120,10 @@ function showGenerationList() {
 
 function showAllCourseTaken() {
     return db('ms_course_taken')
+}
+
+function showAllSessionHeader() {
+    return db('ms_session_header')
 }
 
 function showAllCourseTeached() {
@@ -148,6 +158,30 @@ function editProgramData(program_id, program_name) {
     return db('ms_program')
         .where({ program_id })
         .update({ program_name })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+function editSessionHeaderData(session_header_id, session_id, teacher_id, class_id, session_date) {
+    return db('ms_session_header')
+        .where({ session_header_id })
+        .update({ session_id, teacher_id, class_id, session_date })
+        .returning('*')
+        .then(result => {
+            console.log('res :' + result);
+        }).catch(err => {
+            console.log('err : ' + err);
+        })
+}
+
+function editAttendanceData(attendance_id, session_header_id, student_id, presence_in_time, presence_out_time, presence_in_status, presence_out_status) {
+    return db('ms_attendance')
+        .where({ attendance_id })
+        .update({ session_header_id, student_id, presence_in_time, presence_out_time, presence_in_status, presence_out_status })
         .returning('*')
         .then(result => {
             console.log('res :' + result);
@@ -284,9 +318,14 @@ function grabTeacherCourseNot(teacher_id) {
         .whereNotExists(db.select('*').from('ms_course_teached')
             .where({ teacher_id })
             .whereRaw('ms_course.course_id = ms_course_teached.course_id'))
-        
+
 }
 
+function findSessionHeaderAtt(session_id, teacher_id, class_id) {
+    return db('ms_session_header')
+        .where({session_id, teacher_id, class_id})
+        .first()
+}
 
 
 
@@ -484,7 +523,7 @@ function showTeacherRelatedCourse(teacher_id) {
     return db('ms_teacher')
         .join('ms_course_teached', 'ms_course_teached.teacher_id', 'ms_teacher.teacher_id')
         .join('ms_course', 'ms_course_teached.course_id', 'ms_course.course_id')
-        .select('ms_course.course_id', 'ms_course.course_name','ms_course_teached.course_teached_id')
+        .select('ms_course.course_id', 'ms_course.course_name', 'ms_course_teached.course_teached_id')
         .where({ 'ms_teacher.teacher_id': teacher_id })
 }
 
@@ -579,7 +618,7 @@ function grabTakenCourse(student_id) {
     return db('ms_student')
         .join('ms_course_taken', 'ms_student.student_id', 'ms_course_taken.student_id')
         .join('ms_course', 'ms_course_taken.course_id', 'ms_course.course_id')
-        .select('ms_student.student_id', 'ms_course.course_id', 'ms_course.course_name','ms_course_taken.course_taken_id')
+        .select('ms_student.student_id', 'ms_course.course_id', 'ms_course.course_name', 'ms_course_taken.course_taken_id')
         .where({ 'ms_student.student_id': student_id })
 }
 
@@ -693,6 +732,14 @@ function addTakenCourse(takenCourse) {
 
 function addTeachedCourse(teachedCourse) {
     return db('ms_course_teached').insert(teachedCourse, ['course_teached_id'])
+}
+
+function addSessionHeader(sessionHeader) {
+    return db('ms_session_header').insert(sessionHeader, ['session_header_id'])
+}
+
+function addAttendance(attendance) {
+    return db('ms_attendance').insert(attendance, ['attendance_id'])
 }
 
 

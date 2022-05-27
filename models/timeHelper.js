@@ -3,7 +3,7 @@ module.exports = {
     getCurrentTime,
     compareBaseTime,
     getTimezoneOffset,
-    getCurrentDate
+    getCurrentDate   
 }
 
 var offset = new Date().getTimezoneOffset();
@@ -69,3 +69,4 @@ function compareBaseTime(time1, time2) {
 
     return compare;
 }
+
