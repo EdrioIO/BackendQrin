@@ -321,9 +321,9 @@ function grabTeacherCourseNot(teacher_id) {
 
 }
 
-function findSessionHeaderAtt(session_id, teacher_id, class_id) {
+function findSessionHeaderAtt(session_id, teacher_id, class_id,session_date) {
     return db('ms_session_header')
-        .where({session_id, teacher_id, class_id})
+        .where({session_id, teacher_id, class_id,session_date})
         .first()
 }
 

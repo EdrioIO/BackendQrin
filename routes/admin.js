@@ -1012,7 +1012,7 @@ router.post('/sessionHeaderData/showSpesific', async (req, res) => {
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
         try {
-            const adminRes = await admin.findSessionHeaderAtt(session_id, teacher_id, class_id)
+            const adminRes = await admin.findSessionHeaderAtt(session_id, teacher_id, class_id,session_date)
             if (adminRes) {
                 res.status(200).json({ error: false, message: 'Show spesific session header succeed', adminRes })
             }
