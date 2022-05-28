@@ -125,11 +125,11 @@ function showAllCourseTaken() {
 
 function showAllSessionHeader() {
     return db('ms_session_header')
-    .join('ms_session','ms_session.session_id','ms_session_header.session_id')
-    .join('ms_teacher','ms_teacher.teacher_id','ms_session_header.teacher_id')
-    .join('ms_class','ms_class.class_id','ms_session_header.class_id')
-    .select('ms_session_header.session_header_id','ms_session.session_id','ms_session.session_name','ms_teacher.teacher_id',
-    'ms_teacher.teacher_name','ms_class.class_id','ms_class.class_name','ms_session_header.session_date')
+        .join('ms_session', 'ms_session.session_id', 'ms_session_header.session_id')
+        .join('ms_teacher', 'ms_teacher.teacher_id', 'ms_session_header.teacher_id')
+        .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
+        .select('ms_session_header.session_header_id', 'ms_session.session_id', 'ms_session.session_name', 'ms_teacher.teacher_id',
+            'ms_teacher.teacher_name', 'ms_class.class_id', 'ms_class.class_name', 'ms_session_header.session_date')
 }
 
 function showAllCourseTeached() {
@@ -329,18 +329,23 @@ function grabTeacherCourseNot(teacher_id) {
 
 function findSessionHeaderAtt(session_id, teacher_id, class_id, session_date) {
     return db('ms_session_header')
-    .where({ session_id, teacher_id, class_id, session_date })
-        .join('ms_session', 'ms_session.session_id','ms_session_header.session_id')
-        .join('ms_teacher','ms_teacher.teacher_id', 'ms_session_header.teacher_id')
-        .join('ms_class','ms_class.class_id','ms_session_header.class_id')
-        .select('session_header_id', 'ms_teacher.teacher_id','ms_teacher.teacher_id','ms_class.class_id'
-        ,'ms_class.class_name', 'ms_session.session_id','ms_session.session_name')
+        .join('ms_session', 'ms_session.session_id', 'ms_session_header.session_id')
+        .join('ms_teacher', 'ms_teacher.teacher_id', 'ms_session_header.teacher_id')
+        .join('ms_class', 'ms_class.class_id', 'ms_session_header.class_id')
+        .select('session_header_id', 'ms_teacher.teacher_id', 'ms_teacher.teacher_name', 'ms_class.class_id'
+            , 'ms_class.class_name', 'ms_session.session_id', 'ms_session.session_name')
+        .where(
+            {'ms_session_header.session_id' : session_id, 
+            'ms_session_header.teacher_id' : teacher_id, 
+            'ms_session_header.class_id' : class_id, 
+            'ms_session_header.session_date' : session_date }
+        )
         .first()
 }
 
 function findAttWithSessionHeader(session_header_id) {
     return db('ms_attendance')
-        .where({session_header_id})
+        .where({ session_header_id })
 }
 
 
