@@ -125,6 +125,11 @@ function showAllCourseTaken() {
 
 function showAllSessionHeader() {
     return db('ms_session_header')
+    .join('ms_session','ms_session.session_id','ms_session_header.session_id')
+    .join('ms_teacher','ms_teacher.teacher_id','ms_session_header.teacher_id')
+    .join('ms_class','ms_class.class_id','ms_session_header.class_id')
+    .select('ms_session_header.session_header_id','ms_session.session_id','ms_session.session_name','ms_teacher.teacher_id',
+    'ms_teacher.teacher_name','ms_class.class_id','ms_class.class_name','ms_session_header.session_date')
 }
 
 function showAllCourseTeached() {
