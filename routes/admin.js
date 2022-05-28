@@ -1029,6 +1029,30 @@ router.post('/sessionHeaderData/showSpesific', async (req, res) => {
     }
 })
 
+router.post('/attendanceData/showSpesific', async (req, res) => {
+    const { adminPass, session_header_id} = req.body
+
+    if (adminPass == process.env.ADMIN_ACCESS1) {
+        try {
+            const adminRes = await admin.findAttWithSessionHeader(session_header_id)
+            if (adminRes[0]) {
+                res.status(200).json({ error: false, message: 'Show spesific attendance succeed', adminRes })
+            }
+            else {
+                res.status(501).json({ error: true })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(500).json({ error: true })
+        }
+    }
+    else {
+        res.status(500).json({ error: true, message: 'You are not an admin' })
+    }
+})
+
+
+
 
 router.post('/dev', async (req, res) => {
 
