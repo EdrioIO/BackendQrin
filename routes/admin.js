@@ -1007,7 +1007,7 @@ router.patch('/attendanceData/edit/:attendance_id', async (req, res) => {
     }
 }) 
 
-router.post('/sessionHeaderData/showSpesific', async (req, res) => {
+router.post('/sessionHeaderData/showSpecific', async (req, res) => {
     const { adminPass, session_id, teacher_id, class_id, session_date} = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
@@ -1029,7 +1029,7 @@ router.post('/sessionHeaderData/showSpesific', async (req, res) => {
     }
 })
 
-router.post('/attendanceData/showSpesific', async (req, res) => {
+router.post('/attendanceData/showSpecific', async (req, res) => {
     const { adminPass, session_header_id} = req.body
 
     if (adminPass == process.env.ADMIN_ACCESS1) {
