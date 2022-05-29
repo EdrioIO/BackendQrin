@@ -346,7 +346,7 @@ function findSessionHeaderAtt(session_id, teacher_id, class_id, session_date) {
 function findAttWithSessionHeader(session_header_id) {
     return db('ms_attendance')
     .join('ms_student','ms_student.student_id','ms_attendance.student_id')
-    .select('ms_attendance.attendance_id','ms_attendance.session_header_id','ms_student.student_id','ms_student.student_name',
+    .select('ms_attendance.attendance_id','ms_attendance.session_header_id','ms_student.student_id','ms_student.student_name','ms_student.student_nim',
     'ms_attendance.presence_in_time','ms_attendance.presence_out_time','ms_attendance.presence_in_status','ms_attendance.presence_out_status')
         .where({'ms_attendance.session_header_id' : session_header_id })
 }
