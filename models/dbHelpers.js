@@ -54,6 +54,7 @@ module.exports = {
     showGenerationRelatedForSession,
     grabAttendDataLecturerVer,
     manualAttend,
+    manualReset,
     displayListAttendance,
     submitInquiryTeacher,
     alterTeacherProfilePhone,
@@ -521,6 +522,32 @@ function manualAttend(attendance_id, attend_type, base_in_time, base_out_time) {
         db('ms_attendance')
             .where({ attendance_id: attendance_id })
             .update({ presence_out_time: base_out_time, presence_out_status: true })
+            .returning('*')
+            .then(result => {
+                console.log('res : ' + result);
+            }).catch(err => {
+                console.log('err : ' + err);
+            })
+    }
+}
+
+function manualReset(attendance_id, attend_type) {
+    if (attend_type == 'in') {
+        db('ms_attendance')
+            .where({ attendance_id: attendance_id })
+            .update({ presence_in_time: null, presence_in_status: false })
+            .returning('*')
+            .then(result => {
+                console.log('res :' + result);
+            }).catch(err => {
+                console.log('err : ' + err);
+            })
+    }
+
+    else if (attend_type == 'out') {
+        db('ms_attendance')
+            .where({ attendance_id: attendance_id })
+            .update({ presence_out_time: null, presence_out_status: false })
             .returning('*')
             .then(result => {
                 console.log('res : ' + result);

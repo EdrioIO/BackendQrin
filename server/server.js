@@ -38,12 +38,10 @@ server.get('/', (req,res)=>{
 })
 
 
-server.use('/api/user', 
-// restrictedUser,
- userRouter);
-server.use('/api/admin',adminRouter);
+server.use('/api/user', userRouter);
+server.use('/api/admin', adminRouter);
 server.use('/api/teacher', teacherRouter);
-server.use('/api/auth', authRouter);
+// server.use('/api/auth', authRouter);
 
 
 module.exports = server;

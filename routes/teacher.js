@@ -221,7 +221,32 @@ router.get('/classAttendData/:session_id/:student_generation', async (req, res) 
 //   sum += item;
 // }
 
-router.get('/')
+router.patch('/resetAttend', urlencodedParser, async (req, res) => {
+    // const {string, array} = req.body
+
+    const session_id = req.body.session_id
+    const studentRes = req.body.student
+   
+
+    try {
+        for (student = 0 ; student < studentRes.length; student++) {
+            var temps = await teacher.grabAttendDataLecturerVer(studentRes[student].student_id, session_id)
+            if (studentRes[student].check_in_status == 'reset') {
+                await teacher.manualReset(temps[0].attendance_id, "in") // manual reset 
+            }
+            if (studentRes[student].check_out_status == 'reset') {
+                await teacher.manualReset(temps[0].attendance_id, "out")
+            }
+        }
+
+        res.status(200).json({ error: false, message: 'Manual Check Succeed' });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: true, message: "Manual Check Operation Failed" })
+    }
+})
+
 
 router.patch('/manualAttend', urlencodedParser, async (req, res) => {
     // const {string, array} = req.body
@@ -238,6 +263,12 @@ router.patch('/manualAttend', urlencodedParser, async (req, res) => {
             }
             if (studentRes[student].check_out_status == 'manual') {
                 await teacher.manualAttend(temps[0].attendance_id, "out", temps[0].base_in_time, temps[0].base_out_time)
+            }
+            if (studentRes[student].check_in_status == 'reset') {
+                await teacher.manualReset(temps[0].attendance_id, "in") // manual reset 
+            }
+            if (studentRes[student].check_out_status == 'reset') {
+                await teacher.manualReset(temps[0].attendance_id, "out")
             }
         }
 
